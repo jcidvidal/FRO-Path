@@ -1,0 +1,42 @@
+name: CI - Verificación de TypeScript
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Colocamos el env aquí arriba (global) para que no haya dudas
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js v24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      # Verificación del Backend (NestJS)
+      - name: Instalar dependencias Backend
+        run: npm install
+        working-directory: ./server
+
+      - name: Type-check Backend
+        run: npm run build
+        working-directory: ./server
+
+      # Verificación del Frontend (React + Vite)
+      - name: Instalar dependencias Frontend
+        run: npm install
+        working-directory: ./client
+
+      - name: Type-check Frontend
+        run: npx tsc --noEmit
+        working-directory: ./client

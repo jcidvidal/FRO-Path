@@ -17,8 +17,8 @@ jobs:
       - name: Configurar Node.js v24
         uses: actions/setup-node@v4
         with:
-          node-version: '24' # Versión exacta de tu stack
-          cache: 'npm'
+          node-version: '24'
+          # Se eliminó la línea de cache para evitar errores en la raíz
 
       # Verificación del Backend (NestJS)
       - name: Instalar dependencias Backend
@@ -26,7 +26,7 @@ jobs:
         working-directory: ./server
 
       - name: Type-check Backend
-        run: npm run start:dev -- --dry-run # O 'npm run build' si ya tienes el script
+        run: npm run start:dev -- --dry-run
         working-directory: ./server
 
       # Verificación del Frontend (React + Vite)

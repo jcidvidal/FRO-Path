@@ -9,6 +9,9 @@ on:
 jobs:
   build-check:
     runs-on: ubuntu-latest
+    # Forzamos a que las acciones usen Node.js 24 para evitar el warning de depreciación
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout del código
@@ -18,7 +21,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          # Se eliminó la línea de cache para evitar errores en la raíz
 
       # Verificación del Backend (NestJS)
       - name: Instalar dependencias Backend

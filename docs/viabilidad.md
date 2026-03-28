@@ -10,7 +10,7 @@ El proyecto es técnicamente factible utilizando herramientas de desarrollo mode
 ## 2. Viabilidad Legal y Normativa (Contexto UFRO)
 El sistema opera bajo el marco regulatorio de la Universidad de La Frontera.
 - **Reglamento Académico:** El algoritmo de cálculo de créditos y validación de prerrequisitos se ajusta estrictamente al **Reglamento de Régimen de Estudios de Pregrado** de la UFRO.
-- **Datos de Mallas:** La información de las carreras de **Ingeniería Civil Informática (ICC)** e **Ingeniería Civil Industrial (ICI)** es de carácter público y se obtiene de los sitios oficiales de la facultad.
+- **Datos de Mallas:** La información de las carreras de **Ingeniería Civil Informática (ICC)** e **Ingeniería INformática (II)** es de carácter público y se obtiene de los sitios oficiales de la facultad.
 - **Privacidad:** El sistema no almacenará datos sensibles de carácter personal en su primera fase, operando como un simulador anónimo para el estudiante.
 
 ## 3. Viabilidad Económica y de Tiempo

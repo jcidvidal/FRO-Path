@@ -23,20 +23,20 @@ jobs:
         with:
           node-version: '24'
 
-      # Verificación del Backend (NestJS)
+      # --- Verificación del Backend (NestJS) ---
       - name: Instalar dependencias Backend
         run: npm install
-        working-directory: ./server
+        working-directory: ./apps/server
 
       - name: Type-check Backend
         run: npm run build
-        working-directory: ./server
+        working-directory: ./apps/server
 
-      # Verificación del Frontend (React + Vite)
+      # --- Verificación del Frontend (React + Vite) ---
       - name: Instalar dependencias Frontend
         run: npm install
-        working-directory: ./client
+        working-directory: ./apps/client
 
       - name: Type-check Frontend
         run: npx tsc --noEmit
-        working-directory: ./client
+        working-directory: ./apps/client

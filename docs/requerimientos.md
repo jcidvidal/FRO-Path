@@ -3,7 +3,7 @@
 ## 1. Requerimientos Funcionales (RF)
 Son las funciones específicas que el usuario podrá realizar en la plataforma.
 
-- **RF-01: Selección de Carrera:** El sistema debe permitir al usuario alternar entre la visualización de la malla de Ingeniería Civil Informática (ICC) e Ingeniería Civil Industrial (ICI).
+- **RF-01: Selección de Carrera:** El sistema debe permitir al usuario alternar entre la visualización de la malla de Ingeniería Civil Informática (ICC) e Ingeniería Informática(II).
 - **RF-02: Visualización Interactiva:** El sistema debe mostrar las asignaturas organizadas por niveles, áreas y créditos SCT.
 - **RF-03: Gestión de Estados:** El usuario debe poder marcar cada asignatura como "Pendiente", "Cursando" o "Aprobada".
 - **RF-04: Validación de Prerrequisitos:** El sistema debe bloquear o advertir si un usuario intenta marcar como "Aprobada" una materia cuyos prerrequisitos no han sido cumplidos.

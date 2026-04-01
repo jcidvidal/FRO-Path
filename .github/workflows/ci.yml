@@ -2,9 +2,9 @@ name: CI - Verificación de TypeScript
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ] # Agrega develop aquí
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ] # Agrega develop aquí
 
 # Colocamos el env aquí arriba (global) para que no haya dudas
 env:

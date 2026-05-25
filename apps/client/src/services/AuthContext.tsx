@@ -48,7 +48,7 @@ function emailExists(email: string): boolean {
 
 function validateRegister(email: string, password: string): string | null {
     if (emailExists(email)) return 'El correo ya esta registrado';
-    if (password.length < 6) return 'La contrasena debe tener al menos 6 caracteres';
+    if (password.length < 6) return 'La contraseña debe tener al menos 6 caracteres';
     return null;
 }
 
@@ -71,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const found = findUser(email, password);
 
             if (!found) {
-                return { success: false, error: 'Contrasena incorrecta' };
+                return { success: false, error: 'Contraseña incorrecta' };
             }
 
             const userData: User = { email: found.email, name: found.name, role: found.role };

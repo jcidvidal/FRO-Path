@@ -8,7 +8,7 @@ export class Profesor extends Usuario {
     correo: string,
     rut: string,
     contrasena: string,
-    public asignaturas: Asignatura[] = []
+    public asignaturas: Asignatura[] = [],
   ) {
     super(id, nombre, correo, rut, contrasena);
   }

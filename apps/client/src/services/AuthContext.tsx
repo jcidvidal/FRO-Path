@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 import { storage } from './storage';
 
 export interface User {
@@ -34,7 +35,7 @@ const initialMockUsers: MockUser[] = [
     { email: 'admin@ufrontera.cl', password: 'pass123', name: 'AdminPrueba', role: 'admin' },
 ];
 
-let mockUsers = [...initialMockUsers];
+const mockUsers = [...initialMockUsers];
 
 function findUser(email: string, password: string): MockUser | undefined {
     return mockUsers.find(
@@ -55,16 +56,8 @@ function validateRegister(email: string, password: string): string | null {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        const saved = storage.get<User>(STORAGE_KEY);
-        if (saved) {
-            setUser(saved);
-        }
-        setIsLoading(false);
-    }, []);
+    const [user, setUser] = useState<User | null>(() => storage.get<User>(STORAGE_KEY));
+    const isLoading = false;
 
     const login = useCallback(
         async (email: string, password: string, remember?: boolean): Promise<{ success: boolean; error?: string }> => {

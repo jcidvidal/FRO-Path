@@ -63,6 +63,15 @@ El proyecto utiliza un entorno de desarrollo moderno basado en **TypeScript** pa
 | **Base de Datos** | PostgreSQL | 16+ |
 | **Lenguaje** | TypeScript | 5.0+ |
 
+### Integracion Continua (CI)
+
+El proyecto utiliza GitHub Actions para verificar automaticamente cada `push` o `pull_request` hacia las ramas `main` y `develop`.
+
+El pipeline definido en `.github/workflows/ci.yml` configura **Node.js v24.14.1** y fuerza el uso de **npm v11.11.0** antes de instalar dependencias. Luego ejecuta la compilacion del backend, las pruebas del backend y el build del frontend:
+
+- Backend: `npm ci`, `npm run build`, `npm test`
+- Frontend: `npm ci`, `npm run build`
+
 ---
 
 ## ⚖️ Marco Legal y Normativo

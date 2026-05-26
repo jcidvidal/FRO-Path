@@ -11,7 +11,8 @@
   "workspaces": [
     "apps/client",
     "apps/server",
-    "packages/common"
+    "packages/common",
+    "packages/database"
   ],
   "scripts": {
     "install:all": "npm install --workspaces",

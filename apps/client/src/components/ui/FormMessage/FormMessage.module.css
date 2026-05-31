@@ -1,0 +1,38 @@
+.message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-family: var(--font-family);
+  font-size: 14px;
+  line-height: 1.5;
+  border: 1px solid transparent;
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+.error {
+  color: var(--color-error);
+  background-color: rgba(255, 68, 68, 0.1);
+  border-color: rgba(255, 68, 68, 0.25);
+}
+
+.success {
+  color: var(--color-success);
+  background-color: rgba(57, 255, 20, 0.08);
+  border-color: rgba(57, 255, 20, 0.2);
+}
+
+.info {
+  color: var(--color-text-secondary);
+  background-color: rgba(160, 174, 192, 0.08);
+  border-color: rgba(160, 174, 192, 0.2);
+}

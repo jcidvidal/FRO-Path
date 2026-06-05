@@ -4,13 +4,13 @@ import { Asignatura } from "./asignatura.entity.js"
 
 @Entity()
 export class ProgresoAcademico {
-    @PrimaryColumn({ type: "int" })
-    usuario_id!: number
+    @PrimaryColumn({ type: "varchar", length: 36 })//esta es una llave primaria y foranea que es un UUID xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    usuario_id!: string
 
-    @PrimaryColumn({ type: "int" })
-    asignatura_id!: number
+    @PrimaryColumn({ type: "varchar", length: 36 })//esta es una llave primaria y foranea que es un UUID xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    asignatura_id!: string
 
-    @Column({ type: "enum", enum: ["aprobado", "reprobado", "cursando", "bloqueado", "disponible"] })
+    @Column({ type: "enum", enum: ["aprobado", "reprobado", "cursando", "bloqueado", "disponible"] })//Este es un anum que se puede diferencia entre 5 estados
     estado!: string
 
     @ManyToOne(() => Usuario)

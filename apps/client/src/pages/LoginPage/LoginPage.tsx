@@ -73,7 +73,7 @@ export function LoginPage() {
 
                     <div className={styles.field}>
                         <PasswordInput
-                            label="Contrasena"
+                            label="Contraseña"
                             name="password"
                             value={values.password}
                             onChange={handleChange}

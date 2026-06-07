@@ -13,7 +13,7 @@ import {
   UsuarioRegistro,
 } from './postgres.entities';
 
-const ID_USUARIO_FUNCIONAL = 1;
+const EMAIL_USUARIO_FUNCIONAL = 'estudiante.funcional@fro-path.local';
 
 @Injectable()
 export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
@@ -49,7 +49,7 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
       .getRepository<ProgresoAcademicoRegistro>('ProgresoAcademico')
       .createQueryBuilder('progreso')
       .where('progreso.usuario_id = :usuarioId', {
-        usuarioId: ID_USUARIO_FUNCIONAL,
+        usuarioId: await this.obtenerIdUsuarioFuncional(dataSource),
       })
       .andWhere('progreso.asignatura_id IN (:...ids)', { ids: idsAsignaturas })
       .getMany();
@@ -98,7 +98,7 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
       .getRepository<ProgresoAcademicoRegistro>('ProgresoAcademico')
       .upsert(
         {
-          usuario_id: ID_USUARIO_FUNCIONAL,
+          usuario_id: await this.obtenerIdUsuarioFuncional(dataSource),
           asignatura_id: registro.id,
           estado: asignatura.estado,
         },
@@ -138,17 +138,7 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
   }
 
   private async sembrarDatosBase(dataSource: DataSource): Promise<void> {
-    await dataSource.getRepository<UsuarioRegistro>('Usuario').upsert(
-      {
-        id: ID_USUARIO_FUNCIONAL,
-        nombre: 'Estudiante',
-        apellido_paterno: 'Funcional',
-        apellido_materno: 'FROPath',
-        email: 'estudiante.funcional@fro-path.local',
-        password: 'pendiente-auth',
-      },
-      ['id'],
-    );
+    const idUsuarioFuncional = await this.obtenerIdUsuarioFuncional(dataSource);
 
     for (const carreraSeed of CARRERAS_SEED) {
       const carreraRepo = dataSource.getRepository<CarreraRegistro>('Carrera');
@@ -196,7 +186,7 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
           .getRepository<ProgresoAcademicoRegistro>('ProgresoAcademico')
           .upsert(
             {
-              usuario_id: ID_USUARIO_FUNCIONAL,
+              usuario_id: idUsuarioFuncional,
               asignatura_id: asignatura.id,
               estado: estadoInicialAsignatura(asignaturaSeed),
             },
@@ -222,5 +212,27 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
         }
       }
     }
+  }
+
+  private async obtenerIdUsuarioFuncional(
+    dataSource: DataSource,
+  ): Promise<number> {
+    const repositorio = dataSource.getRepository<UsuarioRegistro>('Usuario');
+    let usuario = await repositorio.findOne({
+      where: { email: EMAIL_USUARIO_FUNCIONAL },
+    });
+
+    if (!usuario) {
+      usuario = await repositorio.save({
+        nombre: 'Estudiante',
+        apellido_paterno: 'Funcional',
+        apellido_materno: 'FROPath',
+        email: EMAIL_USUARIO_FUNCIONAL,
+        password: 'pendiente-auth',
+        rol: 'estudiante',
+      });
+    }
+
+    return usuario.id;
   }
 }

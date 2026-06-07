@@ -1,19 +1,25 @@
 # Requerimientos del Sistema: FRO-Path
 
-## 1. Requerimientos Funcionales (RF)
-Son las funciones específicas que el usuario podrá realizar en la plataforma.
+Este documento define lo que el sistema debe hacer y las propiedades tecnicas que debe cumplir. Debe actualizarse cada vez que cambie una funcionalidad esperada o una restriccion de calidad.
 
-- **RF-01: Selección de Carrera:** El sistema debe permitir al usuario alternar entre la visualización de la malla de Ingeniería Civil Informática (ICC) e Ingeniería Informática(II).
-- **RF-02: Visualización Interactiva:** El sistema debe mostrar las asignaturas organizadas por niveles, áreas y créditos SCT.
-- **RF-03: Gestión de Estados:** El usuario debe poder marcar cada asignatura como "Pendiente", "Cursando" o "Aprobada".
-- **RF-04: Validación de Prerrequisitos:** El sistema debe bloquear o advertir si un usuario intenta marcar como "Aprobada" una materia cuyos prerrequisitos no han sido cumplidos.
-- **RF-05: Contador de Créditos:** El sistema debe calcular y mostrar en tiempo real la suma de créditos SCT de las materias seleccionadas o aprobadas.
+## 1. Requerimientos funcionales
 
-## 2. Requerimientos No Funcionales (RNF)
-Son las propiedades técnicas y de calidad que debe cumplir el software.
+- **RF-01: Seleccion de carrera.** El sistema debe permitir alternar entre las carreras soportadas por la primera version.
+- **RF-02: Visualizacion interactiva.** El sistema debe mostrar asignaturas organizadas por nivel, area y creditos SCT.
+- **RF-03: Gestion de estados.** El usuario debe poder marcar asignaturas segun estados academicos definidos por el sistema.
+- **RF-04: Validacion de prerrequisitos.** El sistema debe bloquear o advertir cuando se intente aprobar una asignatura sin cumplir sus prerrequisitos.
+- **RF-05: Contador de creditos.** El sistema debe calcular y mostrar en tiempo real creditos SCT aprobados, totales y porcentaje de avance.
+- **RF-06: Analisis de carga academica.** El sistema debe entregar advertencias y recomendaciones sobre la carga seleccionada.
 
-- **RNF-01: Rendimiento:** La carga inicial de la malla y el cambio entre carreras debe realizarse en menos de 2 segundos.
-- **RNF-02: Responsividad:** La interfaz debe ser funcional tanto en computadores de escritorio como en dispositivos móviles (browser).
-- **RNF-03: Persistencia de Datos:** La información de las mallas y los estados del usuario deben almacenarse de forma consistente en una base de datos PostgreSQL.
-- **RNF-04: Seguridad de Tipos:** El proyecto debe pasar todas las verificaciones de TypeScript en el pipeline de CI antes de cualquier despliegue.
-- **RNF-05: Disponibilidad:** El sistema debe ser accesible vía web de forma permanente durante el periodo de evaluación.
+## 2. Requerimientos no funcionales
+
+- **RNF-01: Rendimiento.** La carga inicial de la malla y el cambio entre carreras debe completarse en menos de 2 segundos en condiciones normales.
+- **RNF-02: Responsividad.** La interfaz debe ser funcional en escritorio y dispositivos moviles.
+- **RNF-03: Persistencia.** La informacion de mallas y estados del usuario debe almacenarse de forma consistente cuando se integre la base de datos final.
+- **RNF-04: Seguridad de tipos.** El proyecto debe pasar verificaciones TypeScript antes de despliegue.
+- **RNF-05: Disponibilidad.** El sistema debe estar accesible via web durante el periodo de evaluacion.
+- **RNF-06: Claridad academica.** Las recomendaciones deben comunicarse como apoyo orientativo, no como decision oficial de inscripcion.
+
+## Decision pendiente
+
+Confirmar si las carreras de la primera version son ICC/II o ICC/ICI. La documentacion queda neutral hasta cerrar esta decision.

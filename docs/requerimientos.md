@@ -6,7 +6,7 @@ Este documento define lo que el sistema debe hacer y las propiedades tecnicas qu
 
 La primera version de FRO-Path debe soportar solo estas carreras:
 
-- Ingenieria Civil Industrial (ICI).
+- Ingenieria Civil Informatica (ICC).
 - Ingenieria Informatica (II).
 
 No se deben incluir otras carreras en esta version.

@@ -109,9 +109,9 @@ npm run dev:server
 
 El proyecto usa GitHub Actions para validar cambios hacia ramas principales. La intencion del pipeline es instalar dependencias, compilar los workspaces relevantes y ejecutar pruebas antes de integrar cambios.
 
-## Decision pendiente
+## Carreras soportadas
 
-La documentacion historica menciona distintas combinaciones de carreras soportadas: ICC/ICI e ICC/II. Antes de cerrar la primera version se debe confirmar oficialmente que carreras se incluiran.
+La primera version de FRO-Path soporta Ingenieria Civil Informatica (ICI) e Ingenieria Informatica (II). No se incluyen otras carreras en esta version.
 
 ## Equipo
 

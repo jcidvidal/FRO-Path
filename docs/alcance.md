@@ -32,6 +32,6 @@ El sistema no debe contemplar en la primera fase:
 - Estudiantes de carreras informaticas de la Universidad de La Frontera.
 - Directores de carrera, docentes o ayudantes que orienten a estudiantes en su avance academico.
 
-## Decision pendiente
+## Carreras soportadas
 
-Hay una inconsistencia entre documentos: este alcance mencionaba ICC/ICI, mientras `docs/requerimientos.md` menciona ICC/II. Se debe confirmar oficialmente que carreras soportara la primera version.
+La primera version de FRO-Path soporta Ingenieria Civil Informatica (ICC) e Ingenieria Informatica (II). Esta definicion debe mantenerse alineada con `docs/requerimientos.md`.

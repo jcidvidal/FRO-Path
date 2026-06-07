@@ -20,7 +20,16 @@ export class CambiarEstadoAsignaturaUseCase {
     idAsignatura: string,
     estado: EstadoAsignatura,
   ) {
+    if (!Object.values(EstadoAsignatura).includes(estado)) {
+      throw new BadRequestException(`El estado ${estado} no es valido.`);
+    }
+
     const asignaturas = await this.repositorioMalla.buscarPorCarrera(idCarrera);
+
+    if (asignaturas.length === 0) {
+      throw new BadRequestException(`La carrera ${idCarrera} no existe.`);
+    }
+
     const asignatura = asignaturas.find(
       (elemento) => elemento.id === idAsignatura,
     );
@@ -49,13 +58,35 @@ export class CambiarEstadoAsignaturaUseCase {
         ? [new EventoAsignaturaAprobada(idCarrera, idAsignatura)]
         : [];
 
+    const idsAsignaturasDesbloqueadas =
+      estado === EstadoAsignatura.Aprobada
+        ? this.servicioDesbloqueoCascada.obtenerIdsAsignaturasDesbloqueadas(
+            asignaturaGuardada,
+            asignaturas,
+          )
+        : [];
+    const asignaturasPorId = new Map(
+      asignaturas.map((elemento) => [elemento.id, elemento]),
+    );
+
+    await Promise.all(
+      idsAsignaturasDesbloqueadas.map((idAsignaturaDesbloqueada) => {
+        const asignaturaDesbloqueada = asignaturasPorId.get(
+          idAsignaturaDesbloqueada,
+        );
+
+        return asignaturaDesbloqueada
+          ? this.repositorioMalla.guardarEstadoAsignatura(
+              idCarrera,
+              asignaturaDesbloqueada.conEstado(EstadoAsignatura.Disponible),
+            )
+          : Promise.resolve(undefined);
+      }),
+    );
+
     return {
       asignatura: asignaturaGuardada.aPrimitivos(),
-      idsAsignaturasDesbloqueadas:
-        this.servicioDesbloqueoCascada.obtenerIdsAsignaturasDesbloqueadas(
-          asignaturaGuardada,
-          asignaturas,
-        ),
+      idsAsignaturasDesbloqueadas,
       eventos,
     };
   }

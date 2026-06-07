@@ -8,7 +8,7 @@ import { ANALISIS_IA } from './domain/ports/ai-analysis.port';
 import { REPOSITORIO_MALLA } from './domain/ports/mesh-repository.port';
 import { PuedeAprobarAsignaturaSpecification } from './domain/specs/can-approve-course.specification';
 import { FachadaAnalisisIaEstatico } from './infrastructure/ai/static-ai-analysis.facade';
-import { RepositorioMallaEnMemoria } from './infrastructure/persistence/in-memory-mesh.repository';
+import { RepositorioMallaPostgres } from './infrastructure/persistence/postgres/postgres-mesh.repository';
 import { MeshController } from './presentation/mesh.controller';
 
 @Module({
@@ -22,7 +22,7 @@ import { MeshController } from './presentation/mesh.controller';
     ManejadorEventoAsignaturaAprobada,
     {
       provide: REPOSITORIO_MALLA,
-      useClass: RepositorioMallaEnMemoria,
+      useClass: RepositorioMallaPostgres,
     },
     {
       provide: ANALISIS_IA,

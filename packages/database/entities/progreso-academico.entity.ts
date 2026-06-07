@@ -10,7 +10,7 @@ export class ProgresoAcademico {
     @PrimaryColumn({ type: "int" })
     asignatura_id!: number
 
-    @Column({ type: "enum", enum: ["aprobado", "reprobado", "cursando", "bloqueado", "disponible"] })
+    @Column({ type: "enum", enum: ["aprobada", "reprobada", "en_curso", "bloqueada", "disponible"] })
     estado!: string
 
     @ManyToOne(() => Usuario)

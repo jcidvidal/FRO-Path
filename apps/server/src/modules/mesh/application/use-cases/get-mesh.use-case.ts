@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { REPOSITORIO_MALLA } from '../../domain/ports/mesh-repository.port';
 import type { PuertoRepositorioMalla } from '../../domain/ports/mesh-repository.port';
 
@@ -11,6 +11,10 @@ export class ObtenerMallaUseCase {
 
   async ejecutar(idCarrera: string) {
     const asignaturas = await this.repositorioMalla.buscarPorCarrera(idCarrera);
+
+    if (asignaturas.length === 0) {
+      throw new NotFoundException(`La carrera ${idCarrera} no existe.`);
+    }
 
     return {
       idCarrera,

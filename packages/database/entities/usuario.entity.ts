@@ -19,4 +19,7 @@ export class Usuario {
 
     @Column({ type: "varchar", length: 30 })
     password!: string
+
+    @Column({ type: "varchar", length: 20, default: "estudiante" })
+    rol!: string
 }

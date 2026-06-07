@@ -30,6 +30,7 @@ export interface UsuarioRegistro {
   apellido_materno: string;
   email: string;
   password: string;
+  rol: string;
 }
 
 export interface ProgresoAcademicoRegistro {
@@ -101,6 +102,7 @@ export const UsuarioSchema = new EntitySchema<UsuarioRegistro>({
     apellido_materno: { type: String, length: 50 },
     email: { type: String, length: 140, unique: true },
     password: { type: String, length: 255 },
+    rol: { type: String, length: 20, default: 'estudiante' },
   },
 });
 

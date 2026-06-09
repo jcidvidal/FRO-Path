@@ -1,0 +1,45 @@
+.layout {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #000000;
+}
+
+.glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.glowGreen {
+  background: radial-gradient(
+    ellipse 65% 60% at 50% 52%,
+    rgba(30, 90, 20, 0.85) 0%,
+    rgba(15, 55, 10, 0.55) 28%,
+    rgba(5, 20, 5, 0.25) 55%,
+    transparent 100%
+  );
+}
+
+.glowCyan {
+  background: radial-gradient(
+    ellipse 70% 65% at 50% 52%,
+    rgba(0, 80, 100, 0.8) 0%,
+    rgba(0, 50, 70, 0.5) 30%,
+    rgba(0, 20, 30, 0.2) 58%,
+    transparent 100%
+  );
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px;
+}

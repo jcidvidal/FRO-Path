@@ -10,7 +10,7 @@ export class ProgresoAcademico {
     @PrimaryColumn({ type: "varchar", length: 36 })//esta es una llave primaria y foranea que es un UUID xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
     asignatura_id!: string
 
-    @Column({ type: "enum", enum: ["aprobado", "reprobado", "cursando", "bloqueado", "disponible"] })//Este es un anum que se puede diferencia entre 5 estados
+    @Column({ type: "enum", enum: ["aprobada", "reprobada", "en_curso", "bloqueada", "disponible"] })
     estado!: string
 
     @ManyToOne(() => Usuario)

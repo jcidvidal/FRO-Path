@@ -13,4 +13,7 @@ export class Usuario {
 
     @Column({ type: "varchar", length: 30 }) //Esta es la contrsanha, pero hay que ver algún metodo de encriptación para guardarla
     password!: string
+
+    @Column({ type: "varchar", length: 20, default: "estudiante" })
+    rol!: string
 }

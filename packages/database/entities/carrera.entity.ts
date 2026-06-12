@@ -6,5 +6,8 @@ export class Carrera {
     id!: string
 
     @Column({ type: "varchar", length: 28 }) // 22 Ingeniería Informática, 28 Ingeniería Civil Informática
-    nombre!: string 
+    nombre!: string
+
+    @Column({ type: "varchar", length: 10, unique: true }) //ICC706
+    codigo_carrera!: string
 }

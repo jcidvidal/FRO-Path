@@ -34,4 +34,4 @@ El sistema no debe contemplar en la primera fase:
 
 ## Carreras soportadas
 
-La primera version de FRO-Path soporta Ingenieria Civil Informatica (ICC) e Ingenieria Informatica (II). Esta definicion debe mantenerse alineada con `docs/requerimientos.md`.
+La primera version de FRO-Path soporta Ingenieria Civil Informatica (ICI) e Ingenieria Informatica (II). Esta definicion debe mantenerse alineada con `docs/requerimientos.md`.

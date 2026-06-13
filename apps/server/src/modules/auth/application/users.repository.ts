@@ -63,6 +63,15 @@ export class UsuariosRepository {
     return usuario ? this.mapearConPassword(usuario) : null;
   }
 
+  async buscarPorId(id: number): Promise<UsuarioAutenticado | null> {
+    const dataSource = await this.obtenerDataSourceConSeed();
+    const usuario = await dataSource
+      .getRepository<UsuarioRegistro>('Usuario')
+      .findOne({ where: { id } });
+
+    return usuario ? this.mapear(usuario) : null;
+  }
+
   async crear(entrada: CrearUsuarioEntrada): Promise<UsuarioAutenticado> {
     const dataSource = await this.obtenerDataSourceConSeed();
     const usuario = await dataSource
@@ -77,6 +86,18 @@ export class UsuariosRepository {
       });
 
     return this.mapear(usuario);
+  }
+
+  async actualizarRol(
+    id: number,
+    rol: RolUsuario.Profesor | RolUsuario.Director,
+  ): Promise<UsuarioAutenticado> {
+    const dataSource = await this.obtenerDataSourceConSeed();
+    const repositorio = dataSource.getRepository<UsuarioRegistro>('Usuario');
+    const usuario = await repositorio.findOneByOrFail({ id });
+    usuario.rol = rol;
+
+    return this.mapear(await repositorio.save(usuario));
   }
 
   private async obtenerDataSourceConSeed(): Promise<DataSource> {

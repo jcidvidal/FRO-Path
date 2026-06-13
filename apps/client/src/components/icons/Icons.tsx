@@ -43,3 +43,12 @@ export function UsersIcon({ className }: IconProps) {
         </svg>
     );
 }
+
+export function LockIcon({ className }: IconProps) {
+    return (
+        <svg className={className} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="5" width="8" height="6" rx="1" stroke="currentColor" strokeWidth="1.2" />
+            <path d="M4 5V3.5a2 2 0 1 1 4 0V5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+        </svg>
+    );
+}

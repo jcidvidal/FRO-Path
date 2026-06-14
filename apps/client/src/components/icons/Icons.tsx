@@ -52,3 +52,21 @@ export function LockIcon({ className }: IconProps) {
         </svg>
     );
 }
+
+export function SearchIcon({ className }: IconProps) {
+    return (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+            <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M11 11L14.5 14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+    );
+}
+
+export function UserIcon({ className }: IconProps) {
+    return (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+            <circle cx="10" cy="7" r="3.5" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M3 18C3 14.5 6.5 12 10 12C13.5 12 17 14.5 17 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+    );
+}

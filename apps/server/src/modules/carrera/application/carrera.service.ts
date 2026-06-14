@@ -10,7 +10,7 @@ import { CarreraRepository } from './carrera.repository';
 
 @Injectable()
 export class CarreraService {
-  constructor(private readonly carreraRepository: CarreraRepository) {}
+  constructor(private readonly carreraRepository: CarreraRepository) { }
 
   async create(dto: CreateCarreraDto): Promise<Carrera> {
     const existente = await this.carreraRepository.buscarPorCodigo(
@@ -26,7 +26,7 @@ export class CarreraService {
     return this.carreraRepository.buscarTodos();
   }
 
-  async findOne(id: string): Promise<Carrera> {
+  async findOne(id: number): Promise<Carrera> {
     const carrera = await this.carreraRepository.buscarPorId(id);
     if (!carrera) {
       throw new NotFoundException(`La carrera con ID ${id} no existe.`);
@@ -34,7 +34,7 @@ export class CarreraService {
     return carrera;
   }
 
-  async update(id: string, dto: UpdateCarreraDto): Promise<Carrera> {
+  async update(id: number, dto: UpdateCarreraDto): Promise<Carrera> {
     await this.findOne(id);
 
     if (dto.codigo_carrera) {
@@ -50,7 +50,7 @@ export class CarreraService {
     return this.carreraRepository.actualizar(id, dto);
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: number): Promise<void> {
     await this.findOne(id);
     await this.carreraRepository.eliminar(id);
   }

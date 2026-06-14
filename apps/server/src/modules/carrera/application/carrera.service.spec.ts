@@ -33,7 +33,7 @@ describe('CarreraService', () => {
   it('crea una carrera exitosamente', async () => {
     carreraRepository.buscarPorCodigo.mockResolvedValue(null);
     carreraRepository.crear.mockResolvedValue({
-      id: 'uuid-1',
+      id: 1,
       nombre: 'Ingenieria Informatica',
       codigo_carrera: 'ICC706',
     });
@@ -52,7 +52,7 @@ describe('CarreraService', () => {
 
   it('rechaza crear si el codigo ya existe', async () => {
     carreraRepository.buscarPorCodigo.mockResolvedValue({
-      id: 'uuid-existente',
+      id: 2,
       nombre: 'Otra Carrera',
       codigo_carrera: 'ICC706',
     });
@@ -65,7 +65,7 @@ describe('CarreraService', () => {
   it('arroja NotFound si la carrera no existe al buscar por ID', async () => {
     carreraRepository.buscarPorId.mockResolvedValue(null);
 
-    await expect(carreraService.findOne('uuid-falso')).rejects.toThrow(
+    await expect(carreraService.findOne(999)).rejects.toThrow(
       NotFoundException,
     );
   });

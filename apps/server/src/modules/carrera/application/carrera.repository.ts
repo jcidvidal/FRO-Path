@@ -16,7 +16,7 @@ export class CarreraRepository {
     return carreras.map((c) => this.mapear(c));
   }
 
-  async buscarPorId(id: string): Promise<Carrera | null> {
+  async buscarPorId(id: number): Promise<Carrera | null> {
     const ds = await this.obtenerDataSource();
     const carrera = await ds
       .getRepository<CarreraRegistro>('Carrera')
@@ -42,7 +42,7 @@ export class CarreraRepository {
     return this.mapear(guardada);
   }
 
-  async actualizar(id: string, entrada: UpdateCarreraDto): Promise<Carrera> {
+  async actualizar(id: number, entrada: UpdateCarreraDto): Promise<Carrera> {
     const ds = await this.obtenerDataSource();
     const repo = ds.getRepository<CarreraRegistro>('Carrera');
 
@@ -59,7 +59,7 @@ export class CarreraRepository {
     return this.mapear(guardada);
   }
 
-  async eliminar(id: string): Promise<void> {
+  async eliminar(id: number): Promise<void> {
     const ds = await this.obtenerDataSource();
     await ds.getRepository<CarreraRegistro>('Carrera').delete(id);
   }

@@ -1,7 +1,7 @@
 import { EntitySchema } from 'typeorm';
 
 export interface CarreraRegistro {
-  id: string;
+  id: number;
   codigo: string;
   nombre: string;
 }

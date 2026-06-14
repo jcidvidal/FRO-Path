@@ -8,4 +8,4 @@ import { CarreraRepository } from './application/carrera.repository';
   providers: [CarreraService, CarreraRepository],
   exports: [CarreraService, CarreraRepository],
 })
-export class CarreraModule {}
+export class CarreraModule { }

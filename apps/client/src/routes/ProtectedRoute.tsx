@@ -7,7 +7,9 @@ interface ProtectedRouteProps {
     allowedRoles?: string[];
 }
 const roleRoutes: Record<string, string> = {
-  estudiante: '/dashboard',
+    estudiante: '/dashboard',
+    docente: '/dashboard/docente',
+    director: '/dashboard/director',
 };
 
 export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {

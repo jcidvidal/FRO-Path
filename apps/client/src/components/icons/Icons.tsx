@@ -65,8 +65,8 @@ export function SearchIcon({ className }: IconProps) {
 export function UserIcon({ className }: IconProps) {
     return (
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-            <circle cx="10" cy="7" r="3.5" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M3 18C3 14.5 6.5 12 10 12C13.5 12 17 14.5 17 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <circle cx="10" cy="7" r="3.5" stroke="var(--color-green)" strokeWidth="1.5" />
+            <path d="M3 18C3 14.5 6.5 12 10 12C13.5 12 17 14.5 17 18" stroke="var(--color-green)" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
     );
 }

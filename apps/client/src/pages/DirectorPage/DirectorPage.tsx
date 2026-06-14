@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { DashboardLayout } from '../../layouts/DashboardLayout/DashboardLayout';
 import { AppSidebar } from '../../components/auth/AppSidebar/AppSidebar';
@@ -10,13 +10,19 @@ import type { SubjectStatus } from '../../types/malla';
 import styles from './DirectorPage.module.css';
 
 export function DirectorPage() {
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const view = searchParams.get('view') || 'mallas';
 
     const [search, setSearch] = useState('');
     const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
     const [carreraFilter, setCarreraFilter] = useState('todas');
     const [selectedCareerId, setSelectedCareerId] = useState('ing-informatica');
+
+    useEffect(() => {
+        if (!searchParams.get('view')) {
+            setSearchParams({ view: 'mallas' }, { replace: true });
+        }
+    }, []);
 
     const selectedCareer = careerMallas.find((c) => c.id === selectedCareerId) ?? null;
 

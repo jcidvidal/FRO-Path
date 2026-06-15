@@ -34,31 +34,31 @@ describe('CarreraService', () => {
     carreraRepository.buscarPorCodigo.mockResolvedValue(null);
     carreraRepository.crear.mockResolvedValue({
       id: 1,
-      nombre: 'Ingenieria Informatica',
-      codigo_carrera: 'ICC706',
+      nombre: 'Ingeniería Informática',
+      codigo_carrera: 'DIR: 3086',
     });
 
     const resultado = await carreraService.create({
-      nombre: 'Ingenieria Informatica',
-      codigo_carrera: 'ICC706',
+      nombre: 'Ingeniería Informática',
+      codigo_carrera: 'DIR: 3086',
     });
 
-    expect(resultado.codigo_carrera).toBe('ICC706');
+    expect(resultado.codigo_carrera).toBe('DIR: 3086');
     expect(carreraRepository.crear).toHaveBeenCalledWith({
-      nombre: 'Ingenieria Informatica',
-      codigo_carrera: 'ICC706',
+      nombre: 'Ingeniería Informática',
+      codigo_carrera: 'DIR: 3086',
     });
   });
 
   it('rechaza crear si el codigo ya existe', async () => {
     carreraRepository.buscarPorCodigo.mockResolvedValue({
       id: 2,
-      nombre: 'Otra Carrera',
-      codigo_carrera: 'ICC706',
+      nombre: 'Ingeniería Civil Informática',
+      codigo_carrera: 'DIR: 3087',
     });
 
     await expect(
-      carreraService.create({ nombre: 'Nueva', codigo_carrera: 'ICC706' }),
+      carreraService.create({ nombre: 'Nueva', codigo_carrera: 'DIR: 3087' }),
     ).rejects.toThrow(ConflictException);
   });
 

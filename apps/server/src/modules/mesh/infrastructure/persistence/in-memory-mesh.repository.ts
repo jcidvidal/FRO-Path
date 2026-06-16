@@ -3,6 +3,12 @@ import { Asignatura } from '../../domain/entities/course.entity';
 import { PuertoRepositorioMalla } from '../../domain/ports/mesh-repository.port';
 import { EstadoAsignatura } from '../../domain/value-objects/course-status.vo';
 
+function estadoInicial(asignatura: Asignatura): EstadoAsignatura {
+  return asignatura.idsPrerequisitos.length > 0
+    ? EstadoAsignatura.Bloqueada
+    : EstadoAsignatura.Disponible;
+}
+
 @Injectable()
 export class RepositorioMallaEnMemoria implements PuertoRepositorioMalla {
   private readonly asignaturasPorCarrera = new Map<string, Asignatura[]>([
@@ -31,13 +37,14 @@ export class RepositorioMallaEnMemoria implements PuertoRepositorioMalla {
     ],
   ]);
 
-  buscarPorCarrera(idCarrera: string): Promise<Asignatura[]> {
+  buscarPorCarrera(idCarrera: string, _idUsuario: number): Promise<Asignatura[]> {
     return Promise.resolve(this.asignaturasPorCarrera.get(idCarrera) ?? []);
   }
 
   guardarEstadoAsignatura(
     idCarrera: string,
     asignatura: Asignatura,
+    _idUsuario: number,
   ): Promise<Asignatura> {
     const asignaturas = this.asignaturasPorCarrera.get(idCarrera) ?? [];
     this.asignaturasPorCarrera.set(
@@ -48,5 +55,15 @@ export class RepositorioMallaEnMemoria implements PuertoRepositorioMalla {
     );
 
     return Promise.resolve(asignatura);
+  }
+
+  limpiarProgreso(idCarrera: string, _idUsuario: number): Promise<void> {
+    const asignaturas = this.asignaturasPorCarrera.get(idCarrera) ?? [];
+    this.asignaturasPorCarrera.set(
+      idCarrera,
+      asignaturas.map((a) => a.conEstado(estadoInicial(a))),
+    );
+
+    return Promise.resolve();
   }
 }

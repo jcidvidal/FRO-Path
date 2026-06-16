@@ -3,23 +3,20 @@ import { DataSource } from 'typeorm';
 import { Asignatura } from '../../../domain/entities/course.entity';
 import { PuertoRepositorioMalla } from '../../../domain/ports/mesh-repository.port';
 import { EstadoAsignatura } from '../../../domain/value-objects/course-status.vo';
-import { CARRERAS_SEED, estadoInicialAsignatura } from './mesh-seed';
+import { CARRERAS_SEED } from './mesh-seed';
 import { obtenerDataSourceFroPath } from './postgres-data-source';
 import {
   AsignaturaRegistro,
   CarreraRegistro,
   PrerrequisitoRegistro,
   ProgresoAcademicoRegistro,
-  UsuarioRegistro,
 } from './postgres.entities';
-
-const EMAIL_USUARIO_FUNCIONAL = 'estudiante.funcional@fro-path.local';
 
 @Injectable()
 export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
   private dataSource?: DataSource;
 
-  async buscarPorCarrera(idCarrera: string): Promise<Asignatura[]> {
+  async buscarPorCarrera(idCarrera: string, idUsuario: number): Promise<Asignatura[]> {
     const dataSource = await this.obtenerDataSourceConSeed();
     const carrera = await dataSource
       .getRepository<CarreraRegistro>('Carrera')
@@ -48,9 +45,7 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
     const progreso = await dataSource
       .getRepository<ProgresoAcademicoRegistro>('ProgresoAcademico')
       .createQueryBuilder('progreso')
-      .where('progreso.usuario_id = :usuarioId', {
-        usuarioId: await this.obtenerIdUsuarioFuncional(dataSource),
-      })
+      .where('progreso.usuario_id = :usuarioId', { usuarioId: idUsuario })
       .andWhere('progreso.asignatura_id IN (:...ids)', { ids: idsAsignaturas })
       .getMany();
 
@@ -74,7 +69,9 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
           nivel: asignatura.nivel,
           estado:
             progresoPorAsignatura.get(asignatura.id) ??
-            EstadoAsignatura.Disponible,
+            (prerequisitos.some((p) => p.asignatura_id === asignatura.id)
+              ? EstadoAsignatura.Bloqueada
+              : EstadoAsignatura.Disponible),
           idsPrerequisitos: prerequisitos
             .filter((item) => item.asignatura_id === asignatura.id)
             .map((item) => codigosPorId.get(item.requisito_id))
@@ -86,6 +83,7 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
   async guardarEstadoAsignatura(
     idCarrera: string,
     asignatura: Asignatura,
+    idUsuario: number,
   ): Promise<Asignatura> {
     const dataSource = await this.obtenerDataSourceConSeed();
     const registro = await this.buscarRegistroAsignatura(
@@ -98,7 +96,7 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
       .getRepository<ProgresoAcademicoRegistro>('ProgresoAcademico')
       .upsert(
         {
-          usuario_id: await this.obtenerIdUsuarioFuncional(dataSource),
+          usuario_id: idUsuario,
           asignatura_id: registro.id,
           estado: asignatura.estado,
         },
@@ -106,6 +104,30 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
       );
 
     return asignatura;
+  }
+
+  async limpiarProgreso(idCarrera: string, idUsuario: number): Promise<void> {
+    const dataSource = await this.obtenerDataSourceConSeed();
+    const carrera = await dataSource
+      .getRepository<CarreraRegistro>('Carrera')
+      .findOne({ where: { codigo: idCarrera } });
+
+    if (!carrera) return;
+
+    const asignaturas = await dataSource
+      .getRepository<AsignaturaRegistro>('Asignatura')
+      .find({ where: { carrera_id: carrera.id } });
+
+    const ids = asignaturas.map((a) => a.id);
+    if (ids.length === 0) return;
+
+    await dataSource
+      .getRepository<ProgresoAcademicoRegistro>('ProgresoAcademico')
+      .createQueryBuilder()
+      .delete()
+      .where('usuario_id = :usuarioId', { usuarioId: idUsuario })
+      .andWhere('asignatura_id IN (:...ids)', { ids })
+      .execute();
   }
 
   private async obtenerDataSourceConSeed(): Promise<DataSource> {
@@ -138,8 +160,6 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
   }
 
   private async sembrarDatosBase(dataSource: DataSource): Promise<void> {
-    const idUsuarioFuncional = await this.obtenerIdUsuarioFuncional(dataSource);
-
     for (const carreraSeed of CARRERAS_SEED) {
       const carreraRepo = dataSource.getRepository<CarreraRegistro>('Carrera');
       let carrera = await carreraRepo.findOne({
@@ -182,17 +202,6 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
           continue;
         }
 
-        await dataSource
-          .getRepository<ProgresoAcademicoRegistro>('ProgresoAcademico')
-          .upsert(
-            {
-              usuario_id: idUsuarioFuncional,
-              asignatura_id: asignatura.id,
-              estado: estadoInicialAsignatura(asignaturaSeed),
-            },
-            ['usuario_id', 'asignatura_id'],
-          );
-
         for (const requisitoCodigo of asignaturaSeed.requisitos ?? []) {
           const requisito = asignaturasPorCodigo.get(requisitoCodigo);
 
@@ -212,27 +221,5 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
         }
       }
     }
-  }
-
-  private async obtenerIdUsuarioFuncional(
-    dataSource: DataSource,
-  ): Promise<number> {
-    const repositorio = dataSource.getRepository<UsuarioRegistro>('Usuario');
-    let usuario = await repositorio.findOne({
-      where: { email: EMAIL_USUARIO_FUNCIONAL },
-    });
-
-    if (!usuario) {
-      usuario = await repositorio.save({
-        nombre: 'Estudiante',
-        apellido_paterno: 'Funcional',
-        apellido_materno: 'FROPath',
-        email: EMAIL_USUARIO_FUNCIONAL,
-        password: 'pendiente-auth',
-        rol: 'estudiante',
-      });
-    }
-
-    return usuario.id;
   }
 }

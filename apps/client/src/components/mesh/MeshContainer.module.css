@@ -150,6 +150,26 @@
     line-height: 1.7;
 }
 
+.estadoCarga {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+}
+
+.estadoError {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-reprobado-bd);
+    font-size: var(--font-size-base);
+    padding: 16px;
+    text-align: center;
+}
+
 /* esto es para responsive */
 @media (max-width: 768px) {
     .container {

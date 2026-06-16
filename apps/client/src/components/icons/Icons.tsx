@@ -70,3 +70,29 @@ export function UserIcon({ className }: IconProps) {
         </svg>
     );
 }
+export function ErrorIcon({ className }: IconProps) {
+    return (
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+            <circle cx="9" cy="9" r="8" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M6 6L12 12M12 6L6 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+    );
+}
+
+export function SuccessIcon({ className }: IconProps) {
+    return (
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+            <circle cx="9" cy="9" r="8" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M5 9L8 12L13 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
+}
+
+export function InfoIcon({ className }: IconProps) {
+    return (
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+            <circle cx="9" cy="9" r="8" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M9 8V13M9 6V6.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+    );
+}

@@ -85,7 +85,6 @@
     min-width: 0;
 }
 
-/* Mobile: 2 semesters per row */
 @media (max-width: 768px) {
     .gridWrapper {
         padding: 8px;

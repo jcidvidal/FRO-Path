@@ -27,19 +27,24 @@ class RepositorioMallaFake implements PuertoRepositorioMalla {
     }),
   ];
 
-  buscarPorCarrera(): Promise<Asignatura[]> {
+  buscarPorCarrera(_idCarrera: string, _idUsuario: number): Promise<Asignatura[]> {
     return Promise.resolve(this.asignaturas);
   }
 
   guardarEstadoAsignatura(
     _idCarrera: string,
     asignatura: Asignatura,
+    _idUsuario: number,
   ): Promise<Asignatura> {
     this.asignaturas = this.asignaturas.map((elemento) =>
       elemento.id === asignatura.id ? asignatura : elemento,
     );
 
     return Promise.resolve(asignatura);
+  }
+
+  limpiarProgreso(_idCarrera: string, _idUsuario: number): Promise<void> {
+    return Promise.resolve();
   }
 }
 
@@ -62,6 +67,7 @@ describe('CambiarEstadoAsignaturaUseCase', () => {
       'icc',
       'ICC-001',
       EstadoAsignatura.Aprobada,
+      1,
     );
 
     expect(resultado.idsAsignaturasDesbloqueadas).toEqual(['ICC-002']);
@@ -79,6 +85,7 @@ describe('CambiarEstadoAsignaturaUseCase', () => {
       'icc',
       'ICC-001',
       EstadoAsignatura.EnCurso,
+      1,
     );
 
     expect(resultado.idsAsignaturasDesbloqueadas).toEqual([]);

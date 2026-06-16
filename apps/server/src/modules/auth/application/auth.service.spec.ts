@@ -22,8 +22,8 @@ describe('AuthService', () => {
       sign: jest.fn().mockReturnValue('jwt-token'),
     };
     authService = new AuthService(
-      usuariosRepository as UsuariosRepository,
-      jwtService as JwtService,
+      usuariosRepository as unknown as UsuariosRepository,
+      jwtService as unknown as JwtService,
     );
   });
 

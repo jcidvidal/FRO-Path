@@ -2,8 +2,9 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import { LoginPage } from '../pages/LoginPage/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage/RegisterPage';
 import { DashboardPage } from '../pages/DashboardPage/DashboardPage';
-import { DocentePage } from '../pages/DocentePage/DocentePage';
-import { DirectorPage } from '../pages/DirectorPage/DirectorPage';
+import { DocenteDashboardPage } from '../pages/DocenteDashboardPage/DocenteDashboardPage';
+import { DirectorDashboardPage } from '../pages/DirectorDashboardPage/DirectorDashboardPage';
+import { AdminDashboardPage } from '../pages/AdminDashboardPage/AdminDashboardPage';
 import { ProtectedRoute } from './ProtectedRoute';
 
 const router = createBrowserRouter([
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
         path: '/dashboard/docente',
         element: (
             <ProtectedRoute allowedRoles={['docente']}>
-                <DocentePage />
+                <DocenteDashboardPage />
             </ProtectedRoute>
         ),
     },
@@ -35,7 +36,15 @@ const router = createBrowserRouter([
         path: '/dashboard/director',
         element: (
             <ProtectedRoute allowedRoles={['director']}>
-                <DirectorPage />
+                <DirectorDashboardPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/dashboard/admin',
+        element: (
+            <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboardPage />
             </ProtectedRoute>
         ),
     },

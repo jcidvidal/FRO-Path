@@ -5,21 +5,21 @@ import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
 
 describe('AppController (e2e)', () => {
-  let app: INestApplication<App>;
+  let aplicacion: INestApplication<App>;
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+    const moduloPruebas: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
+    aplicacion = moduloPruebas.createNestApplication();
+    await aplicacion.init();
   });
 
   it('/ (GET)', () => {
-    return request(app.getHttpServer())
+    return request(aplicacion.getHttpServer())
       .get('/')
       .expect(200)
-      .expect('Hello World!');
+      .expect('FRO-Path API is running.');
   });
 });

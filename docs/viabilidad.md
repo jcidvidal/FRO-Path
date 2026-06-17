@@ -1,24 +1,44 @@
-# Estudio de Viabilidad: Proyecto FRO-Path
+# Estudio de Viabilidad: FRO-Path
 
-## 1. Viabilidad Técnica
-El proyecto es técnicamente factible utilizando herramientas de desarrollo modernas y estándares de la industria.
-- **Stack Tecnológico:** Uso de **NestJS** para el backend y **React** para el frontend, permitiendo una arquitectura robusta y escalable.
-- **Base de Datos:** Implementación de **PostgreSQL** para manejar la integridad referencial de las mallas académicas.
-- **Infraestructura de Desarrollo:** Configuración de **GitHub Actions** para Integración Continua (CI), asegurando que cada cambio sea verificado automáticamente en menos de 30 segundos.
-- **Hardware:** El desarrollo se realiza en estaciones de trabajo locales y el despliegue final se proyecta en servicios de nube gratuitos (Tier gratuito de Render/Vercel).
+Este documento justifica si el proyecto puede realizarse con los recursos, plazos y restricciones disponibles.
 
-## 2. Viabilidad Legal y Normativa (Contexto UFRO)
-El sistema opera bajo el marco regulatorio de la Universidad de La Frontera.
-- **Reglamento Académico:** El algoritmo de cálculo de créditos y validación de prerrequisitos se ajusta estrictamente al **Reglamento de Régimen de Estudios de Pregrado** de la UFRO.
-- **Datos de Mallas:** La información de las carreras de **Ingeniería Civil Informática (ICC)** e **Ingeniería Informática (II)** es de carácter público y se obtiene de los sitios oficiales de la facultad.
-- **Privacidad:** El sistema no almacenará datos sensibles de carácter personal en su primera fase, operando como un simulador anónimo para el estudiante.
+## 1. Viabilidad tecnica
 
-## 3. Viabilidad Económica y de Tiempo
-- **Costos de Desarrollo:** El presupuesto es de **$0 USD**, utilizando herramientas de código abierto y licencias estudiantiles.
-- **Cronograma:** El proyecto cuenta con un plazo de **16 semanas** (Marzo - Julio 2026), con hitos de control cada 3 semanas para mitigar retrasos.
-- **Riesgo de Tiempo:** La meta crítica es el **07 de abril**, fecha límite para la entrega de la propuesta técnica final.
+El proyecto es tecnicamente factible usando herramientas modernas y conocidas por el equipo.
 
-## 4. Viabilidad Operativa (El Equipo)
-El equipo cuenta con las competencias necesarias para cubrir las áreas críticas del software:
-- **Liderazgo y Gestión:** Coordinado por el **Vicepresidente del centro de alumnos**, asegurando el alineamiento con las necesidades estudiantiles.
-- **Desarrollo:** Integrado por estudiantes de Ingeniería Civil Informática con experiencia previa en proyectos académicos y arquitectura de software.
+- **Backend:** NestJS permite una arquitectura modular para separar controladores, casos de uso, dominio e infraestructura.
+- **Frontend:** React con Vite permite construir una interfaz interactiva y rapida para visualizar la malla.
+- **Base de datos:** PostgreSQL es adecuado para representar relaciones entre carreras, asignaturas, prerrequisitos, usuarios y progreso academico.
+- **CI:** GitHub Actions puede verificar instalacion, build y pruebas antes de integrar cambios.
+- **Despliegue:** El frontend puede desplegarse en Vercel y el backend puede proyectarse en servicios compatibles con Node.js.
+
+## 2. Viabilidad legal y normativa
+
+El sistema debe operar como herramienta de apoyo academico, sin reemplazar sistemas oficiales de la UFRO.
+
+- Las mallas curriculares deben obtenerse desde fuentes oficiales o validadas.
+- El uso de datos personales debe limitarse a lo necesario.
+- Las recomendaciones del sistema deben ser informativas y no vinculantes.
+- Si se almacenan credenciales, deben protegerse con mecanismos seguros; no corresponde guardar contrasenas en texto plano.
+
+## 3. Viabilidad economica y de tiempo
+
+- **Costo inicial:** el proyecto puede construirse con herramientas open source y servicios gratuitos para evaluacion.
+- **Plazo academico:** se proyecta dentro del periodo Marzo - Julio 2026.
+- **Riesgo principal:** la integracion completa entre frontend, backend y base de datos puede requerir mas tiempo que una version simulada en memoria.
+
+## 4. Viabilidad operativa
+
+El equipo puede dividir el trabajo por capas:
+
+- Frontend: visualizacion e interaccion con la malla.
+- Backend: reglas de negocio, endpoints y analisis.
+- Base de datos: modelo relacional y persistencia.
+- Documentacion y CI: trazabilidad, calidad y entrega.
+
+## Riesgos a monitorear
+
+- Confirmacion de carreras soportadas.
+- Datos oficiales de mallas y prerrequisitos.
+- Persistencia real del progreso por usuario.
+- Definicion final del proveedor o mecanismo de IA.

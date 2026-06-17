@@ -3,6 +3,7 @@ import { renderHook, act } from '@testing-library/react';
 import React from 'react';
 import { AuthProvider, useAuth } from './AuthContext';
 import { storage } from './storage';
+import * as apiClientModule from './apiClient';
 
 vi.mock('./storage', () => ({
     storage: {
@@ -11,6 +12,27 @@ vi.mock('./storage', () => ({
         remove: vi.fn(),
     },
 }));
+
+vi.mock('./apiClient', () => ({
+    apiClient: { post: vi.fn() },
+    saveToken: vi.fn(),
+    removeToken: vi.fn(),
+    getToken: vi.fn().mockReturnValue(null),
+}));
+
+const mockBackendResponse = {
+    accessToken: 'mock-jwt-token',
+    tokenType: 'Bearer',
+    expiresIn: '1h',
+    user: {
+        id: 1,
+        nombre: 'Estudiante',
+        apellidoPaterno: 'Demo',
+        apellidoMaterno: 'FROPath',
+        email: 'estudiante@fro-path.local',
+        rol: 'estudiante',
+    },
+};
 
 function renderAuthHook() {
     return renderHook(() => useAuth(), {
@@ -30,120 +52,125 @@ describe('AuthContext', () => {
     });
 
     describe('login', () => {
-        it('debe iniciar sesion con credenciales correctas', async () => {
+        it('debe iniciar sesion cuando la API responde correctamente', async () => {
+            vi.mocked(apiClientModule.apiClient.post).mockResolvedValue(mockBackendResponse);
             const { result } = renderAuthHook();
 
             await act(async () => {
-                const res = await result.current.login('estud@ufromail.cl', 'pass123');
+                const res = await result.current.login('estudiante@fro-path.local', 'Pass1234');
                 expect(res.success).toBe(true);
             });
 
             expect(result.current.isAuthenticated).toBe(true);
             expect(result.current.user).toEqual({
-                email: 'estud@ufromail.cl',
-                name: 'EstudiantePrueba',
+                id: 1,
+                email: 'estudiante@fro-path.local',
+                name: 'Estudiante Demo',
                 role: 'estudiante',
             });
         });
 
-        it('debe fallar con email incorrecto', async () => {
+        it('debe mapear el rol profesor a docente', async () => {
+            vi.mocked(apiClientModule.apiClient.post).mockResolvedValue({
+                ...mockBackendResponse,
+                user: { ...mockBackendResponse.user, rol: 'profesor' },
+            });
             const { result } = renderAuthHook();
 
             await act(async () => {
-                const res = await result.current.login('wrong@ufro.cl', 'pass123');
-                expect(res.success).toBe(false);
-                expect(res.error).toBe('Contraseña incorrecta');
+                await result.current.login('profesor@fro-path.local', 'Pass1234');
             });
+
+            expect(result.current.user?.role).toBe('docente');
         });
 
-        it('debe fallar con contrasena incorrecta', async () => {
+        it('debe fallar y retornar el mensaje de error de la API', async () => {
+            vi.mocked(apiClientModule.apiClient.post).mockRejectedValue(
+                new Error('Credenciales invalidas.'),
+            );
             const { result } = renderAuthHook();
 
             await act(async () => {
-                const res = await result.current.login('estud@ufromail.cl', 'wrongpassword');
+                const res = await result.current.login('nadie@test.cl', 'wrongpassword');
                 expect(res.success).toBe(false);
-                expect(res.error).toBe('Contraseña incorrecta');
+                expect(res.error).toBe('Credenciales invalidas.');
             });
+
+            expect(result.current.isAuthenticated).toBe(false);
         });
 
-        it('debe guardar en storage si remember es true', async () => {
+        it('debe guardar el token y el usuario en storage tras login exitoso', async () => {
+            vi.mocked(apiClientModule.apiClient.post).mockResolvedValue(mockBackendResponse);
             const { result } = renderAuthHook();
 
             await act(async () => {
-                await result.current.login('estud@ufromail.cl', 'pass123', true);
+                await result.current.login('estudiante@fro-path.local', 'Pass1234');
             });
 
+            expect(apiClientModule.saveToken).toHaveBeenCalledWith('mock-jwt-token');
             expect(storage.set).toHaveBeenCalledWith('auth_user', {
-                email: 'estud@ufromail.cl',
-                name: 'EstudiantePrueba',
+                id: 1,
+                email: 'estudiante@fro-path.local',
+                name: 'Estudiante Demo',
                 role: 'estudiante',
             });
         });
 
-        it('no debe guardar en storage si remember es false', async () => {
+        it('debe retornar error generico si la API falla de forma inesperada', async () => {
+            vi.mocked(apiClientModule.apiClient.post).mockRejectedValue('error no esperado');
             const { result } = renderAuthHook();
 
             await act(async () => {
-                await result.current.login('estud@ufromail.cl', 'pass123', false);
+                const res = await result.current.login('test@test.cl', 'password');
+                expect(res.success).toBe(false);
+                expect(res.error).toBe('Error al iniciar sesión');
             });
-
-            expect(storage.set).not.toHaveBeenCalled();
         });
     });
 
     describe('register', () => {
         it('debe registrar un nuevo usuario exitosamente', async () => {
+            vi.mocked(apiClientModule.apiClient.post).mockResolvedValue(mockBackendResponse);
             const { result } = renderAuthHook();
 
             await act(async () => {
-                const res = await result.current.register('Nuevo Usuario', '22.222.222-2', 'new@ufromail.cl', 'newpassword');
+                const res = await result.current.register('Nuevo', '22.222.222-2', 'nuevo@test.cl', 'password123');
                 expect(res.success).toBe(true);
             });
         });
 
-        it('debe fallar al registrar un email existente', async () => {
+        it('debe fallar si la API indica que el correo ya existe', async () => {
+            vi.mocked(apiClientModule.apiClient.post).mockRejectedValue(
+                new Error('El correo ya esta registrado.'),
+            );
             const { result } = renderAuthHook();
 
             await act(async () => {
-                const res = await result.current.register('Otro Usuario', '22.222.222-2', 'estud@ufromail.cl', 'pass123');
+                const res = await result.current.register('Otro', '33.333.333-3', 'existente@test.cl', 'password123');
                 expect(res.success).toBe(false);
-                expect(res.error).toBe('El correo ya esta registrado');
+                expect(res.error).toBe('El correo ya esta registrado.');
             });
         });
 
-        it('debe fallar si la contrasena es muy corta', async () => {
+        it('no debe setear el usuario en estado tras registrar', async () => {
+            vi.mocked(apiClientModule.apiClient.post).mockResolvedValue(mockBackendResponse);
             const { result } = renderAuthHook();
 
             await act(async () => {
-                const res = await result.current.register('Nuevo Usuario', '33.333.333-3', 'new2@ufromail.cl', '12345');
-                expect(res.success).toBe(false);
-                expect(res.error).toBe('La contraseña debe tener al menos 6 caracteres');
-            });
-        });
-
-        it('debe permitir login despues de registrar un nuevo usuario', async () => {
-            const { result } = renderAuthHook();
-
-            await act(async () => {
-                const res = await result.current.register('Nuevo Usuario', '44.444.444-4', 'newuser@ufromail.cl', 'mypassword');
-                expect(res.success).toBe(true);
+                await result.current.register('Nuevo', '44.444.444-4', 'nuevo@test.cl', 'password123');
             });
 
-            await act(async () => {
-                const res = await result.current.login('newuser@ufromail.cl', 'mypassword');
-                expect(res.success).toBe(true);
-            });
-
-            expect(result.current.isAuthenticated).toBe(true);
+            expect(result.current.isAuthenticated).toBe(false);
         });
     });
 
     describe('logout', () => {
-        it('debe cerrar sesion y limpiar el usuario', async () => {
+        it('debe limpiar usuario, token y storage al cerrar sesion', async () => {
+            vi.mocked(apiClientModule.apiClient.post).mockResolvedValue(mockBackendResponse);
             const { result } = renderAuthHook();
 
             await act(async () => {
-                await result.current.login('estud@ufromail.cl', 'pass123');
+                await result.current.login('estudiante@fro-path.local', 'Pass1234');
             });
             expect(result.current.isAuthenticated).toBe(true);
 
@@ -153,6 +180,7 @@ describe('AuthContext', () => {
 
             expect(result.current.isAuthenticated).toBe(false);
             expect(result.current.user).toBeNull();
+            expect(apiClientModule.removeToken).toHaveBeenCalled();
             expect(storage.remove).toHaveBeenCalledWith('auth_user');
         });
     });

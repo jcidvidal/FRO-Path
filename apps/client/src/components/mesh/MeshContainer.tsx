@@ -1,47 +1,23 @@
-import { useState } from 'react';
 import { MeshGrid } from './MeshGrid';
-import type { SubjectStatus, Semester, Subject } from '../../types/malla';
-import { initialSemestres, initialModulosIngles, initialPracticas } from '../../data/mallaData';
+import type { SubjectStatus } from '../../types/malla';
+import { useMesh } from '../../store/useMeshStore';
 import styles from './MeshContainer.module.css';
 import bandurrIA from '../../assets/imagenes/Bandurrias/badurrIA.png';
 
+const ID_CARRERA = 'icc';
+
 export function MeshContainer() {
-    const [semestres, setSemestres] = useState<Semester[]>(initialSemestres);
-    const [modulosIngles, setModulosIngles] = useState<Subject[]>(initialModulosIngles);
-    const [practicas, setPracticas] = useState<Subject[]>(initialPracticas);
+    const { semestres, isLoading, error, cambiarEstado } = useMesh(ID_CARRERA);
 
-    const totalSct = semestres
-        .flatMap((s) => s.asignaturas)
-        .reduce((acc, a) => acc + a.sct, 0);
-
+    const totalSct = semestres.flatMap((s) => s.asignaturas).reduce((acc, a) => acc + a.sct, 0);
     const aprobadoSct = semestres
         .flatMap((s) => s.asignaturas)
         .filter((a) => a.status === 'aprobado')
         .reduce((acc, a) => acc + a.sct, 0);
-
-    const porcentaje = Math.round((aprobadoSct / totalSct) * 100);
+    const porcentaje = totalSct === 0 ? 0 : Math.round((aprobadoSct / totalSct) * 100);
 
     function handleStatusChange(subjectId: string, newStatus: SubjectStatus) {
-        setSemestres((prev) =>
-            prev.map((sem) => ({
-                ...sem,
-                asignaturas: sem.asignaturas.map((sub) =>
-                    sub.id === subjectId ? { ...sub, status: newStatus } : sub
-                ),
-            }))
-        );
-
-        setModulosIngles((prev) =>
-            prev.map((sub) =>
-                sub.id === subjectId ? { ...sub, status: newStatus } : sub
-            )
-        );
-
-        setPracticas((prev) =>
-            prev.map((sub) =>
-                sub.id === subjectId ? { ...sub, status: newStatus } : sub
-            )
-        );
+        cambiarEstado(subjectId, newStatus);
     }
 
     return (
@@ -81,12 +57,20 @@ export function MeshContainer() {
                 </div>
             </div>
 
-            <MeshGrid
-                semestres={semestres}
-                modulosIngles={modulosIngles}
-                practicas={practicas}
-                onStatusChange={handleStatusChange}
-            />
+            {isLoading && (
+                <div className={styles.estadoCarga}>Cargando malla curricular...</div>
+            )}
+
+            {error && (
+                <div className={styles.estadoError}>{error}</div>
+            )}
+
+            {!isLoading && !error && (
+                <MeshGrid
+                    semestres={semestres}
+                    onStatusChange={handleStatusChange}
+                />
+            )}
 
             <div className={styles.leyenda}>
                 <span className={styles.leyendaItem}>

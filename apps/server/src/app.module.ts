@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
@@ -7,7 +8,12 @@ import { ProgressModule } from './modules/progress/progress.module';
 import { CarreraModule } from './modules/carrera/carrera.module';
 
 @Module({
-  imports: [AuthModule, MeshModule, ProgressModule, CarreraModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true, cache: true }),
+    AuthModule,
+    MeshModule,
+    ProgressModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

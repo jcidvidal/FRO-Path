@@ -36,7 +36,13 @@ export function LoginPage() {
             const result = await login(vals.email, vals.password);
 
             if (result.success) {
-                navigate('/dashboard');
+                const rutas: Record<string, string> = {
+                    estudiante: '/dashboard',
+                    docente: '/dashboard/docente',
+                    director: '/dashboard/director',
+                    admin: '/dashboard/admin',
+                };
+                navigate(rutas[result.role ?? 'estudiante'] ?? '/dashboard');
             } else {
                 if (result.error?.toLowerCase().includes('contrasena')) {
                     setFieldError('password', result.error);

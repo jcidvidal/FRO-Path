@@ -9,8 +9,8 @@ export class ObtenerMallaUseCase {
     private readonly repositorioMalla: PuertoRepositorioMalla,
   ) {}
 
-  async ejecutar(idCarrera: string) {
-    const asignaturas = await this.repositorioMalla.buscarPorCarrera(idCarrera);
+  async ejecutar(idCarrera: string, idUsuario: number) {
+    const asignaturas = await this.repositorioMalla.buscarPorCarrera(idCarrera, idUsuario);
 
     if (asignaturas.length === 0) {
       throw new NotFoundException(`La carrera ${idCarrera} no existe.`);

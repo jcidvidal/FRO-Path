@@ -1,6 +1,9 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../../auth/presentation/jwt-auth.guard';
+import type { RequestConUsuario } from '../../auth/presentation/jwt-auth.guard';
 import { CalcularProgresoEstudianteUseCase } from '../application/calculate-student-progress.use-case';
 
+@UseGuards(JwtAuthGuard)
 @Controller('progress')
 export class ProgressController {
   constructor(
@@ -8,7 +11,10 @@ export class ProgressController {
   ) {}
 
   @Get(':idCarrera')
-  obtenerProgreso(@Param('idCarrera') idCarrera: string) {
-    return this.calcularProgresoEstudianteUseCase.ejecutar(idCarrera);
+  obtenerProgreso(
+    @Param('idCarrera') idCarrera: string,
+    @Req() solicitud: RequestConUsuario,
+  ) {
+    return this.calcularProgresoEstudianteUseCase.ejecutar(idCarrera, solicitud.user!.id);
   }
 }

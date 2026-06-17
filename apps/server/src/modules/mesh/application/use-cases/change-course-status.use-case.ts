@@ -19,12 +19,13 @@ export class CambiarEstadoAsignaturaUseCase {
     idCarrera: string,
     idAsignatura: string,
     estado: EstadoAsignatura,
+    idUsuario: number,
   ) {
     if (!Object.values(EstadoAsignatura).includes(estado)) {
       throw new BadRequestException(`El estado ${estado} no es valido.`);
     }
 
-    const asignaturas = await this.repositorioMalla.buscarPorCarrera(idCarrera);
+    const asignaturas = await this.repositorioMalla.buscarPorCarrera(idCarrera, idUsuario);
 
     if (asignaturas.length === 0) {
       throw new BadRequestException(`La carrera ${idCarrera} no existe.`);
@@ -51,6 +52,7 @@ export class CambiarEstadoAsignaturaUseCase {
       await this.repositorioMalla.guardarEstadoAsignatura(
         idCarrera,
         asignatura.conEstado(estado),
+        idUsuario,
       );
 
     const eventos =
@@ -79,6 +81,7 @@ export class CambiarEstadoAsignaturaUseCase {
           ? this.repositorioMalla.guardarEstadoAsignatura(
               idCarrera,
               asignaturaDesbloqueada.conEstado(EstadoAsignatura.Disponible),
+              idUsuario,
             )
           : Promise.resolve(undefined);
       }),

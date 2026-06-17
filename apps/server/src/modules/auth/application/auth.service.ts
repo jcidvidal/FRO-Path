@@ -1,7 +1,9 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -23,6 +25,18 @@ interface JwtPayload {
   sub: number;
   email: string;
   rol: RolUsuario;
+}
+
+interface UsuarioSolicitante {
+  id: number;
+  email: string;
+  rol: RolUsuario;
+}
+
+interface AsignarRolUsuarioEntrada {
+  idUsuario: number;
+  rol: RolUsuario;
+  usuarioSolicitante?: UsuarioSolicitante;
 }
 
 @Injectable()
@@ -69,18 +83,60 @@ export class AuthService {
     return this.crearRespuestaAuth(usuario);
   }
 
+  async asignarRolUsuario({
+    idUsuario,
+    rol,
+    usuarioSolicitante,
+  }: AsignarRolUsuarioEntrada): Promise<UsuarioAutenticado> {
+    if (usuarioSolicitante?.rol !== RolUsuario.Admin) {
+      throw new ForbiddenException('Solo un administrador puede asignar roles.');
+    }
+
+    if (!Number.isInteger(idUsuario) || idUsuario <= 0) {
+      throw new BadRequestException('El id de usuario no es valido.');
+    }
+
+    if (!this.esRolAsignable(rol)) {
+      throw new BadRequestException(
+        'Solo se puede asignar rol profesor o director.',
+      );
+    }
+
+    const usuario = await this.usuariosRepository.buscarPorId(idUsuario);
+
+    if (!usuario) {
+      throw new NotFoundException(`El usuario ${idUsuario} no existe.`);
+    }
+
+    return this.usuariosRepository.actualizarRol(idUsuario, rol);
+  }
+
+  private esRolAsignable(
+    rol: RolUsuario,
+  ): rol is RolUsuario.Profesor | RolUsuario.Director {
+    return [RolUsuario.Profesor, RolUsuario.Director].includes(rol);
+  }
+
   private crearRespuestaAuth(usuario: UsuarioAutenticado): AuthResponse {
-    const payload: JwtPayload = {
-      sub: usuario.id,
+    const usuarioSeguro: UsuarioAutenticado = {
+      id: usuario.id,
+      nombre: usuario.nombre,
+      apellidoPaterno: usuario.apellidoPaterno,
+      apellidoMaterno: usuario.apellidoMaterno,
       email: usuario.email,
       rol: usuario.rol,
+    };
+    const payload: JwtPayload = {
+      sub: usuarioSeguro.id,
+      email: usuarioSeguro.email,
+      rol: usuarioSeguro.rol,
     };
 
     return {
       accessToken: this.jwtService.sign(payload),
       tokenType: 'Bearer',
       expiresIn: process.env.JWT_EXPIRES_IN ?? '1h',
-      user: usuario,
+      user: usuarioSeguro,
     };
   }
 

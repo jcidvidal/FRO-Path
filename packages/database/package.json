@@ -7,6 +7,11 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "on": "docker compose up -d",
+    "ps": "docker compose ps -a",
+    "off": "docker compose down",
+    "start": "tsx --watch index.ts",
+    "i": "tsx index.ts",
     "build": "tsc -p tsconfig.json --noEmit",
     "lint": "tsc -p tsconfig.json --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -85,10 +85,8 @@ describe('useForm', () => {
             } as unknown as React.FormEvent);
         });
 
-        // Should have errors for both fields
         expect(result.current.errors.name).toBe('Este campo es requerido');
         expect(result.current.errors.email).toBe('Este campo es requerido');
-        // onSubmit should NOT have been called
         expect(onSubmit).not.toHaveBeenCalled();
     });
 
@@ -154,7 +152,6 @@ describe('useForm', () => {
             useForm({ initialValues, validators, onSubmit }),
         );
 
-        // First touch the field to trigger validation
         act(() => {
             result.current.handleBlur({
                 target: { name: 'name', value: '' },
@@ -162,7 +159,6 @@ describe('useForm', () => {
         });
         expect(result.current.errors.name).toBe('Este campo es requerido');
 
-        // Then change the value to a valid one
         act(() => {
             result.current.handleChange({
                 target: { name: 'name', value: 'Juan' },

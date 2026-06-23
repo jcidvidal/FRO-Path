@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(() => storage.get<User>(USER_KEY));
 
     const login = useCallback(
-        async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+        async (email: string, password: string): Promise<{ success: boolean; error?: string; role?: User['role'] }> => {
             try {
                 const response = await apiClient.post<BackendAuthResponse>('/auth/login', { email, password });
                 const userData = mapUser(response.user);

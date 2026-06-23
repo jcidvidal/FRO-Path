@@ -1,73 +1,44 @@
-# React + TypeScript + Vite
+# Cliente React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicacion web de FRO-Path. Este paquete contiene la interfaz que permite al estudiante ver su malla, seleccionar carrera, revisar estados de asignaturas y consultar su avance academico.
 
-Currently, two official plugins are available:
+## Responsabilidad del apartado
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Renderizar la experiencia visual de la malla curricular.
+- Consumir los endpoints del backend para obtener malla, progreso y analisis.
+- Mantener estado de sesion, validaciones de formularios y persistencia local de datos temporales.
+- Mostrar errores y advertencias de forma comprensible para el usuario.
 
-## React Compiler
+## Estructura esperada
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `src/App.tsx`: composicion principal de la aplicacion.
+- `src/components`: componentes visuales reutilizables.
+- `src/components/mesh`: piezas especificas del visualizador de malla.
+- `src/services`: servicios de autenticacion, storage y validacion.
+- `src/hooks`: hooks reutilizables cuando exista logica de React compartida.
+- `src/layouts`: estructuras de pantalla o shells de navegacion.
+- `src/store`: estado global o stores de cliente.
+- `src/test`: configuracion de pruebas.
 
-## Expanding the ESLint configuration
+## Comandos
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
+npm run build
+npm run test
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Desde la raiz del monorepo tambien se puede ejecutar:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev:client
+npm run build:client
 ```
+
+## Criterios para agregar codigo
+
+- Si el codigo dibuja o coordina UI, debe vivir en `components`, `layouts` o `App.tsx`.
+- Si el codigo valida datos, administra storage o encapsula acceso externo, debe vivir en `services`.
+- Si el codigo representa contratos compartidos con backend, debe moverse a `packages/common`.
+- Si una regla decide si una asignatura puede aprobarse, debe vivir en backend, no en el cliente.

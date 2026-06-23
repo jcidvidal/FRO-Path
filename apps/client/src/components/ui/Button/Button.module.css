@@ -1,0 +1,96 @@
+.button {
+  display: block;
+  width: 100%;
+  margin-top: 32px;
+  padding: 13px 0;
+  background: transparent;
+  border: 2px solid #39ff14;
+  border-radius: 8px;
+  color: #39ff14;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.18s,
+    color 0.18s,
+    box-shadow 0.18s;
+  position: relative;
+  line-height: 1.5;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.green {
+  border-color: #39ff14;
+  color: #39ff14;
+}
+
+.green:hover:not(:disabled) {
+  background: #39ff14;
+  color: #000000;
+  box-shadow:
+    0 0 18px rgba(57, 255, 20, 0.8),
+    0 0 40px rgba(57, 255, 20, 0.4);
+}
+
+.green:active:not(:disabled) {
+  background: rgba(57, 255, 20, 0.18);
+}
+
+.cyan {
+  border-color: #00e5ff;
+  color: #00e5ff;
+}
+
+.cyan:hover:not(:disabled) {
+  background: #00e5ff;
+  color: #000000;
+  box-shadow:
+    0 0 18px rgba(0, 229, 255, 0.8),
+    0 0 40px rgba(0, 229, 255, 0.4);
+}
+
+.cyan:active:not(:disabled) {
+  background: rgba(0, 229, 255, 0.18);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button:focus-visible {
+  outline: 2px solid #39ff14;
+  outline-offset: 2px;
+}
+
+.cyan:focus-visible {
+  outline-color: #00e5ff;
+}
+
+.loading {
+  cursor: wait;
+}
+
+.spinner {
+  display: inline-block;
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-right: 6px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

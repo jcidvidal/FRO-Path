@@ -1,19 +1,31 @@
-# Matriz de Comparación de Ítems Técnicos - FRO-Path
+# Matriz Comparativa Tecnica: FRO-Path
 
-Para la selección del stack tecnológico, el equipo evaluó diversas alternativas bajo criterios de mantenibilidad, escalabilidad y facilidad de implementación para el contexto de la UFRO.
+Este documento registra las decisiones tecnicas principales y por que se eligieron. Debe actualizarse cuando el equipo cambie una tecnologia o descarte una alternativa relevante.
 
-## 📊 Matriz de Decisión
+## Matriz de decision
 
-| Ítem | Opción Elegida | Alternativa Evaluada | Justificación Técnica |
+| Item | Opcion elegida | Alternativa evaluada | Justificacion tecnica |
 | :--- | :--- | :--- | :--- |
-| **Arquitectura Backend** | **NestJS** | Express.js | NestJS ofrece una arquitectura modular y orientada a objetos (similar a Angular/Spring), facilitando la organización de la lógica compleja de prerrequisitos. |
-| **Motor de Base de Datos** | **PostgreSQL** | MongoDB | Las mallas académicas son datos altamente relacionales. PostgreSQL garantiza integridad referencial, vital para que no existan "nodos huérfanos" en la malla. |
-| **Framework Frontend** | **React + Vite** | Angular / Vue | React posee el ecosistema más amplio de librerías para visualización de grafos y nodos, ideal para una malla interactiva. Vite acelera el desarrollo significativamente. |
-| **Lenguaje** | **TypeScript** | JavaScript | El tipado fuerte reduce errores en tiempo de ejecución, permitiendo que el pipeline de CI detecte fallos antes del despliegue. |
-| **Gestión de Proyecto** | **GitHub Projects** | Trello / Jira | Centraliza el código, la documentación y las tareas en un solo ecosistema, mejorando la trazabilidad para el equipo y el docente. |
+| Arquitectura backend | NestJS | Express.js | NestJS entrega modulos, inyeccion de dependencias y una estructura clara para reglas complejas de prerrequisitos. |
+| Base de datos | PostgreSQL | MongoDB | Las mallas son datos relacionales; PostgreSQL ayuda a mantener integridad entre asignaturas, carreras y prerrequisitos. |
+| Frontend | React + Vite | Angular / Vue | React tiene un ecosistema amplio para interfaces interactivas y Vite acelera desarrollo y build. |
+| Lenguaje | TypeScript | JavaScript | El tipado reduce errores entre frontend, backend y contratos compartidos. |
+| Gestion del proyecto | GitHub Projects | Trello / Jira | Centraliza codigo, issues, PRs y trazabilidad en el mismo ecosistema. |
+| Monorepo | npm workspaces | Repos separados | Permite compartir contratos entre apps y paquetes sin duplicar codigo. |
 
-## 🃏 Estimación (Planning Poker)
-Se realizó una sesión de estimación simplificada para las tareas críticas del Hito 1:
-- **Configuración de CI:** Media (5 pts) - Requiere conocimientos de YAML y Actions.
-- **Documentación Base:** Baja (3 pts) - Definición de requerimientos y alcance.
-- **Modelado de Base de Datos:** Alta (8 pts) - Es el núcleo de la lógica de FRO-Path.
+## Estimacion inicial
+
+- Configuracion de CI: media, porque requiere definir comandos por workspace.
+- Documentacion base: baja a media, porque depende de cerrar decisiones de alcance.
+- Modelado de base de datos: alta, porque es el nucleo de prerrequisitos y progreso.
+- Visualizador interactivo: alta, porque requiere claridad visual y manejo de estados.
+- Integracion backend-frontend: media, porque los contratos ya pueden vivir en `packages/common`.
+
+## Criterio para nuevas decisiones
+
+Cada decision tecnica nueva debe registrar:
+
+- Problema que resuelve.
+- Alternativas evaluadas.
+- Motivo de eleccion.
+- Riesgo o costo asumido.

@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16.13-alpine
+    container_name: db_fro-path
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=mallaufro
+      - POSTGRES_DB=mallaufro
+    ports:
+      - "127.0.0.1:5435:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

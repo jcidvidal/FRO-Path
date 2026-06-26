@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { SubjectNode } from './nodes/SubjectNode';
 import type { Subject, SubjectStatus, Semester } from '../../types/malla';
 import styles from './MeshGrid.module.css';
@@ -13,6 +14,21 @@ interface MeshGridProps {
 }
 
 export function MeshGrid({ semestres, modulosIngles, practicas, onStatusChange, readOnly, selectedSubjectId, onSubjectClick }: MeshGridProps) {
+    const [hoveredSubjectId, setHoveredSubjectId] = useState<string | null>(null);
+
+    let prerequisiteIds: string[] = [];
+    if (readOnly && hoveredSubjectId) {
+        const allSubjects = [
+            ...semestres.flatMap((s) => s.asignaturas),
+            ...(modulosIngles || []),
+            ...(practicas || []),
+        ];
+        const hovered = allSubjects.find((s) => s.id === hoveredSubjectId);
+        if (hovered?.prerrequisitos) {
+            prerequisiteIds = hovered.prerrequisitos;
+        }
+    }
+
     return (
         <div className={styles.gridWrapper}>
             <div className={styles.scrollContainer}>
@@ -24,17 +40,22 @@ export function MeshGrid({ semestres, modulosIngles, practicas, onStatusChange, 
                             </div>
                             <div className={styles.subjects}>
                                 {semestre.asignaturas.map((subject) => (
-                                    <SubjectNode
-                                        key={subject.id}
-                                        subject={subject}
-                                        onStatusChange={onStatusChange}
-                                        readOnly={readOnly}
-                                        onSubjectClick={onSubjectClick}
-                                        isSelected={selectedSubjectId === subject.id}
-                                        semestres={semestres}
-                                        modulosIngles={modulosIngles}
-                                        practicas={practicas}
-                                    />
+                                <SubjectNode
+                                    key={subject.id}
+                                    subject={subject}
+                                    onStatusChange={onStatusChange}
+                                    readOnly={readOnly}
+                                    onSubjectClick={onSubjectClick}
+                                    isSelected={selectedSubjectId === subject.id}
+                                    semestres={semestres}
+                                    modulosIngles={modulosIngles}
+                                    practicas={practicas}
+                                    isPrerequisite={prerequisiteIds.includes(subject.id)}
+                                    isHovered={hoveredSubjectId === subject.id}
+                                    isDimmed={readOnly && hoveredSubjectId !== null && hoveredSubjectId !== subject.id && !prerequisiteIds.includes(subject.id)}
+                                    onHover={setHoveredSubjectId}
+                                    onHoverEnd={() => setHoveredSubjectId(null)}
+                                />
                                 ))}
                             </div>
                         </div>
@@ -60,6 +81,11 @@ export function MeshGrid({ semestres, modulosIngles, practicas, onStatusChange, 
                                             semestres={semestres}
                                             modulosIngles={modulosIngles}
                                             practicas={practicas}
+                                            isPrerequisite={prerequisiteIds.includes(item.id)}
+                                            isHovered={hoveredSubjectId === item.id}
+                                            isDimmed={readOnly && hoveredSubjectId !== null && hoveredSubjectId !== item.id && !prerequisiteIds.includes(item.id)}
+                                            onHover={setHoveredSubjectId}
+                                            onHoverEnd={() => setHoveredSubjectId(null)}
                                         />
                                     ))}
                                 </div>
@@ -83,6 +109,11 @@ export function MeshGrid({ semestres, modulosIngles, practicas, onStatusChange, 
                                             semestres={semestres}
                                             modulosIngles={modulosIngles}
                                             practicas={practicas}
+                                            isPrerequisite={prerequisiteIds.includes(item.id)}
+                                            isHovered={hoveredSubjectId === item.id}
+                                            isDimmed={readOnly && hoveredSubjectId !== null && hoveredSubjectId !== item.id && !prerequisiteIds.includes(item.id)}
+                                            onHover={setHoveredSubjectId}
+                                            onHoverEnd={() => setHoveredSubjectId(null)}
                                         />
                                     ))}
                                 </div>

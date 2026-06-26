@@ -13,6 +13,7 @@ import { CarreraModule } from './modules/carrera/carrera.module';
     AuthModule,
     MeshModule,
     ProgressModule,
+    CarreraModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,15 +1,21 @@
+import type { NivelCarga } from '../services/clasificar-carga-academica';
+
 export const ANALISIS_IA = Symbol('ANALISIS_IA');
 
 export interface EntradaAnalisisIa {
   idCarrera: string;
-  idsAsignaturasSeleccionadas: string[];
-  idsAsignaturasAprobadas: string[];
+  sctEnCurso: number;
+  cantidadEnCurso: number;
+  sctAprobado: number;
+  sctTotal: number;
+  // Clasificación determinista calculada en el dominio. La IA solo la redacta,
+  // no decide la categoría.
+  nivelCarga: NivelCarga;
+  ramosAdicionalesSugeridos: number;
 }
 
 export interface ResultadoAnalisisIa {
-  resumen: string;
-  advertencias: string[];
-  recomendaciones: string[];
+  comentario: string;
 }
 
 export interface PuertoAnalisisIa {

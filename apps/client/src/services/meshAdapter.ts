@@ -23,6 +23,10 @@ export interface BackendCambioEstadoResponse {
     eventos: unknown[];
 }
 
+export interface AnalisisIaResponse {
+    comentario: string;
+}
+
 const ESTADO_A_STATUS: Record<BackendEstado, SubjectStatus> = {
     disponible: 'disponible',
     bloqueada: 'bloqueado',

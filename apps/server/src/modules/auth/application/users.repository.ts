@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { hash } from 'bcrypt';
 import { DataSource } from 'typeorm';
 import {
@@ -186,6 +186,23 @@ export class UsuariosRepository {
     usuario.rol = rol;
 
     return this.mapear(await repositorio.save(usuario));
+  }
+
+  async actualizar(
+    id: number,
+    datos: Partial<Pick<UsuarioRegistro, 'nombre' | 'apellido_paterno' | 'apellido_materno' | 'email' | 'rol'>>,
+  ): Promise<UsuarioAutenticado> {
+    const dataSource = await this.obtenerDataSourceConSeed();
+    const repositorio = dataSource.getRepository<UsuarioRegistro>('Usuario');
+    await repositorio.update(id, datos);
+    const usuario = await repositorio.findOne({
+      where: { id },
+      relations: { carrera: true },
+    });
+    if (!usuario) {
+      throw new NotFoundException(`Usuario ${id} no encontrado`);
+    }
+    return this.mapear(usuario);
   }
 
   async eliminar(id: number): Promise<void> {

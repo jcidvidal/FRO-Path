@@ -16,19 +16,21 @@ export class AnalizarCargaMallaUseCase {
   ) {}
 
   async ejecutar(idCarrera: string, idUsuario: number) {
-    const asignaturas = await this.repositorioMalla.buscarPorCarrera(
+    const { asignaturas, modulosIngles, practicas } = await this.repositorioMalla.buscarPorCarrera(
       idCarrera,
       idUsuario,
     );
 
-    if (asignaturas.length === 0) {
+    const todasLasAsignaturas = [...asignaturas, ...modulosIngles, ...practicas];
+
+    if (todasLasAsignaturas.length === 0) {
       throw new NotFoundException(`La carrera ${idCarrera} no existe.`);
     }
 
-    const enCurso = asignaturas.filter(
+    const enCurso = todasLasAsignaturas.filter(
       (asignatura) => asignatura.estado === EstadoAsignatura.EnCurso,
     );
-    const aprobadas = asignaturas.filter(
+    const aprobadas = todasLasAsignaturas.filter(
       (asignatura) => asignatura.estado === EstadoAsignatura.Aprobada,
     );
 
@@ -45,7 +47,7 @@ export class AnalizarCargaMallaUseCase {
       sctEnCurso,
       cantidadEnCurso,
       sctAprobado: sumarSct(aprobadas),
-      sctTotal: sumarSct(asignaturas),
+      sctTotal: sumarSct(todasLasAsignaturas),
       nivelCarga: nivel,
       ramosAdicionalesSugeridos,
     });

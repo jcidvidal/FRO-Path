@@ -22,10 +22,14 @@ describe('CalcularProgresoEstudianteUseCase', () => {
   });
 
   it('calcula porcentaje SCT correctamente segun asignaturas aprobadas', async () => {
-    repositorioFake.buscarPorCarrera.mockResolvedValue([
-      new Asignatura({ id: '1', codigo: 'A', nombre: 'A', sct: 6, nivel: 1, estado: EstadoAsignatura.Aprobada, idsPrerequisitos: [] }),
-      new Asignatura({ id: '2', codigo: 'B', nombre: 'B', sct: 4, nivel: 1, estado: EstadoAsignatura.Disponible, idsPrerequisitos: [] }),
-    ]);
+    repositorioFake.buscarPorCarrera.mockResolvedValue({
+      asignaturas: [
+        new Asignatura({ id: '1', codigo: 'A', nombre: 'A', sct: 6, nivel: 1, estado: EstadoAsignatura.Aprobada, idsPrerequisitos: [] }),
+        new Asignatura({ id: '2', codigo: 'B', nombre: 'B', sct: 4, nivel: 1, estado: EstadoAsignatura.Disponible, idsPrerequisitos: [] }),
+      ],
+      modulosIngles: [],
+      practicas: [],
+    });
 
     const resultado = await casoDeUso.ejecutar('icc', 1);
 
@@ -35,10 +39,14 @@ describe('CalcularProgresoEstudianteUseCase', () => {
   });
 
   it('retorna progreso cero si ninguna asignatura esta aprobada', async () => {
-    repositorioFake.buscarPorCarrera.mockResolvedValue([
-      new Asignatura({ id: '1', codigo: 'A', nombre: 'A', sct: 6, nivel: 1, estado: EstadoAsignatura.Disponible, idsPrerequisitos: [] }),
-      new Asignatura({ id: '2', codigo: 'B', nombre: 'B', sct: 4, nivel: 1, estado: EstadoAsignatura.Bloqueada, idsPrerequisitos: ['1'] }),
-    ]);
+    repositorioFake.buscarPorCarrera.mockResolvedValue({
+      asignaturas: [
+        new Asignatura({ id: '1', codigo: 'A', nombre: 'A', sct: 6, nivel: 1, estado: EstadoAsignatura.Disponible, idsPrerequisitos: [] }),
+        new Asignatura({ id: '2', codigo: 'B', nombre: 'B', sct: 4, nivel: 1, estado: EstadoAsignatura.Bloqueada, idsPrerequisitos: ['1'] }),
+      ],
+      modulosIngles: [],
+      practicas: [],
+    });
 
     const resultado = await casoDeUso.ejecutar('icc', 1);
 
@@ -47,7 +55,7 @@ describe('CalcularProgresoEstudianteUseCase', () => {
   });
 
   it('lanza NotFoundException si la carrera no existe', async () => {
-    repositorioFake.buscarPorCarrera.mockResolvedValue([]);
+    repositorioFake.buscarPorCarrera.mockResolvedValue({ asignaturas: [], modulosIngles: [], practicas: [] });
 
     await expect(casoDeUso.ejecutar('no-existe', 1)).rejects.toThrow(NotFoundException);
   });

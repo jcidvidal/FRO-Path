@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { Asignatura } from '../../../domain/entities/course.entity';
-import { PuertoRepositorioMalla } from '../../../domain/ports/mesh-repository.port';
+import { PuertoRepositorioMalla, MallaCategorizada } from '../../../domain/ports/mesh-repository.port';
 import { EstadoAsignatura } from '../../../domain/value-objects/course-status.vo';
-import { CARRERAS_SEED } from './mesh-seed';
+import { CARRERAS_SEED, type AsignaturaSeed } from './mesh-seed';
 import { obtenerDataSourceFroPath } from './postgres-data-source';
 import {
   AsignaturaRegistro,
@@ -16,7 +16,7 @@ import {
 export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
   private dataSource?: DataSource;
 
-  async buscarPorCarrera(idCarrera: string, idUsuario: number): Promise<Asignatura[]> {
+  async buscarPorCarrera(idCarrera: string, idUsuario: number): Promise<MallaCategorizada> {
     const dataSource = await this.obtenerDataSourceConSeed();
     const carrera = await dataSource
       .getRepository<CarreraRegistro>('Carrera')
@@ -25,23 +25,26 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
       });
 
     if (!carrera) {
-      return [];
+      return { asignaturas: [], modulosIngles: [], practicas: [] };
     }
 
+    // Obtener TODAS las asignaturas de la carrera (sin filtrar por categoría)
     const asignaturas = await dataSource
       .getRepository<AsignaturaRegistro>('Asignatura')
       .find({
         where: { carrera_id: carrera.id },
         order: { nivel: 'ASC', codigo_ramo: 'ASC' },
       });
-    const idsAsignaturas = asignaturas.map((asignatura) => asignatura.id);
+
+    const idsAsignaturas = asignaturas.map((a) => a.id);
+    
+    // Obtener prerrequisitos y progreso igual que ahora
     const prerequisitos = await dataSource
       .getRepository<PrerrequisitoRegistro>('Prerrequisito')
       .createQueryBuilder('prerrequisito')
-      .where('prerrequisito.asignatura_id IN (:...ids)', {
-        ids: idsAsignaturas,
-      })
+      .where('prerrequisito.asignatura_id IN (:...ids)', { ids: idsAsignaturas })
       .getMany();
+    
     const progreso = await dataSource
       .getRepository<ProgresoAcademicoRegistro>('ProgresoAcademico')
       .createQueryBuilder('progreso')
@@ -49,35 +52,37 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
       .andWhere('progreso.asignatura_id IN (:...ids)', { ids: idsAsignaturas })
       .getMany();
 
-    const codigosPorId = new Map(
-      asignaturas.map((asignatura) => [asignatura.id, asignatura.codigo_ramo]),
-    );
-    const progresoPorAsignatura = new Map(
-      progreso.map((item) => [
-        item.asignatura_id,
-        item.estado as EstadoAsignatura,
-      ]),
-    );
+    const codigosPorId = new Map(asignaturas.map((a) => [a.id, a.codigo_ramo]));
+    const progresoPorAsignatura = new Map(progreso.map((item) => [item.asignatura_id, item.estado as EstadoAsignatura]));
+    const prerequisitosAsignatura = new Map<number, number[]>();
+    for (const p of prerequisitos) {
+      const lista = prerequisitosAsignatura.get(p.asignatura_id) ?? [];
+      lista.push(p.requisito_id);
+      prerequisitosAsignatura.set(p.asignatura_id, lista);
+    }
 
-    return asignaturas.map(
-      (asignatura) =>
-        new Asignatura({
-          id: asignatura.codigo_ramo,
-          codigo: asignatura.codigo_ramo,
-          nombre: asignatura.nombre,
-          sct: asignatura.sct,
-          nivel: asignatura.nivel,
-          estado:
-            progresoPorAsignatura.get(asignatura.id) ??
-            (prerequisitos.some((p) => p.asignatura_id === asignatura.id)
-              ? EstadoAsignatura.Bloqueada
-              : EstadoAsignatura.Disponible),
-          idsPrerequisitos: prerequisitos
-            .filter((item) => item.asignatura_id === asignatura.id)
-            .map((item) => codigosPorId.get(item.requisito_id))
-            .filter((codigo): codigo is string => Boolean(codigo)),
-        }),
-    );
+    const mapearAsignatura = (registro: AsignaturaRegistro): Asignatura => {
+      return new Asignatura({
+        id: registro.codigo_ramo,
+        codigo: registro.codigo_ramo,
+        nombre: registro.nombre,
+        sct: registro.sct,
+        nivel: registro.nivel,
+        estado: progresoPorAsignatura.get(registro.id) ??
+                (prerequisitosAsignatura.get(registro.id)?.length
+                  ? EstadoAsignatura.Bloqueada
+                  : EstadoAsignatura.Disponible),
+        idsPrerequisitos: (prerequisitosAsignatura.get(registro.id) ?? [])
+          .map((reqId) => codigosPorId.get(reqId))
+          .filter((codigo): codigo is string => Boolean(codigo)),
+      });
+    };
+
+    return {
+      asignaturas: asignaturas.filter(a => a.categoria === 'malla').map(mapearAsignatura),
+      modulosIngles: asignaturas.filter(a => a.categoria === 'ingles').map(mapearAsignatura),
+      practicas: asignaturas.filter(a => a.categoria === 'practica').map(mapearAsignatura),
+    };
   }
 
   async guardarEstadoAsignatura(
@@ -114,6 +119,8 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
 
     if (!carrera) return;
 
+    // Obtener TODAS las asignaturas de la carrera (sin filtrar por categoría)
+    // porque debe limpiar el progreso de TODAS (incluyendo inglés y prácticas)
     const asignaturas = await dataSource
       .getRepository<AsignaturaRegistro>('Asignatura')
       .find({ where: { carrera_id: carrera.id } });
@@ -177,25 +184,47 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
         dataSource.getRepository<AsignaturaRegistro>('Asignatura');
       const asignaturasPorCodigo = new Map<string, AsignaturaRegistro>();
 
-      for (const asignaturaSeed of carreraSeed.asignaturas) {
-        let asignatura = await asignaturaRepo.findOne({
-          where: { codigo_ramo: asignaturaSeed.codigo },
-        });
-
-        if (!asignatura) {
-          asignatura = await asignaturaRepo.save({
-            codigo_ramo: asignaturaSeed.codigo,
-            nombre: asignaturaSeed.nombre,
-            sct: asignaturaSeed.sct,
-            nivel: asignaturaSeed.nivel,
-            carrera_id: carrera.id,
+      // Función helper para insertar asignaturas con categoría
+      const sembrarAsignaturas = async (items: AsignaturaSeed[], categoria: string) => {
+        for (const item of items) {
+          let asignatura = await asignaturaRepo.findOne({
+            where: { codigo_ramo: item.codigo },
           });
+          if (!asignatura) {
+            asignatura = await asignaturaRepo.save({
+              codigo_ramo: item.codigo,
+              nombre: item.nombre,
+              sct: item.sct,
+              nivel: item.nivel,
+              carrera_id: carrera.id,
+              categoria: categoria,
+            });
+          }
+          asignaturasPorCodigo.set(item.codigo, asignatura);
         }
+      };
 
-        asignaturasPorCodigo.set(asignaturaSeed.codigo, asignatura);
+      // Sembrar asignaturas de malla
+      await sembrarAsignaturas(carreraSeed.asignaturas, 'malla');
+      
+      // Sembrar módulos de inglés
+      if (carreraSeed.modulosIngles) {
+        await sembrarAsignaturas(carreraSeed.modulosIngles, 'ingles');
+      }
+      
+      // Sembrar prácticas
+      if (carreraSeed.practicas) {
+        await sembrarAsignaturas(carreraSeed.practicas, 'practica');
       }
 
-      for (const asignaturaSeed of carreraSeed.asignaturas) {
+      // Insertar prerrequisitos para todas las categorías (el Map incluye todas las asignaturas)
+      const todasLasAsignaturasSeed = [
+        ...carreraSeed.asignaturas,
+        ...(carreraSeed.modulosIngles ?? []),
+        ...(carreraSeed.practicas ?? []),
+      ];
+
+      for (const asignaturaSeed of todasLasAsignaturasSeed) {
         const asignatura = asignaturasPorCodigo.get(asignaturaSeed.codigo);
 
         if (!asignatura) {

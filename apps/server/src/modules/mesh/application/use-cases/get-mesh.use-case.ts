@@ -10,7 +10,7 @@ export class ObtenerMallaUseCase {
   ) {}
 
   async ejecutar(idCarrera: string, idUsuario: number) {
-    const asignaturas = await this.repositorioMalla.buscarPorCarrera(idCarrera, idUsuario);
+    const { asignaturas, modulosIngles, practicas } = await this.repositorioMalla.buscarPorCarrera(idCarrera, idUsuario);
 
     if (asignaturas.length === 0) {
       throw new NotFoundException(`La carrera ${idCarrera} no existe.`);
@@ -19,6 +19,8 @@ export class ObtenerMallaUseCase {
     return {
       idCarrera,
       asignaturas: asignaturas.map((asignatura) => asignatura.aPrimitivos()),
+      modulosIngles: modulosIngles.map((asignatura) => asignatura.aPrimitivos()),
+      practicas: practicas.map((asignatura) => asignatura.aPrimitivos()),
     };
   }
 }

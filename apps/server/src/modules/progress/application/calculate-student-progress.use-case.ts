@@ -14,12 +14,14 @@ export class CalcularProgresoEstudianteUseCase {
   ) {}
 
   async ejecutar(idCarrera: string, idUsuario: number) {
-    const asignaturas = await this.repositorioMalla.buscarPorCarrera(idCarrera, idUsuario);
+    const { asignaturas, modulosIngles, practicas } = await this.repositorioMalla.buscarPorCarrera(idCarrera, idUsuario);
 
-    if (asignaturas.length === 0) {
+    const todasLasAsignaturas = [...asignaturas, ...modulosIngles, ...practicas];
+
+    if (todasLasAsignaturas.length === 0) {
       throw new NotFoundException(`La carrera ${idCarrera} no existe.`);
     }
 
-    return this.estrategiaCalculo.calcular(asignaturas).aPrimitivos();
+    return this.estrategiaCalculo.calcular(todasLasAsignaturas).aPrimitivos();
   }
 }

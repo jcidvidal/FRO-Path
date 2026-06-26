@@ -1,6 +1,5 @@
 import { apiClient } from './apiClient';
-import { adaptarMeshAFrontend, type BackendMeshResponse } from './meshAdapter';
-import type { Semester } from '../types/malla';
+import { adaptarMeshAFrontend, type BackendMeshResponse, type FrontendMalla } from './meshAdapter';
 
 export interface EstudianteResumen {
     id: number;
@@ -31,7 +30,7 @@ export function eliminarEstudiante(idEstudiante: number): Promise<{ id: number }
 export async function obtenerMallaEstudiante(
     idCarrera: string,
     idEstudiante: number,
-): Promise<Semester[]> {
+): Promise<FrontendMalla> {
     const data = await apiClient.get<BackendMeshResponse>(
         `/mesh/${idCarrera}/estudiante/${idEstudiante}`,
     );

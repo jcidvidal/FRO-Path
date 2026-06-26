@@ -55,22 +55,19 @@ export function DirectorDashboardPage() {
 
     const {
         semestres,
+        modulosIngles,
+        practicas,
         cargando: cargandoMalla,
         error: errorMalla,
     } = useMallaEstudiante(ID_CARRERA, seleccionado?.id ?? null);
 
-    const { totalSct, aprobadoSct, porcentaje } = useMemo(() => {
-        const asignaturas = semestres.flatMap((s) => s.asignaturas);
-        const total = asignaturas.reduce((acc, a) => acc + a.sct, 0);
-        const aprobado = asignaturas
-            .filter((a) => a.status === 'aprobado')
-            .reduce((acc, a) => acc + a.sct, 0);
-        return {
-            totalSct: total,
-            aprobadoSct: aprobado,
-            porcentaje: total === 0 ? 0 : Math.round((aprobado / total) * 100),
-        };
-    }, [semestres]);
+    // Solo calcular SCT de la malla
+    const asignaturasMalla = useMemo(() => semestres.flatMap((s) => s.asignaturas), [semestres]);
+    const totalSct = asignaturasMalla.reduce((acc, a) => acc + a.sct, 0);
+    const aprobadoSct = asignaturasMalla
+        .filter((a) => a.status === 'aprobado')
+        .reduce((acc, a) => acc + a.sct, 0);
+    const porcentaje = totalSct === 0 ? 0 : Math.round((aprobadoSct / totalSct) * 100);
 
     return (
         <DashboardLayout sidebar={(onCloseSidebar) => (
@@ -171,7 +168,12 @@ export function DirectorDashboardPage() {
                                 )}
 
                                 {!cargandoMalla && !errorMalla && (
-                                    <MeshGrid semestres={semestres} readOnly />
+                                    <MeshGrid
+                                        semestres={semestres}
+                                        modulosIngles={modulosIngles}
+                                        practicas={practicas}
+                                        readOnly
+                                    />
                                 )}
                             </>
                         )}

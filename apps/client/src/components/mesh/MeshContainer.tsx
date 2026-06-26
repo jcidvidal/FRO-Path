@@ -14,6 +14,8 @@ export function MeshContainer() {
 
     const {
         semestres,
+        modulosIngles,
+        practicas,
         isLoading,
         error,
         cambiarEstado,
@@ -21,12 +23,13 @@ export function MeshContainer() {
         analizando,
     } = useMesh(idCarrera);
 
-    const asignaturas = semestres.flatMap((s) => s.asignaturas);
-    const totalSct = asignaturas.reduce((acc, a) => acc + a.sct, 0);
-    const aprobadoSct = asignaturas
+    // Solo calcular SCT de la malla (los módulos de inglés no tienen SCT)
+    const asignaturasMalla = semestres.flatMap((s) => s.asignaturas);
+    const totalSct = asignaturasMalla.reduce((acc, a) => acc + a.sct, 0);
+    const aprobadoSct = asignaturasMalla
         .filter((a) => a.status === 'aprobado')
         .reduce((acc, a) => acc + a.sct, 0);
-    const cursandoSct = asignaturas
+    const cursandoSct = asignaturasMalla
         .filter((a) => a.status === 'cursando')
         .reduce((acc, a) => acc + a.sct, 0);
     const porcentajeAprobado = totalSct === 0 ? 0 : Math.round((aprobadoSct / totalSct) * 100);
@@ -94,6 +97,8 @@ export function MeshContainer() {
             {!isLoading && !error && (
                 <MeshGrid
                     semestres={semestres}
+                    modulosIngles={modulosIngles}
+                    practicas={practicas}
                     onStatusChange={handleStatusChange}
                 />
             )}

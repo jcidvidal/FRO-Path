@@ -1,12 +1,10 @@
 .container {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
     height: 100%;
-    gap: 12px;
-    padding: 32px;
-    text-align: center;
+    gap: 16px;
+    padding: 24px;
+    overflow-y: auto;
 }
 
 .titulo {
@@ -17,5 +15,150 @@
 
 .descripcion {
     color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+    max-width: 720px;
+}
+
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.buscador {
+    flex: 1;
+    min-width: 240px;
+    max-width: 420px;
+    padding: 10px 14px;
+    border: 1px solid var(--color-border, #d0d7de);
+    border-radius: 8px;
+    font-size: var(--font-size-base);
+    outline: none;
+}
+
+.buscador:focus,
+.selectorRol:focus {
+    border-color: var(--color-green);
+}
+
+.selectorRol {
+    padding: 10px 14px;
+    border: 1px solid var(--color-border, #d0d7de);
+    border-radius: 8px;
+    font-size: var(--font-size-base);
+    background: var(--color-surface, #fff);
+    outline: none;
+    cursor: pointer;
+}
+
+.tablaWrapper {
+    border: 1px solid var(--color-border, #d0d7de);
+    border-radius: 10px;
+    overflow: auto;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-base);
+}
+
+.tabla th,
+.tabla td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-border, #eef0f2);
+}
+
+.tabla th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-text-secondary);
+    background: var(--color-surface-hover, #f6f8fa);
+}
+
+.tabla tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.celdaEmail {
+    color: var(--color-text-secondary);
+}
+
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: var(--color-surface-hover, #eef0f2);
+    color: var(--color-text-primary, #1f2328);
+}
+
+.badge_estudiante {
+    background: #e6f4ea;
+    color: #1a7f37;
+}
+
+.badge_profesor {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.badge_director {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+.badge_admin {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.botonRol {
+    padding: 6px 12px;
+    border: 1px solid var(--color-green);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--color-green);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.botonRol:hover:not(:disabled) {
+    background: var(--color-green);
+    color: #fff;
+}
+
+.botonRol:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.sinAcciones {
+    color: var(--color-text-secondary);
+}
+
+.estado {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+}
+
+.estadoExito {
+    color: var(--color-green);
+    font-size: var(--font-size-base);
+}
+
+.estadoError {
+    color: var(--color-danger, #d1242f);
     font-size: var(--font-size-base);
 }

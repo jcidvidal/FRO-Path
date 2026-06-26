@@ -7,6 +7,8 @@ export interface UsuarioAutenticado {
   apellidoMaterno: string;
   email: string;
   rol: RolUsuario;
+  idCarrera?: string | null;
+  nombreCarrera?: string | null;
 }
 
 export interface UsuarioConPassword extends UsuarioAutenticado {

@@ -20,4 +20,8 @@ export class RegisterDto {
   @IsString()
   @IsOptional()
   apellidoMaterno?: string;
+
+  @IsString()
+  @IsOptional()
+  carrera?: string;
 }

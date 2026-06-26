@@ -1,185 +1,617 @@
-.container {
+.content {
+    padding: 20px 24px;
     display: flex;
     flex-direction: column;
-    height: 100%;
     gap: 16px;
-    padding: 24px;
 }
 
-.titulo {
-    font-size: 1.5rem;
-    font-weight: 700;
+.subtitle {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
     color: var(--color-green);
 }
 
-.buscador {
-    width: 100%;
-    max-width: 420px;
-    padding: 10px 14px;
-    border: 1px solid var(--color-border, #d0d7de);
-    border-radius: 8px;
-    font-size: var(--font-size-base);
-    outline: none;
-}
-
-.buscador:focus {
-    border-color: var(--color-green);
-}
-
-.layout {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 20px;
-    flex: 1;
-    min-height: 0;
-}
-
-.listaPanel {
-    border: 1px solid var(--color-border, #d0d7de);
-    border-radius: 10px;
-    padding: 8px;
-    overflow-y: auto;
-}
-
-.lista {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+.toolbar {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-.itemFila {
-    display: flex;
-    align-items: stretch;
-    gap: 4px;
-}
-
-.itemEstudiante {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    flex: 1;
-    min-width: 0;
-    text-align: left;
-    padding: 10px 12px;
-    border: none;
-    border-radius: 8px;
-    background: transparent;
-    cursor: pointer;
-}
-
-.botonEliminar {
-    flex-shrink: 0;
-    border: none;
-    border-radius: 8px;
-    background: transparent;
-    color: var(--color-danger, #d1242f);
-    font-size: 1rem;
-    padding: 0 10px;
-    cursor: pointer;
-}
-
-.botonEliminar:hover:not(:disabled) {
-    background: var(--color-danger-soft, #ffebe9);
-}
-
-.botonEliminar:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.itemEstudiante:hover {
-    background: var(--color-surface-hover, #f3f4f6);
-}
-
-.itemActivo {
-    background: var(--color-green-soft, #e6f4ea);
-}
-
-.itemNombre {
+.selectLabel {
+    font-size: var(--font-size-sm);
     font-weight: 600;
-    color: var(--color-text-primary, #1f2328);
-}
-
-.itemEmail {
-    font-size: 0.8rem;
     color: var(--color-text-secondary);
+    white-space: nowrap;
 }
 
-.mallaPanel {
-    border: 1px solid var(--color-border, #d0d7de);
-    border-radius: 10px;
+.careerSelect {
+    flex: 1;
+    max-width: 500px;
+    background: transparent;
+    border: 2px solid var(--color-card-border-green);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: border-color 0.18s;
+    appearance: auto;
+}
+
+.careerSelect:focus-visible {
+    outline: none;
+    border-color: var(--color-green);
+    box-shadow: 0 0 0 2px var(--color-green-soft);
+}
+
+.careerSelect option {
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+}
+
+.careerTitle {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    padding: 12px 16px 0 16px;
+    margin: 0;
+}
+
+.filters {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.searchWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    max-width: 400px;
+    background: transparent;
+    border: 2px solid var(--color-card-border-green);
+    border-radius: 8px;
+    padding: 8px 14px;
+}
+
+.searchIcon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.searchInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+}
+
+.searchInput::placeholder {
+    color: var(--color-text-muted);
+}
+
+.carreraSelect {
+    background: transparent;
+    border: 2px solid var(--color-card-border-green);
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+    cursor: pointer;
+}
+
+.carreraSelect option {
+    background: var(--color-bg-primary);
+}
+
+.mainPanel {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    border: 2px solid var(--color-card-border-green);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.studentList {
+    width: 240px;
+    min-width: 240px;
+    border-right: 2px solid var(--color-card-border-green);
     padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 8px;
 }
 
-.detalleHeader {
+.listTitle {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--color-green);
+    border-bottom: 2px solid var(--color-green);
+    padding-bottom: 8px;
+}
+
+.studentItems {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.studentItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-family);
+    transition: background 0.18s, border-color 0.18s;
+}
+
+.studentItem:hover {
+    background: var(--color-green-soft);
+}
+
+.studentItemActive {
+    border-color: var(--color-green);
+    background: var(--color-green-soft);
+}
+
+.userIcon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.studentInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.studentName {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.studentMeta {
     display: flex;
     flex-direction: column;
     gap: 2px;
 }
 
-.detalleNombre {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--color-text-primary, #1f2328);
+.studentRut {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
 }
 
-.detalleEmail {
-    font-size: 0.85rem;
+.studentCarrera {
+    font-size: var(--font-size-xs);
+    color: var(--color-cyan);
+}
+
+.meshPanel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.meshArea {
+    padding: 16px;
+}
+
+.placeholder {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base);
+    margin: auto;
+}
+
+.studentDetail {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    border-top: 2px solid var(--color-card-border-green);
+}
+
+.detailCard {
+    flex: 1;
+    border: 2px solid var(--color-card-border-green);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
 }
 
-.progreso {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    max-width: 420px;
+.detailCard:first-child {
+    flex: 0 0 auto;
+    min-width: 220px;
+}
+
+.detailTitle {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
 }
 
 .progresoHeader {
     display: flex;
     justify-content: space-between;
-    font-size: 0.85rem;
+    font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
+}
+
+.sctGreen {
+    color: var(--color-green);
+    font-weight: 700;
 }
 
 .progressBar {
     width: 100%;
-    height: 10px;
-    background: var(--color-surface-hover, #eef0f2);
-    border-radius: 999px;
+    height: 8px;
+    background-color: #2a2d2a;
+    border: 2px solid var(--color-green);
+    border-radius: 6px;
     overflow: hidden;
 }
 
 .progressFill {
     height: 100%;
-    background: var(--color-green);
+    background-color: var(--color-green);
+    border-radius: 4px;
     transition: width 0.3s ease;
 }
 
 .porcentaje {
-    align-self: flex-end;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-green);
+    text-align: center;
+}
+
+.detailStats {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    justify-content: center;
+    min-width: 140px;
+}
+
+.detailStats p {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+}
+
+.dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dotAprobado { background-color: var(--color-aprobado-bd); }
+.dotReprobado { background-color: var(--color-reprobado-bd); }
+.dotCursando { background-color: var(--color-cursando-bd); }
+.dotDisponible { background-color: var(--color-disponible-bd); }
+.dotBloqueado { background-color: var(--color-bloqueado-bd); }
+
+@media (max-width: 768px) {
+    .content {
+        padding: 12px;
+    }
+
+    .filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .searchWrapper {
+        max-width: 100%;
+    }
+
+    .mainPanel {
+        flex-direction: column;
+    }
+
+    .studentList {
+        width: 100%;
+        min-width: unset;
+        border-right: none;
+        border-bottom: 2px solid var(--color-card-border-green);
+        max-height: 200px;
+    }
+
+    .studentDetail {
+        flex-direction: column;
+    }
+
+    .detailStats {
+        flex-direction: row;
+        flex-wrap: wrap;
+        min-width: unset;
+    }
+}
+
+.avancesContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.subtitle {
+    font-size: var(--font-size-lg);
     font-weight: 600;
     color: var(--color-green);
 }
 
-.estado {
+.filters {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.searchWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    max-width: 400px;
+    background: transparent;
+    border: 2px solid var(--color-card-border-green);
+    border-radius: 8px;
+    padding: 8px 14px;
+}
+
+.searchIcon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.searchInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+}
+
+.searchInput::placeholder {
+    color: var(--color-text-muted);
+}
+
+.carreraSelect {
+    background: transparent;
+    border: 2px solid var(--color-card-border-green);
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+    cursor: pointer;
+}
+
+.carreraSelect option {
+    background: var(--color-bg-primary);
+}
+
+.studentList {
+    width: 240px;
+    min-width: 240px;
+    border-right: 2px solid var(--color-card-border-green);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.listTitle {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--color-green);
+    border-bottom: 2px solid var(--color-green);
+    padding-bottom: 8px;
+}
+
+.studentItems {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.studentItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-family);
+    transition: background 0.18s, border-color 0.18s;
+}
+
+.studentItem:hover {
+    background: var(--color-green-soft);
+}
+
+.studentItemActive {
+    border-color: var(--color-green);
+    background: var(--color-green-soft);
+}
+
+.userIcon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.studentInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.studentName {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.studentMeta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.studentRut {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.meshPanel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.meshArea {
+    padding: 16px;
+}
+
+.placeholder {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base);
+    margin: auto;
+    padding: 40px;
+    text-align: center;
+}
+
+.studentDetail {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    border-top: 2px solid var(--color-card-border-green);
+}
+
+.detailCard {
+    flex: 1;
+    border: 2px solid var(--color-card-border-green);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
-    font-size: var(--font-size-base);
 }
 
-.estadoError {
-    color: var(--color-danger, #d1242f);
-    font-size: var(--font-size-base);
+.detailCard:first-child {
+    flex: 0 0 auto;
+    min-width: 220px;
 }
 
-@media (max-width: 768px) {
-    .layout {
-        grid-template-columns: 1fr;
-    }
+.detailTitle {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
 }
+
+.progresoHeader {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.sctGreen {
+    color: var(--color-green);
+    font-weight: 700;
+}
+
+.progressBar {
+    width: 100%;
+    height: 8px;
+    background-color: #2a2d2a;
+    border: 2px solid var(--color-green);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background-color: var(--color-green);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.porcentaje {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-green);
+    text-align: center;
+}
+
+.detailStats {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    justify-content: center;
+    min-width: 140px;
+}
+
+.detailStats p {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+}
+
+.dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dotAprobado { background-color: var(--color-aprobado-bd); }
+.dotReprobado { background-color: var(--color-reprobado-bd); }
+.dotCursando { background-color: var(--color-cursando-bd); }
+.dotDisponible { background-color: var(--color-disponible-bd); }
+.dotBloqueado { background-color: var(--color-bloqueado-bd); }

@@ -51,7 +51,7 @@ export function MeshGrid({ semestres, modulosIngles, practicas, onStatusChange, 
                                     modulosIngles={modulosIngles}
                                     practicas={practicas}
                                     isPrerequisite={prerequisiteIds.includes(subject.id)}
-                                    isHovered={hoveredSubjectId === subject.id}
+                                    isHovered={readOnly && hoveredSubjectId === subject.id}
                                     isDimmed={readOnly && hoveredSubjectId !== null && hoveredSubjectId !== subject.id && !prerequisiteIds.includes(subject.id)}
                                     onHover={setHoveredSubjectId}
                                     onHoverEnd={() => setHoveredSubjectId(null)}
@@ -82,7 +82,7 @@ export function MeshGrid({ semestres, modulosIngles, practicas, onStatusChange, 
                                             modulosIngles={modulosIngles}
                                             practicas={practicas}
                                             isPrerequisite={prerequisiteIds.includes(item.id)}
-                                            isHovered={hoveredSubjectId === item.id}
+                                            isHovered={readOnly && hoveredSubjectId === item.id}
                                             isDimmed={readOnly && hoveredSubjectId !== null && hoveredSubjectId !== item.id && !prerequisiteIds.includes(item.id)}
                                             onHover={setHoveredSubjectId}
                                             onHoverEnd={() => setHoveredSubjectId(null)}
@@ -110,7 +110,7 @@ export function MeshGrid({ semestres, modulosIngles, practicas, onStatusChange, 
                                             modulosIngles={modulosIngles}
                                             practicas={practicas}
                                             isPrerequisite={prerequisiteIds.includes(item.id)}
-                                            isHovered={hoveredSubjectId === item.id}
+                                            isHovered={readOnly && hoveredSubjectId === item.id}
                                             isDimmed={readOnly && hoveredSubjectId !== null && hoveredSubjectId !== item.id && !prerequisiteIds.includes(item.id)}
                                             onHover={setHoveredSubjectId}
                                             onHoverEnd={() => setHoveredSubjectId(null)}

@@ -46,8 +46,8 @@ export function SubjectTooltip({ subject, semestres, modulosIngles, practicas, p
             <div className={styles.tooltipHeader}>Prerrequisitos</div>
             {prereqs.length > 0 ? (
                 <ul className={styles.tooltipList}>
-                    {prereqs.map((name, i) => (
-                        <li key={i}>{name}</li>
+                    {prereqs.map((name) => (
+                        <li key={name}>{name}</li>
                     ))}
                 </ul>
             ) : (

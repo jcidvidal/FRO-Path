@@ -22,7 +22,11 @@ interface SubjectNodeProps {
 
 const STATUS_OPTIONS: SubjectStatus[] = ['aprobado', 'reprobado', 'cursando', 'disponible'];
 
-function Indicator({ status }: { status: SubjectStatus }) {
+interface IndicatorProps {
+    readonly status: SubjectStatus;
+}
+
+function Indicator({ status }: IndicatorProps) {
     if (status === 'bloqueado') {
         return <LockIcon className={styles.lockIcon} />;
     }
@@ -105,10 +109,10 @@ export function SubjectNode({ subject, onStatusChange, readOnly, onSubjectClick,
                 onClick={handleCardClick}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                role={readOnly ? undefined : 'button'}
-                tabIndex={readOnly ? undefined : 0}
+                role="button"
+                tabIndex={0}
                 onKeyDown={(e) => {
-                    if (!readOnly && (e.key === 'Enter' || e.key === ' ')) handleCardClick();
+                    if (e.key === 'Enter' || e.key === ' ') handleCardClick();
                 }}
             >
                 <div className={styles.indicatorWrapper}>
@@ -126,7 +130,7 @@ export function SubjectNode({ subject, onStatusChange, readOnly, onSubjectClick,
                     {STATUS_OPTIONS.map((status) => (
                         <button
                             key={status}
-                            className={`${styles.menuCircle} ${styles[`menuCircle_${status}`]} ${subject.status === status ? styles.menuCircleActive : ''}`}
+                            className={`${styles.menuCircle} ${styles['menuCircle_' + status]} ${subject.status === status ? styles.menuCircleActive : ''}`}
                             onClick={() => handleStatusSelect(status)}
                             aria-label={status}
                             title={status}

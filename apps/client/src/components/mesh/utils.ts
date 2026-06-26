@@ -15,31 +15,7 @@ export function findSubjectById(
     return all.find((s) => s.id === id) ?? null;
 }
 
-export function resolveDependencies(
-    semestres: Semester[],
-    modulosIngles: Subject[],
-    practicas: Subject[],
-    overrides: Record<string, SubjectStatus>,
-): { semestres: Semester[]; modulos: Subject[]; practicas: Subject[] } {
-    const allSubjects = new Map<string, Subject>();
-
-    for (const sem of semestres) {
-        for (const sub of sem.asignaturas) {
-            allSubjects.set(sub.id, { ...sub });
-        }
-    }
-    for (const sub of modulosIngles) {
-        if (!allSubjects.has(sub.id)) allSubjects.set(sub.id, { ...sub });
-    }
-    for (const sub of practicas) {
-        if (!allSubjects.has(sub.id)) allSubjects.set(sub.id, { ...sub });
-    }
-
-    for (const [id, status] of Object.entries(overrides)) {
-        const s = allSubjects.get(id);
-        if (s) s.status = status;
-    }
-
+function desbloquearMaterias(allSubjects: Map<string, Subject>): void {
     let changed = true;
     let iter = 0;
     while (changed && iter < 50) {
@@ -51,14 +27,16 @@ export function resolveDependencies(
             if (prereqs.length === 0) continue;
             const allMet = prereqs.every((prereqId) => {
                 const p = allSubjects.get(prereqId);
-                return p && p.status === 'aprobado';
+                return p?.status === 'aprobado';
             });
             if (allMet) { subject.status = 'disponible'; changed = true; }
         }
     }
+}
 
-    changed = true;
-    iter = 0;
+function bloquearMaterias(allSubjects: Map<string, Subject>, overrides: Record<string, SubjectStatus>): void {
+    let changed = true;
+    let iter = 0;
     while (changed && iter < 50) {
         changed = false;
         iter++;
@@ -69,11 +47,48 @@ export function resolveDependencies(
             if (prereqs.length === 0) continue;
             const anyMissing = prereqs.some((prereqId) => {
                 const p = allSubjects.get(prereqId);
-                return !p || p.status !== 'aprobado';
+                return p?.status !== 'aprobado';
             });
             if (anyMissing) { subject.status = 'bloqueado'; changed = true; }
         }
     }
+}
+
+function construirMapaMaterias(
+    semestres: Semester[],
+    modulosIngles: Subject[],
+    practicas: Subject[],
+    overrides: Record<string, SubjectStatus>,
+): Map<string, Subject> {
+    const allSubjects = new Map<string, Subject>();
+    for (const sem of semestres) {
+        for (const sub of sem.asignaturas) {
+            allSubjects.set(sub.id, { ...sub });
+        }
+    }
+    for (const sub of modulosIngles) {
+        if (!allSubjects.has(sub.id)) allSubjects.set(sub.id, { ...sub });
+    }
+    for (const sub of practicas) {
+        if (!allSubjects.has(sub.id)) allSubjects.set(sub.id, { ...sub });
+    }
+    for (const [id, status] of Object.entries(overrides)) {
+        const s = allSubjects.get(id);
+        if (s) s.status = status;
+    }
+    return allSubjects;
+}
+
+export function resolveDependencies(
+    semestres: Semester[],
+    modulosIngles: Subject[],
+    practicas: Subject[],
+    overrides: Record<string, SubjectStatus>,
+): { semestres: Semester[]; modulos: Subject[]; practicas: Subject[] } {
+    const allSubjects = construirMapaMaterias(semestres, modulosIngles, practicas, overrides);
+
+    desbloquearMaterias(allSubjects);
+    bloquearMaterias(allSubjects, overrides);
 
     const newSemestres = semestres.map((sem) => ({
         ...sem,

@@ -54,10 +54,11 @@ describe('SubjectNode', () => {
         expect(screen.queryByLabelText('aprobado')).not.toBeInTheDocument();
     });
 
-    it('no es clickeable (role button) en modo readOnly', () => {
+    it('renderiza en modo readOnly con role button', () => {
         render(<SubjectNode subject={asignaturaBase} readOnly semestres={semestres} />);
-        const wrapper = screen.getByText('Programación I').closest('[role]');
-        expect(wrapper).not.toBeInTheDocument();
+        const node = screen.getByText('Programación I').closest('[role="button"]');
+        expect(node).toBeInTheDocument();
+        expect(node).toHaveAttribute('tabindex', '0');
     });
 
     it('tiene role button en modo editable', () => {

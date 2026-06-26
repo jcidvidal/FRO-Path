@@ -3,11 +3,11 @@ import { findSubjectById } from '../utils';
 import styles from './SubjectTooltip.module.css';
 
 interface SubjectTooltipProps {
-    subject: Subject;
-    semestres: Semester[];
-    modulosIngles?: Subject[];
-    practicas?: Subject[];
-    position: DOMRect;
+    readonly subject: Subject;
+    readonly semestres: Semester[];
+    readonly modulosIngles?: Subject[];
+    readonly practicas?: Subject[];
+    readonly position: DOMRect;
 }
 
 export function SubjectTooltip({ subject, semestres, modulosIngles, practicas, position }: SubjectTooltipProps) {

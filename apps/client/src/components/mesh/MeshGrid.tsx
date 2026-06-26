@@ -4,13 +4,13 @@ import type { Subject, SubjectStatus, Semester } from '../../types/malla';
 import styles from './MeshGrid.module.css';
 
 interface MeshGridProps {
-    semestres: Semester[];
-    modulosIngles?: Subject[];
-    practicas?: Subject[];
-    onStatusChange?: (subjectId: string, newStatus: SubjectStatus) => void;
-    readOnly?: boolean;
-    selectedSubjectId?: string;
-    onSubjectClick?: (subjectId: string) => void;
+    readonly semestres: Semester[];
+    readonly modulosIngles?: Subject[];
+    readonly practicas?: Subject[];
+    readonly onStatusChange?: (subjectId: string, newStatus: SubjectStatus) => void;
+    readonly readOnly?: boolean;
+    readonly selectedSubjectId?: string;
+    readonly onSubjectClick?: (subjectId: string) => void;
 }
 
 export function MeshGrid({ semestres, modulosIngles, practicas, onStatusChange, readOnly, selectedSubjectId, onSubjectClick }: MeshGridProps) {

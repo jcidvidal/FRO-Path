@@ -4,14 +4,14 @@ import { GridIcon, TrashIcon, ChartIcon, UsersIcon } from '../../icons/Icons';
 import styles from './AppSidebar.module.css';
 
 interface NavItem {
-    label: string;
-    icon: React.ReactNode;
-    path: string;
+    readonly label: string;
+    readonly icon: React.ReactNode;
+    readonly path: string;
 }
 
 interface AppSidebarProps {
-    onResetMalla?: () => void;
-    onCloseSidebar?: () => void;
+    readonly onResetMalla?: () => void;
+    readonly onCloseSidebar?: () => void;
 }
 
 const itemsPorRol: Record<string, NavItem[]> = {

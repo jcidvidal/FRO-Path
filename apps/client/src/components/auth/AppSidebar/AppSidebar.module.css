@@ -16,7 +16,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 8px;
     height: 60px;
     min-height: 60px;
     border-bottom: 2px solid var(--color-card-border-green);

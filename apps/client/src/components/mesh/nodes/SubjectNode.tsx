@@ -5,19 +5,19 @@ import { SubjectTooltip } from '../SubjectTooltip/SubjectTooltip';
 import { LockIcon } from '../../icons/Icons';
 
 interface SubjectNodeProps {
-    subject: Subject;
-    onStatusChange?: (subjectId: string, newStatus: SubjectStatus) => void;
-    readOnly?: boolean;
-    onSubjectClick?: (subjectId: string) => void;
-    isSelected?: boolean;
-    semestres?: Semester[];
-    modulosIngles?: Subject[];
-    practicas?: Subject[];
-    isPrerequisite?: boolean;
-    isHovered?: boolean;
-    isDimmed?: boolean;
-    onHover?: (subjectId: string) => void;
-    onHoverEnd?: () => void;
+    readonly subject: Subject;
+    readonly onStatusChange?: (subjectId: string, newStatus: SubjectStatus) => void;
+    readonly readOnly?: boolean;
+    readonly onSubjectClick?: (subjectId: string) => void;
+    readonly isSelected?: boolean;
+    readonly semestres?: Semester[];
+    readonly modulosIngles?: Subject[];
+    readonly practicas?: Subject[];
+    readonly isPrerequisite?: boolean;
+    readonly isHovered?: boolean;
+    readonly isDimmed?: boolean;
+    readonly onHover?: (subjectId: string) => void;
+    readonly onHoverEnd?: () => void;
 }
 
 const STATUS_OPTIONS: SubjectStatus[] = ['aprobado', 'reprobado', 'cursando', 'disponible'];

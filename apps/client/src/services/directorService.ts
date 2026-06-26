@@ -8,6 +8,8 @@ export interface EstudianteResumen {
     apellidoMaterno: string;
     email: string;
     rol: string;
+    idCarrera?: string | null;
+    nombreCarrera?: string | null;
 }
 
 export function nombreCompleto(estudiante: EstudianteResumen): string {

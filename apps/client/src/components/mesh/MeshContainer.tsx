@@ -1,16 +1,16 @@
-import { MeshGrid } from './MeshGrid';
-import type { SubjectStatus } from '../../types/malla';
 import { useMesh } from '../../store/useMeshStore';
 import { useAuth } from '../../services/AuthContext';
+import { MeshGrid } from './MeshGrid';
+import type { SubjectStatus } from '../../types/malla';
 import styles from './MeshContainer.module.css';
 import bandurrIA from '../../assets/imagenes/Bandurrias/badurrIA.png';
 
-const ID_CARRERA_POR_DEFECTO = 'ii';
+const DEFAULT_CAREER_ID = 'ii';
 
 export function MeshContainer() {
     const { user } = useAuth();
-    const idCarrera = user?.idCarrera ?? ID_CARRERA_POR_DEFECTO;
-    const nombreCarrera = user?.nombreCarrera ?? 'Malla curricular';
+    const careerId = user?.idCarrera ?? DEFAULT_CAREER_ID;
+    const careerName = user?.nombreCarrera ?? 'Malla curricular';
 
     const {
         semestres,
@@ -21,19 +21,18 @@ export function MeshContainer() {
         cambiarEstado,
         comentarioIa,
         analizando,
-    } = useMesh(idCarrera);
+    } = useMesh(careerId);
 
-    // Solo calcular SCT de la malla (los módulos de inglés no tienen SCT)
-    const asignaturasMalla = semestres.flatMap((s) => s.asignaturas);
-    const totalSct = asignaturasMalla.reduce((acc, a) => acc + a.sct, 0);
-    const aprobadoSct = asignaturasMalla
+    const meshSubjects = semestres.flatMap((s) => s.asignaturas);
+    const totalSct = meshSubjects.reduce((acc, a) => acc + a.sct, 0);
+    const approvedSct = meshSubjects
         .filter((a) => a.status === 'aprobado')
         .reduce((acc, a) => acc + a.sct, 0);
-    const cursandoSct = asignaturasMalla
+    const inProgressSct = meshSubjects
         .filter((a) => a.status === 'cursando')
         .reduce((acc, a) => acc + a.sct, 0);
-    const porcentajeAprobado = totalSct === 0 ? 0 : Math.round((aprobadoSct / totalSct) * 100);
-    const porcentajeCursando = totalSct === 0 ? 0 : Math.round((cursandoSct / totalSct) * 100);
+    const approvedPercentage = totalSct === 0 ? 0 : Math.round((approvedSct / totalSct) * 100);
+    const inProgressPercentage = totalSct === 0 ? 0 : Math.round((inProgressSct / totalSct) * 100);
 
     function handleStatusChange(subjectId: string, newStatus: SubjectStatus) {
         cambiarEstado(subjectId, newStatus);
@@ -43,23 +42,23 @@ export function MeshContainer() {
         <div className={styles.container}>
             <div className={styles.infoBar}>
                 <div className={styles.infoLeft}>
-                    <p className={styles.carrera}>{nombreCarrera}</p>
+                    <p className={styles.carrera}>{careerName}</p>
                     <div className={styles.progreso}>
                         <div className={styles.progresoHeader}>
                             <span>Avance Curricular</span>
-                            <span>{aprobadoSct + cursandoSct} / {totalSct} sct</span>
+                            <span>{approvedSct + inProgressSct} / {totalSct} sct</span>
                         </div>
                         <div className={styles.progressBar}>
                             <div
                                 className={styles.progressFill}
-                                style={{ width: `${porcentajeAprobado}%` }}
+                                style={{ width: `${approvedPercentage}%` }}
                             />
                             <div
                                 className={styles.progressFillCursando}
-                                style={{ width: `${porcentajeCursando}%` }}
+                                style={{ width: `${inProgressPercentage}%` }}
                             />
                         </div>
-                        <span className={styles.porcentaje}>{porcentajeAprobado + porcentajeCursando}%</span>
+                        <span className={styles.porcentaje}>{approvedPercentage + inProgressPercentage}%</span>
                     </div>
                 </div>
 

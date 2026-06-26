@@ -29,7 +29,7 @@ const itemsPorRol: Record<string, NavItem[]> = {
     admin: [
         { label: 'Usuarios', icon: <UsersIcon className={styles.navIcon} />, path: '/dashboard/admin?view=users' },
         { label: 'Ver Mallas', icon: <GridIcon className={styles.navIcon} />, path: '/dashboard/admin?view=mallas' },
-        { label: 'Estudiantes', icon: <ChartIcon className={styles.navIcon} />, path: '/dashboard/admin?view=students' },
+        { label: 'Estudiantes', icon: <ChartIcon className={styles.navIcon} />, path: '/dashboard/admin?view=avances' },
     ],
 };
 

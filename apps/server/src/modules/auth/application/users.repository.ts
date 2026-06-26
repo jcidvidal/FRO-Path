@@ -27,6 +27,7 @@ const USUARIOS_SEED: CrearUsuarioEntrada[] = [
     email: 'estudiante@fro-path.local',
     passwordHash: '',
     rol: RolUsuario.Estudiante,
+    idCarrera: 'icc',
   },
   {
     nombre: 'Profesor',
@@ -221,6 +222,7 @@ export class UsuariosRepository {
 
   private async sembrarUsuarios(dataSource: DataSource): Promise<void> {
     const repositorio = dataSource.getRepository<UsuarioRegistro>('Usuario');
+    const repositorioCarreras = dataSource.getRepository<CarreraRegistro>('Carrera');
     const passwordHash = await hash('Pass1234', 10);
 
     for (const usuarioSeed of USUARIOS_SEED) {
@@ -229,6 +231,10 @@ export class UsuariosRepository {
       });
 
       if (!existente) {
+        const carrera = usuarioSeed.idCarrera
+          ? await repositorioCarreras.findOne({ where: { codigo: usuarioSeed.idCarrera } })
+          : null;
+
         await repositorio.save({
           nombre: usuarioSeed.nombre,
           apellido_paterno: usuarioSeed.apellidoPaterno,
@@ -236,6 +242,7 @@ export class UsuariosRepository {
           email: usuarioSeed.email,
           password: passwordHash,
           rol: usuarioSeed.rol,
+          carrera_id: carrera?.id ?? null,
         });
       }
     }

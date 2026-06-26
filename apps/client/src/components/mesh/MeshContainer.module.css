@@ -185,7 +185,6 @@
     text-align: center;
 }
 
-/* esto es para responsive */
 @media (max-width: 768px) {
     .container {
         margin: 4px;

@@ -10,6 +10,7 @@ import {
     crearUsuario,
     actualizarUsuario,
     eliminarUsuario,
+    nombreCompleto,
     type UsuarioResumen,
     type RolUsuario,
 } from '../../services/adminService';
@@ -72,9 +73,18 @@ function AdminUsersView() {
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editingNombre, setEditingNombre] = useState('');
+    const [editingApellidoPaterno, setEditingApellidoPaterno] = useState('');
+    const [editingApellidoMaterno, setEditingApellidoMaterno] = useState('');
     const [editingRol, setEditingRol] = useState('estudiante');
     const [isCreating, setIsCreating] = useState(false);
-    const [createData, setCreateData] = useState({ nombre: '', email: '', rol: 'estudiante' as string, password: '' });
+    const [createData, setCreateData] = useState({
+        nombre: '',
+        apellidoPaterno: '',
+        apellidoMaterno: '',
+        email: '',
+        rol: 'estudiante' as string,
+        password: '',
+    });
     const [createBtnHovered, setCreateBtnHovered] = useState(false);
 
     const cargarUsuarios = useCallback(async (termino: string) => {
@@ -106,13 +116,20 @@ function AdminUsersView() {
         if (!selectedUser) return;
         setIsEditing(true);
         setEditingNombre(selectedUser.nombre);
+        setEditingApellidoPaterno(selectedUser.apellidoPaterno);
+        setEditingApellidoMaterno(selectedUser.apellidoMaterno);
         setEditingRol(selectedUser.rol as 'estudiante' | 'profesor' | 'director' | 'admin');
     }
 
     async function handleSaveEdit() {
         if (!selectedUser) return;
         try {
-            await actualizarUsuario(selectedUser.id, { nombre: editingNombre, rol: editingRol });
+            await actualizarUsuario(selectedUser.id, {
+                nombre: editingNombre,
+                apellidoPaterno: editingApellidoPaterno,
+                apellidoMaterno: editingApellidoMaterno,
+                rol: editingRol,
+            });
             setIsEditing(false);
             await cargarUsuarios(search);
         } catch (err) {
@@ -122,7 +139,7 @@ function AdminUsersView() {
 
     function handleStartCreate() {
         setIsCreating(true);
-        setCreateData({ nombre: '', email: '', rol: 'estudiante', password: '' });
+        setCreateData({ nombre: '', apellidoPaterno: '', apellidoMaterno: '', email: '', rol: 'estudiante', password: '' });
     }
 
     async function handleSaveCreate() {
@@ -131,7 +148,14 @@ function AdminUsersView() {
             return;
         }
         try {
-            await crearUsuario({ nombre: createData.nombre, email: createData.email, password: createData.password, rol: createData.rol as RolUsuario });
+            await crearUsuario({
+                nombre: createData.nombre,
+                apellidoPaterno: createData.apellidoPaterno,
+                apellidoMaterno: createData.apellidoMaterno,
+                email: createData.email,
+                password: createData.password,
+                rol: createData.rol as RolUsuario,
+            });
             setIsCreating(false);
             await cargarUsuarios(search);
         } catch (err) {
@@ -140,7 +164,7 @@ function AdminUsersView() {
     }
 
     function handleDelete(user: UsuarioResumen) {
-        if (!confirm(`Eliminar a ${user.nombre}?`)) return;
+        if (!confirm(`Eliminar a ${nombreCompleto(user)}?`)) return;
         eliminarUsuario(user.id).then(() => {
             if (selectedUserId === user.id) setSelectedUserId(null);
             cargarUsuarios(search);
@@ -185,7 +209,7 @@ function AdminUsersView() {
                     {users.map((u) => (
                         <button key={u.id} className={`${styles.userItem} ${selectedUser?.id === u.id ? styles.userItemActive : ''}`} onClick={() => handleSelectUser(u.id)}>
                             <div className={styles.userInfo}>
-                                <span className={styles.userName}>{u.nombre}</span>
+                                <span className={styles.userName}>{nombreCompleto(u)}</span>
                                 <RoleBadge role={u.rol} />
                             </div>
                         </button>
@@ -197,7 +221,9 @@ function AdminUsersView() {
                     ) : isEditing ? (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                             <h3 style={{ fontSize: 'var(--font-size-md)', fontWeight: 600, color: 'var(--color-text-primary)' }}>Editar Usuario</h3>
-                            <div><label style={labelStyle}>Nombre</label><input style={inputStyle} value={editingNombre} onChange={(e) => setEditingNombre(e.target.value)} /></div>
+                            <div><label style={labelStyle}>Nombre</label><input style={inputStyle} value={editingNombre} onChange={(e) => setEditingNombre(e.target.value)} placeholder="Nombres" /></div>
+                            <div><label style={labelStyle}>Apellido Paterno</label><input style={inputStyle} value={editingApellidoPaterno} onChange={(e) => setEditingApellidoPaterno(e.target.value)} placeholder="Apellido paterno" /></div>
+                            <div><label style={labelStyle}>Apellido Materno</label><input style={inputStyle} value={editingApellidoMaterno} onChange={(e) => setEditingApellidoMaterno(e.target.value)} placeholder="Apellido materno" /></div>
                             <div><label style={labelStyle}>Rol</label>
                                 <select style={selectStyle} value={editingRol} onChange={(e) => setEditingRol(e.target.value as 'estudiante' | 'profesor' | 'director' | 'admin')}>
                                     {ROLE_OPTIONS.map((o) => (<option key={o.value} value={o.value}>{o.label}</option>))}
@@ -211,7 +237,7 @@ function AdminUsersView() {
                     ) : (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                             <h3 style={{ fontSize: 'var(--font-size-md)', fontWeight: 600, color: 'var(--color-text-primary)' }}>Detalles del Usuario</h3>
-                            <p style={{ display: 'flex', alignItems: 'center', gap: 8 }}>Nombre: {selectedUser.nombre}</p>
+                            <p style={{ display: 'flex', alignItems: 'center', gap: 8 }}>Nombre: {nombreCompleto(selectedUser)}</p>
                             <p style={{ display: 'flex', alignItems: 'center', gap: 8 }}>Email: {selectedUser.email}</p>
                             <p style={{ display: 'flex', alignItems: 'center', gap: 8 }}>Rol: <RoleBadge role={selectedUser.rol} /></p>
                             <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
@@ -226,7 +252,9 @@ function AdminUsersView() {
                 <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.6)', zIndex: 1000 }}>
                     <div style={{ background: 'var(--color-bg-primary)', border: '2px solid var(--color-card-border-green)', borderRadius: 12, padding: 24, width: 400, display: 'flex', flexDirection: 'column', gap: 16 }}>
                         <h3 style={{ fontSize: 'var(--font-size-md)', fontWeight: 600, color: 'var(--color-text-primary)' }}>Crear Usuario</h3>
-                        <div><label style={labelStyle}>Nombre</label><input style={inputStyle} value={createData.nombre} onChange={(e) => setCreateData(p => ({ ...p, nombre: e.target.value }))} placeholder="Nombre completo" /></div>
+                        <div><label style={labelStyle}>Nombre</label><input style={inputStyle} value={createData.nombre} onChange={(e) => setCreateData(p => ({ ...p, nombre: e.target.value }))} placeholder="Nombres" /></div>
+                        <div><label style={labelStyle}>Apellido Paterno</label><input style={inputStyle} value={createData.apellidoPaterno} onChange={(e) => setCreateData(p => ({ ...p, apellidoPaterno: e.target.value }))} placeholder="Apellido paterno" /></div>
+                        <div><label style={labelStyle}>Apellido Materno</label><input style={inputStyle} value={createData.apellidoMaterno} onChange={(e) => setCreateData(p => ({ ...p, apellidoMaterno: e.target.value }))} placeholder="Apellido materno" /></div>
                         <div><label style={labelStyle}>Email</label><input style={inputStyle} value={createData.email} onChange={(e) => setCreateData(p => ({ ...p, email: e.target.value }))} placeholder="email@ejemplo.com" /></div>
                         <div><label style={labelStyle}>Contrasena</label><input style={inputStyle} type="password" value={createData.password} onChange={(e) => setCreateData(p => ({ ...p, password: e.target.value }))} placeholder="Contrasena" /></div>
                         <div><label style={labelStyle}>Rol</label>

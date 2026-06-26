@@ -17,7 +17,7 @@ export interface AuthContextValue {
     isAuthenticated: boolean;
     isLoading: boolean;
     login: (email: string, password: string, remember?: boolean) => Promise<{ success: boolean; error?: string; role?: User['role'] }>;
-    register: (name: string, rut: string, email: string, password: string, carrera: string) => Promise<{ success: boolean; error?: string }>;
+    register: (name: string, apellidoPaterno: string, apellidoMaterno: string, rut: string, email: string, password: string, carrera: string) => Promise<{ success: boolean; error?: string }>;
     logout: () => void;
 }
 
@@ -83,9 +83,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
 
     const register = useCallback(
-        async (name: string, _rut: string, email: string, password: string, carrera: string): Promise<{ success: boolean; error?: string }> => {
+        async (name: string, apellidoPaterno: string, apellidoMaterno: string, _rut: string, email: string, password: string, carrera: string): Promise<{ success: boolean; error?: string }> => {
             try {
-                await apiClient.post<BackendAuthResponse>('/auth/register', { nombre: name, email, password, carrera });
+                await apiClient.post<BackendAuthResponse>('/auth/register', {
+                    nombre: name,
+                    apellidoPaterno,
+                    apellidoMaterno,
+                    email,
+                    password,
+                    carrera,
+                });
                 return { success: true };
             } catch (error) {
                 return {

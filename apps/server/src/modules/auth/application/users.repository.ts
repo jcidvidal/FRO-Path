@@ -19,6 +19,14 @@ interface CrearUsuarioEntrada {
   idCarrera?: string;
 }
 
+type ActualizarUsuarioDatos = {
+  nombre?: string;
+  apellidoPaterno?: string;
+  apellidoMaterno?: string;
+  email?: string;
+  rol?: RolUsuario;
+};
+
 const USUARIOS_SEED: CrearUsuarioEntrada[] = [
   {
     nombre: 'Estudiante',
@@ -191,11 +199,19 @@ export class UsuariosRepository {
 
   async actualizar(
     id: number,
-    datos: Partial<Pick<UsuarioRegistro, 'nombre' | 'apellido_paterno' | 'apellido_materno' | 'email' | 'rol'>>,
+    datos: Partial<ActualizarUsuarioDatos>,
   ): Promise<UsuarioAutenticado> {
     const dataSource = await this.obtenerDataSourceConSeed();
     const repositorio = dataSource.getRepository<UsuarioRegistro>('Usuario');
-    await repositorio.update(id, datos);
+
+    const entityData: Partial<UsuarioRegistro> = {};
+    if (datos.nombre !== undefined) entityData.nombre = datos.nombre;
+    if (datos.apellidoPaterno !== undefined) entityData.apellido_paterno = datos.apellidoPaterno;
+    if (datos.apellidoMaterno !== undefined) entityData.apellido_materno = datos.apellidoMaterno;
+    if (datos.email !== undefined) entityData.email = datos.email;
+    if (datos.rol !== undefined) entityData.rol = datos.rol;
+
+    await repositorio.update(id, entityData);
     const usuario = await repositorio.findOne({
       where: { id },
       relations: { carrera: true },

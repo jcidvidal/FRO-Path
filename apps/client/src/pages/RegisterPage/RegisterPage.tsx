@@ -30,6 +30,8 @@ export function RegisterPage() {
     } = useForm({
         initialValues: {
             nombre: '',
+            apellidoPaterno: '',
+            apellidoMaterno: '',
             rut: '',
             email: '',
             carrera: '',
@@ -38,6 +40,8 @@ export function RegisterPage() {
         },
         validators: {
             nombre: [required],
+            apellidoPaterno: [required],
+            apellidoMaterno: [required],
             rut: [required, rut],
             email: [required],
             password: [required, minLength(6)],
@@ -47,7 +51,15 @@ export function RegisterPage() {
             setFormError(null);
             setSuccessMessage(null);
 
-            const result = await register(vals.nombre, vals.rut, vals.email, vals.password, vals.carrera);
+            const result = await register(
+                vals.nombre,
+                vals.apellidoPaterno,
+                vals.apellidoMaterno,
+                vals.rut,
+                vals.email,
+                vals.password,
+                vals.carrera,
+            );
 
             if (result.success) {
                 setSuccessMessage(
@@ -81,14 +93,40 @@ export function RegisterPage() {
                 <form onSubmit={handleSubmit} noValidate>
                     <div className={styles.fieldsGrid}>
                         <Input
-                            label="Nombre Completo"
+                            label="Nombres"
                             name="nombre"
                             type="text"
                             value={values.nombre}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             error={touched.nombre ? errors.nombre : undefined}
-                            autoComplete="name"
+                            autoComplete="given-name"
+                            required
+                            variant="cyan"
+                        />
+
+                        <Input
+                            label="Apellido Paterno"
+                            name="apellidoPaterno"
+                            type="text"
+                            value={values.apellidoPaterno}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.apellidoPaterno ? errors.apellidoPaterno : undefined}
+                            autoComplete="family-name"
+                            required
+                            variant="cyan"
+                        />
+
+                        <Input
+                            label="Apellido Materno"
+                            name="apellidoMaterno"
+                            type="text"
+                            value={values.apellidoMaterno}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.apellidoMaterno ? errors.apellidoMaterno : undefined}
+                            autoComplete="family-name"
                             required
                             variant="cyan"
                         />

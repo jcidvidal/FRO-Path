@@ -31,6 +31,8 @@ const mockBackendResponse = {
         apellidoMaterno: 'FROPath',
         email: 'estudiante@fro-path.local',
         rol: 'estudiante',
+        idCarrera: 'ii',
+        nombreCarrera: 'Ingenieria Informatica',
     },
 };
 
@@ -67,6 +69,8 @@ describe('AuthContext', () => {
                 email: 'estudiante@fro-path.local',
                 name: 'Estudiante Demo',
                 role: 'estudiante',
+                idCarrera: 'ii',
+                nombreCarrera: 'Ingenieria Informatica',
             });
         });
 
@@ -113,6 +117,8 @@ describe('AuthContext', () => {
                 email: 'estudiante@fro-path.local',
                 name: 'Estudiante Demo',
                 role: 'estudiante',
+                idCarrera: 'ii',
+                nombreCarrera: 'Ingenieria Informatica',
             });
         });
 
@@ -134,7 +140,7 @@ describe('AuthContext', () => {
             const { result } = renderAuthHook();
 
             await act(async () => {
-                const res = await result.current.register('Nuevo', '22.222.222-2', 'nuevo@test.cl', 'password123');
+                const res = await result.current.register('Nuevo', '22.222.222-2', 'nuevo@test.cl', 'password123', 'ii');
                 expect(res.success).toBe(true);
             });
         });
@@ -146,7 +152,7 @@ describe('AuthContext', () => {
             const { result } = renderAuthHook();
 
             await act(async () => {
-                const res = await result.current.register('Otro', '33.333.333-3', 'existente@test.cl', 'password123');
+                const res = await result.current.register('Otro', '33.333.333-3', 'existente@test.cl', 'password123', 'ii');
                 expect(res.success).toBe(false);
                 expect(res.error).toBe('El correo ya esta registrado.');
             });
@@ -157,7 +163,7 @@ describe('AuthContext', () => {
             const { result } = renderAuthHook();
 
             await act(async () => {
-                await result.current.register('Nuevo', '44.444.444-4', 'nuevo@test.cl', 'password123');
+                await result.current.register('Nuevo', '44.444.444-4', 'nuevo@test.cl', 'password123', 'ii');
             });
 
             expect(result.current.isAuthenticated).toBe(false);

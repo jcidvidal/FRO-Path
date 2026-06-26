@@ -8,6 +8,8 @@ export interface User {
     email: string;
     name: string;
     role: 'estudiante' | 'docente' | 'director' | 'admin';
+    idCarrera: string | null;
+    nombreCarrera: string | null;
 }
 
 export interface AuthContextValue {
@@ -15,7 +17,7 @@ export interface AuthContextValue {
     isAuthenticated: boolean;
     isLoading: boolean;
     login: (email: string, password: string, remember?: boolean) => Promise<{ success: boolean; error?: string; role?: User['role'] }>;
-    register: (name: string, rut: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+    register: (name: string, rut: string, email: string, password: string, carrera: string) => Promise<{ success: boolean; error?: string }>;
     logout: () => void;
 }
 
@@ -26,6 +28,8 @@ interface BackendUser {
     apellidoMaterno?: string;
     email: string;
     rol: string;
+    idCarrera?: string | null;
+    nombreCarrera?: string | null;
 }
 
 interface BackendAuthResponse {
@@ -47,6 +51,8 @@ function mapUser(backendUser: BackendUser): User {
             .filter((s): s is string => Boolean(s))
             .join(' '),
         role: mapRole(backendUser.rol),
+        idCarrera: backendUser.idCarrera ?? null,
+        nombreCarrera: backendUser.nombreCarrera ?? null,
     };
 }
 
@@ -77,9 +83,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
 
     const register = useCallback(
-        async (name: string, _rut: string, email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+        async (name: string, _rut: string, email: string, password: string, carrera: string): Promise<{ success: boolean; error?: string }> => {
             try {
-                await apiClient.post<BackendAuthResponse>('/auth/register', { nombre: name, email, password });
+                await apiClient.post<BackendAuthResponse>('/auth/register', { nombre: name, email, password, carrera });
                 return { success: true };
             } catch (error) {
                 return {

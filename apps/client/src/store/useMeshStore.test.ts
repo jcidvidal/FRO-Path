@@ -8,6 +8,7 @@ vi.mock('../services/apiClient', () => ({
     apiClient: {
         get: vi.fn(),
         patch: vi.fn(),
+        post: vi.fn().mockResolvedValue({ comentario: 'Carga equilibrada.' }),
     },
 }));
 
@@ -97,5 +98,50 @@ describe('useMesh', () => {
 
         // Tras el rechazo, vuelve al estado anterior
         await waitFor(() => expect(icc001()?.status).toBe('disponible'));
+    });
+
+    it('tras un cambio exitoso solicita el análisis de IA al servidor', async () => {
+        vi.mocked(apiClient.get).mockResolvedValue(respuestaMalla);
+        const respuestaCambio: BackendCambioEstadoResponse = {
+            asignatura: { id: 'ICC-001', codigo: 'ICC-001', nombre: 'Prog I', sct: 6, nivel: 1, estado: 'en_curso', idsPrerequisitos: [] },
+            idsAsignaturasDesbloqueadas: [],
+            eventos: [],
+        };
+        vi.mocked(apiClient.patch).mockResolvedValue(respuestaCambio);
+        vi.mocked(apiClient.post).mockResolvedValue({ comentario: 'Carga equilibrada.' });
+
+        const { result } = renderHook(() => useMesh('icc'));
+        await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+        act(() => {
+            result.current.cambiarEstado('ICC-001', 'cursando');
+        });
+
+        await waitFor(() => expect(result.current.comentarioIa).toBe('Carga equilibrada.'), { timeout: 2000 });
+
+        expect(apiClient.post).toHaveBeenCalledWith('/mesh/icc/analisis-ia');
+        expect(result.current.analizando).toBe(false);
+    });
+
+    it('marca "analizando" y lo desactiva aunque el análisis de IA falle', async () => {
+        vi.mocked(apiClient.get).mockResolvedValue(respuestaMalla);
+        const respuestaCambio: BackendCambioEstadoResponse = {
+            asignatura: { id: 'ICC-001', codigo: 'ICC-001', nombre: 'Prog I', sct: 6, nivel: 1, estado: 'en_curso', idsPrerequisitos: [] },
+            idsAsignaturasDesbloqueadas: [],
+            eventos: [],
+        };
+        vi.mocked(apiClient.patch).mockResolvedValue(respuestaCambio);
+        vi.mocked(apiClient.post).mockRejectedValue(new Error('IA caída'));
+
+        const { result } = renderHook(() => useMesh('icc'));
+        await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+        act(() => {
+            result.current.cambiarEstado('ICC-001', 'cursando');
+        });
+
+        await waitFor(() => expect(result.current.analizando).toBe(true));
+        await waitFor(() => expect(result.current.analizando).toBe(false), { timeout: 2000 });
+        expect(result.current.comentarioIa).toBeNull();
     });
 });

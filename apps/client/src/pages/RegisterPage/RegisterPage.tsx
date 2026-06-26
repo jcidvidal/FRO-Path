@@ -11,8 +11,8 @@ import { required, minLength, matchesField, rut } from '../../services/validator
 import styles from './RegisterPage.module.css';
 
 const CARRERA_OPTIONS = [
-    { value: 'informatica', label: 'Ingeniería en Informática' },
-    { value: 'ing-civil-inf', label: 'Ingeniería Civil en Informática' },
+    { value: 'ii', label: 'Ingeniería en Informática' },
+    { value: 'icc', label: 'Ingeniería Civil en Informática' },
 ];
 
 export function RegisterPage() {
@@ -34,7 +34,7 @@ export function RegisterPage() {
             nombre: '',
             rut: '',
             email: '',
-            carrera: 'informatica',
+            carrera: 'ii',
             password: '',
             confirmPassword: '',
         },
@@ -49,7 +49,7 @@ export function RegisterPage() {
             setFormError(null);
             setSuccessMessage(null);
 
-            const result = await register(vals.nombre, vals.rut, vals.email, vals.password);
+            const result = await register(vals.nombre, vals.rut, vals.email, vals.password, vals.carrera);
 
             if (result.success) {
                 setSuccessMessage(

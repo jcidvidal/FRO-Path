@@ -40,7 +40,7 @@ describe('ProtectedRoute', () => {
 
     it('debe renderizar children si el usuario esta autenticado', () => {
         vi.mocked(useAuth).mockReturnValue({
-            user: { id: 1, email: 'test@test.cl', name: 'Test', role: 'estudiante' },
+            user: { id: 1, email: 'test@test.cl', name: 'Test', role: 'estudiante', idCarrera: null, nombreCarrera: null },
             isAuthenticated: true,
             isLoading: false,
             login: vi.fn(),
@@ -60,7 +60,7 @@ describe('ProtectedRoute', () => {
 
     it('debe redirigir si el rol no esta permitido', () => {
         vi.mocked(useAuth).mockReturnValue({
-            user: { id: 2, email: 'doc@test.cl', name: 'Doc', role: 'docente' },
+            user: { id: 2, email: 'doc@test.cl', name: 'Doc', role: 'docente', idCarrera: null, nombreCarrera: null },
             isAuthenticated: true,
             isLoading: false,
             login: vi.fn(),

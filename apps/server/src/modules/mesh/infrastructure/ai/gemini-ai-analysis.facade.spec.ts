@@ -1,4 +1,7 @@
-import { FachadaAnalisisIaGemini } from './gemini-ai-analysis.facade';
+import {
+  describirCarrera,
+  FachadaAnalisisIaGemini,
+} from './gemini-ai-analysis.facade';
 
 function respuestaGeminiConTexto(texto: string) {
   return {
@@ -13,8 +16,12 @@ function respuestaGeminiConTexto(texto: string) {
 describe('FachadaAnalisisIaGemini', () => {
   const entrada = {
     idCarrera: 'icc',
-    idsAsignaturasSeleccionadas: ['ICC-002'],
-    idsAsignaturasAprobadas: ['ICC-001'],
+    sctEnCurso: 24,
+    cantidadEnCurso: 4,
+    sctAprobado: 60,
+    sctTotal: 300,
+    nivelCarga: 'equilibrado' as const,
+    ramosAdicionalesSugeridos: 1,
   };
 
   let fetchMock: jest.SpyInstance;
@@ -33,18 +40,14 @@ describe('FachadaAnalisisIaGemini', () => {
     fetchMock.mockResolvedValue(
       respuestaGeminiConTexto(
         JSON.stringify({
-          resumen: 'Carga equilibrada.',
-          advertencias: ['Revisa los prerequisitos.'],
-          recomendaciones: ['Inscribe primero ICC-002.'],
+          comentario: 'Tu carga de 24 SCT es equilibrada.',
         }),
       ),
     );
 
     const resultado = await fachada.analizar(entrada);
 
-    expect(resultado.resumen).toBe('Carga equilibrada.');
-    expect(resultado.advertencias).toEqual(['Revisa los prerequisitos.']);
-    expect(resultado.recomendaciones).toEqual(['Inscribe primero ICC-002.']);
+    expect(resultado.comentario).toBe('Tu carga de 24 SCT es equilibrada.');
 
     const [url, opciones] = fetchMock.mock.calls[0];
     expect(url).toContain('gemini-2.5-flash:generateContent');
@@ -53,16 +56,63 @@ describe('FachadaAnalisisIaGemini', () => {
     ).toMatchObject({ 'x-goog-api-key': 'api-key-falsa' });
   });
 
-  it('completa con valores por defecto si faltan campos en la respuesta', async () => {
+  it('incluye en el prompt la sigla oficial ICI para la malla de Ingeniería Civil Informática', async () => {
     fetchMock.mockResolvedValue(
-      respuestaGeminiConTexto(JSON.stringify({ resumen: 'Solo resumen.' })),
+      respuestaGeminiConTexto(JSON.stringify({ comentario: 'ok' })),
+    );
+
+    await fachada.analizar({ ...entrada, idCarrera: 'icc' });
+
+    const [, opciones] = fetchMock.mock.calls[0];
+    const cuerpo = JSON.parse((opciones as RequestInit).body as string) as {
+      contents: { parts: { text: string }[] }[];
+    };
+    const prompt = cuerpo.contents[0].parts[0].text;
+
+    expect(prompt).toContain('Ingeniería Civil Informática (sigla ICI)');
+    expect(prompt).not.toContain('ICC');
+  });
+
+  it('incluye en el prompt la sigla oficial II para la malla de Ingeniería Informática', async () => {
+    fetchMock.mockResolvedValue(
+      respuestaGeminiConTexto(JSON.stringify({ comentario: 'ok' })),
+    );
+
+    await fachada.analizar({ ...entrada, idCarrera: 'ii' });
+
+    const [, opciones] = fetchMock.mock.calls[0];
+    const cuerpo = JSON.parse((opciones as RequestInit).body as string) as {
+      contents: { parts: { text: string }[] }[];
+    };
+    const prompt = cuerpo.contents[0].parts[0].text;
+
+    expect(prompt).toContain('Ingeniería Informática (sigla II)');
+  });
+
+  describe('describirCarrera', () => {
+    it('mapea los códigos de malla a su nombre y sigla oficial sin distinguir mayúsculas', () => {
+      expect(describirCarrera('icc')).toBe(
+        'Ingeniería Civil Informática (sigla ICI)',
+      );
+      expect(describirCarrera('ICC')).toBe(
+        'Ingeniería Civil Informática (sigla ICI)',
+      );
+      expect(describirCarrera('ii')).toBe('Ingeniería Informática (sigla II)');
+    });
+
+    it('devuelve el identificador tal cual si la carrera es desconocida', () => {
+      expect(describirCarrera('xyz')).toBe('xyz');
+    });
+  });
+
+  it('completa con un comentario vacío si falta el campo en la respuesta', async () => {
+    fetchMock.mockResolvedValue(
+      respuestaGeminiConTexto(JSON.stringify({})),
     );
 
     const resultado = await fachada.analizar(entrada);
 
-    expect(resultado.resumen).toBe('Solo resumen.');
-    expect(resultado.advertencias).toEqual([]);
-    expect(resultado.recomendaciones).toEqual([]);
+    expect(resultado.comentario).toBe('');
   });
 
   it('devuelve un resultado degradado si Gemini responde con error HTTP', async () => {
@@ -74,9 +124,7 @@ describe('FachadaAnalisisIaGemini', () => {
 
     const resultado = await fachada.analizar(entrada);
 
-    expect(resultado.resumen).toContain('No se pudo generar el análisis');
-    expect(resultado.advertencias).toEqual([]);
-    expect(resultado.recomendaciones).toEqual([]);
+    expect(resultado.comentario).toContain('No se pudo generar el análisis');
   });
 
   it('devuelve un resultado degradado si la respuesta llega sin candidatos', async () => {
@@ -87,7 +135,7 @@ describe('FachadaAnalisisIaGemini', () => {
 
     const resultado = await fachada.analizar(entrada);
 
-    expect(resultado.resumen).toContain('No se pudo generar el análisis');
+    expect(resultado.comentario).toContain('No se pudo generar el análisis');
   });
 
   it('devuelve un resultado degradado si fetch lanza una excepción de red', async () => {
@@ -95,6 +143,6 @@ describe('FachadaAnalisisIaGemini', () => {
 
     const resultado = await fachada.analizar(entrada);
 
-    expect(resultado.resumen).toContain('No se pudo generar el análisis');
+    expect(resultado.comentario).toContain('No se pudo generar el análisis');
   });
 });

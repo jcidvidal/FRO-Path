@@ -52,6 +52,7 @@
 }
 
 .progressBar {
+    display: flex;
     width: 100%;
     height: 8px;
     background-color: #2a2d2a;
@@ -63,7 +64,13 @@
 .progressFill {
     height: 100%;
     background-color: var(--color-green);
-    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.progressFillCursando {
+    height: 100%;
+    background-color: var(--color-cursando-bd);
+    opacity: 0.7;
     transition: width 0.3s ease;
 }
 
@@ -148,6 +155,14 @@
     font-size: 12px;
     color: var(--color-text-secondary);
     line-height: 1.7;
+}
+
+.bandurrComentario {
+    font-size: 12px;
+    color: var(--color-text-primary);
+    line-height: 1.7;
+    width: 100%;
+    align-self: stretch;
 }
 
 .estadoCarga {

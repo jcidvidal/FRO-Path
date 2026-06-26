@@ -60,19 +60,12 @@ describe('MeshController', () => {
     expect(limpiarProgresoUseCase.ejecutar).toHaveBeenCalledWith('icc', 7);
   });
 
-  it('analizarCargaMalla delega con el idCarrera y las asignaturas del cuerpo', () => {
+  it('analizarCargaMalla delega con el idCarrera y el id del usuario autenticado', () => {
     analizarCargaUseCase.ejecutar.mockReturnValue('analisis');
 
-    const resultado = controlador.analizarCargaMalla('icc', {
-      idsAsignaturasSeleccionadas: ['A'],
-      idsAsignaturasAprobadas: ['B'],
-    });
+    const resultado = controlador.analizarCargaMalla('icc', solicitudConUsuario(7));
 
     expect(resultado).toBe('analisis');
-    expect(analizarCargaUseCase.ejecutar).toHaveBeenCalledWith({
-      idCarrera: 'icc',
-      idsAsignaturasSeleccionadas: ['A'],
-      idsAsignaturasAprobadas: ['B'],
-    });
+    expect(analizarCargaUseCase.ejecutar).toHaveBeenCalledWith('icc', 7);
   });
 });

@@ -4,6 +4,13 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    // dedupe garantiza una sola instancia de React sin acoplar la
+    // resolucion a apps/client/node_modules. Los alias hardcodeados
+    // anteriores rompian el build cuando npm hoistea react a la raiz
+    // del monorepo (caso del CI con npm workspaces).
+    dedupe: ['react', 'react-dom', 'react-router-dom'],
+  },
   test: {
     globals: true,
     environment: 'jsdom',

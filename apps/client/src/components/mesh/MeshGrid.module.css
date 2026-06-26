@@ -1,0 +1,132 @@
+.gridWrapper {
+    width: 100%;
+    padding: 16px;
+}
+
+.grid {
+    display: flex;
+    gap: 8px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-width: 85px;
+}
+
+.semesterHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 0;
+    border: 2px solid var(--color-green);
+    border-radius: 6px;
+    background-color: var(--color-bg-primary);
+}
+
+.semesterNumber {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--color-green);
+}
+
+.subjects {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.specialRow {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 0 0 8px 0;
+}
+
+.specialGroup {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex: 1;
+}
+
+.specialHeader {
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.specialHeaderGreen {
+    border: 2px solid var(--color-green);
+    color: var(--color-green);
+    background: var(--color-green-soft);
+}
+
+.specialItems {
+    display: flex;
+    gap: 6px;
+    flex: 1;
+}
+
+.specialItems > * {
+    flex: 1;
+    min-width: 0;
+}
+
+@media (max-width: 768px) {
+    .gridWrapper {
+        padding: 8px;
+    }
+
+    .grid {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .column {
+        flex: none;
+        width: calc(50% - 4px);
+    }
+
+    .semesterHeader {
+        width: 100%;
+    }
+
+    .specialRow {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .specialGroup {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .specialHeader {
+        width: 100%;
+        min-height: 40px;
+        padding: 6px 10px;
+    }
+
+    .specialItems {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .specialItems > * {
+        flex: 1 1 calc(50% - 3px);
+        min-width: 0;
+    }
+}

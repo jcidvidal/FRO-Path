@@ -1,20 +1,37 @@
 # Alcance del Proyecto: FRO-Path
 
-## 1. Objetivo General
-Desarrollar una plataforma web interactiva que permita a los estudiantes de Ingeniería Civil Informática (ICC) e Ingeniería Civil Industrial (ICI) de la UFRO visualizar, simular y proyectar su avance académico de forma intuitiva.
+Este documento define que incluye y que no incluye la primera version de FRO-Path. Debe usarse para evitar que el proyecto crezca fuera del objetivo acordado.
 
-## 2. Alcance Funcional (Lo que el sistema SÍ hará)
-- **Visualización de Malla:** Representación gráfica de las asignaturas, niveles y áreas de conocimiento.
-- **Simulador de Prerrequisitos:** Validación automática de qué ramos puede tomar un estudiante según su historial.
-- **Cálculo de Créditos (SCT):** Sumatoria automática de carga académica por semestre.
-- **Gestión de Estados:** Capacidad de marcar ramos como "Aprobado", "Cursando" o "Pendiente".
-- **Filtro por Carrera:** Cambio dinámico entre la malla de ICC e ICI.
+## 1. Objetivo general
 
-## 3. Fuera de Alcance (Lo que el sistema NO hará)
-- **Inscripción oficial:** El sistema no reemplaza al Intranet UFRO ni realiza inscripciones de ramos reales.
-- **Validación de Cupos:** No mostrará disponibilidad de secciones o cupos por profesor.
-- **Carga de Horarios:** No generará horarios semanales con bloques de clases específicos en esta primera fase.
+Desarrollar una plataforma web interactiva que permita a estudiantes de carreras informaticas de la UFRO visualizar, simular y proyectar su avance academico de forma intuitiva.
 
-## 4. Usuarios Objetivo
-- Estudiantes de ICC/ICI de la Universidad de La Frontera.
-- Directores de carrera y docentes que busquen orientar a estudiantes en riesgo académico.
+## 2. Alcance funcional
+
+El sistema si debe contemplar:
+
+- Visualizacion grafica de asignaturas, niveles y areas de conocimiento.
+- Simulacion de prerrequisitos para saber que asignaturas pueden cursarse o aprobarse.
+- Calculo de creditos SCT aprobados y totales.
+- Gestion de estados de asignatura: pendiente, cursando, aprobada, reprobada, bloqueada o disponible, segun el modelo vigente.
+- Filtro o seleccion de carrera.
+- Analisis orientativo de carga academica.
+
+## 3. Fuera de alcance
+
+El sistema no debe contemplar en la primera fase:
+
+- Inscripcion oficial de asignaturas.
+- Reemplazo de Intranet UFRO u otros sistemas institucionales.
+- Validacion de cupos, secciones o profesores disponibles.
+- Generacion de horarios semanales con bloques de clases.
+- Toma de decisiones academicas vinculantes; el sistema entrega apoyo visual y orientativo.
+
+## 4. Usuarios objetivo
+
+- Estudiantes de carreras informaticas de la Universidad de La Frontera.
+- Directores de carrera, docentes o ayudantes que orienten a estudiantes en su avance academico.
+
+## Carreras soportadas
+
+La primera version de FRO-Path soporta Ingenieria Civil Informatica (ICI) e Ingenieria Informatica (II). Esta definicion debe mantenerse alineada con `docs/requerimientos.md`.

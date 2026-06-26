@@ -1,7 +1,7 @@
 import { useState, useId } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import type { InputProps } from '../../ui/Input/Input';
-import styles from './PasswordInput.module.css';
+import styles from './passwordInput.module.css';
 
 export type PasswordInputProps = Omit<InputProps, 'type'>;
 

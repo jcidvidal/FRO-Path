@@ -112,7 +112,6 @@
     border: 1px solid var(--color-border, #d0d7de);
     border-radius: 10px;
     padding: 16px;
-    overflow: auto;
     display: flex;
     flex-direction: column;
     gap: 16px;

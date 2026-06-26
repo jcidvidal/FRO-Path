@@ -3,10 +3,10 @@
     flex-direction: column;
     gap: 16px;
     padding: 16px;
-    height: 100%;
     border: 2px solid var(--color-card-border-green);
     border-radius: 8px;
     margin: 8px;
+    overflow-x: auto;
 }
 
 .infoBar {

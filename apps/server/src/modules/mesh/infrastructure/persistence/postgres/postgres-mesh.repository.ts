@@ -199,6 +199,10 @@ export class RepositorioMallaPostgres implements PuertoRepositorioMalla {
               carrera_id: carrera.id,
               categoria: categoria,
             });
+          } else if (asignatura.categoria !== categoria) {
+            // Actualizar categoria de asignaturas existentes (ej: practicas que fueron creadas antes de existir la columna categoria)
+            await asignaturaRepo.update(asignatura.id, { categoria });
+            asignatura.categoria = categoria;
           }
           asignaturasPorCodigo.set(item.codigo, asignatura);
         }

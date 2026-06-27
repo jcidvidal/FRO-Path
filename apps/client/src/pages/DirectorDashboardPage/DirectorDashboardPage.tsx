@@ -1,4 +1,5 @@
-import { useSearchParams, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { DashboardLayout } from '../../layouts/DashboardLayout/DashboardLayout';
 import { AppSidebar } from '../../components/auth/AppSidebar/AppSidebar';
 import { ReadOnlyMeshView } from '../../components/shared/ReadOnlyMeshView/ReadOnlyMeshView';

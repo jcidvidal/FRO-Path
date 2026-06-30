@@ -75,7 +75,7 @@ function AdminUsersView() {
     const [editingNombre, setEditingNombre] = useState('');
     const [editingApellidoPaterno, setEditingApellidoPaterno] = useState('');
     const [editingApellidoMaterno, setEditingApellidoMaterno] = useState('');
-    const [editingRol, setEditingRol] = useState('estudiante');
+    const [editingRol, setEditingRol] = useState<RolUsuario>('estudiante');
     const [isCreating, setIsCreating] = useState(false);
     const [createData, setCreateData] = useState({
         nombre: '',

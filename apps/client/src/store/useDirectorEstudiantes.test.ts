@@ -3,6 +3,7 @@ import { renderHook, waitFor, act } from '@testing-library/react';
 import { useBusquedaEstudiantes, useMallaEstudiante } from './useDirectorEstudiantes';
 import { apiClient } from '../services/apiClient';
 import * as meshAdapter from '../services/meshAdapter';
+import type { FrontendMalla } from '../services/meshAdapter';
 
 vi.mock('../services/apiClient', () => ({
     apiClient: {
@@ -104,15 +105,26 @@ describe('useMallaEstudiante', () => {
             modulosIngles: [],
             practicas: [],
         };
-        const frontendData = {
+        const frontendData: FrontendMalla = {
             semestres: [
-                { numero: 1, asignaturas: [{ id: 'MAT-01', codigo: 'MAT-01', nombre: 'Matemáticas', sct: 6, status: 'aprobado', idsPrerequisitos: [] }] },
+                {
+                    numero: 1,
+                    asignaturas: [
+                        {
+                            id: 'MAT-01',
+                            nombre: 'Matemáticas',
+                            sct: 6,
+                            status: 'aprobado',
+                            prerrequisitos: [],
+                        },
+                    ],
+                },
             ],
             modulosIngles: [],
             practicas: [],
         };
         vi.mocked(apiClient.get).mockResolvedValue(backendData);
-        vi.mocked(meshAdapter.adaptarMeshAFrontend as unknown as vi.Mock).mockReturnValue(frontendData);
+        vi.mocked(meshAdapter.adaptarMeshAFrontend).mockReturnValue(frontendData);
 
         const { result } = renderHook(() => useMallaEstudiante('icc', 1));
 
@@ -131,7 +143,7 @@ describe('useMallaEstudiante', () => {
 
         const { result, rerender } = renderHook(
             ({ idCarrera, idEstudiante }) => useMallaEstudiante(idCarrera, idEstudiante),
-            { initialProps: { idCarrera: 'icc', idEstudiante: 1 } },
+            { initialProps: { idCarrera: 'icc', idEstudiante: 1 as number | null } },
         );
 
         await waitFor(() => expect(result.current.cargando).toBe(false));

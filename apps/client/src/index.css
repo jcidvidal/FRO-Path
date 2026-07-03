@@ -52,8 +52,8 @@
 
 /* Light mode */
 [data-theme="light"] {
-  --color-green: #16A34A;
-  --color-green-soft: #D1F5DD;
+  --color-green: #0091FF;
+  --color-green-soft: rgba(0, 145, 255, 0.12);
   --color-cyan: #0091FF;
   --color-cyan-soft: rgba(0, 145, 255, 0.12);
   --color-bg-primary: #F4F6F9;
@@ -78,7 +78,6 @@
   --color-disponible-bd: #64748B;
   --color-bloqueado-bg: #E3D5FA;
   --color-bloqueado-bd: #6D28D9;
-  /* Header, cards y hover en light mode */
   --color-header-bg: #1B3A6B;
   --color-header-text: #FFFFFF;
   --color-card-bg: #FFFFFF;
@@ -86,7 +85,7 @@
   --color-hover-bg: #E6F0FA;
 }
 
-/* Explicit dark mode (mismos valores que :root) */
+
 [data-theme="dark"] {
   --color-green: #39FF14;
   --color-green-soft: rgba(57, 255, 20, 0.10);

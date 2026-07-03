@@ -48,3 +48,10 @@
 [data-theme="light"] .glowCyan {
     opacity: 0;
 }
+
+[data-theme="light"] .layout {
+    background-image: url('../../assets/imagenes/Ufro.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

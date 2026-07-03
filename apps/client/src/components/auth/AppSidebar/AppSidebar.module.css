@@ -21,20 +21,21 @@
     border-bottom: 2px solid var(--color-card-border-green);
     margin: 0 -12px;
     padding: 0 20px;
+    background-color: var(--color-header-bg);
 }
 
 .roleLabel {
     font-size: var(--font-size-sm);
     font-weight: 700;
-    color: var(--color-green);
+    color: var(--color-header-text);
     text-transform: uppercase;
     letter-spacing: 0.1em;
 }
 
 .closeButton {
     background: transparent;
-    border: 2px solid var(--color-green);
-    color: var(--color-green);
+    border: 2px solid var(--color-header-text);
+    color: var(--color-header-text);
     font-size: 16px;
     cursor: pointer;
     width: 28px;
@@ -49,11 +50,8 @@
 }
 
 .closeButton:hover {
-    background: var(--color-green);
-    color: var(--color-black);
-    box-shadow:
-        0 0 18px rgba(57, 255, 20, 0.8),
-        0 0 40px rgba(57, 255, 20, 0.4);
+    background: var(--color-header-text);
+    color: var(--color-header-bg);
 }
 
 .nav {

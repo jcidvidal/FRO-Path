@@ -129,3 +129,35 @@
     color: var(--color-green);
     border-left: 3px solid var(--color-green);
 }
+
+.themeToggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--color-card-border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-md);
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+    margin-bottom: 8px;
+}
+
+.themeToggle:hover {
+    background: var(--color-hover-bg);
+    color: var(--color-text-primary);
+    border-color: var(--color-green);
+}
+
+.themeIcon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}

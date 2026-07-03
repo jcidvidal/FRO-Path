@@ -1,7 +1,7 @@
 import { useAuth } from '../../../services/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useTheme } from '../../../services/ThemeContext';
-import { GridIcon, TrashIcon, ChartIcon, UsersIcon, SunIcon, MoonIcon } from '../../icons/Icons';
+import { GridIcon, TrashIcon, ChartIcon, UsersIcon } from '../../icons/Icons';
+import { ThemeToggle } from '../../ui/ThemeToggle/ThemeToggle';
 import styles from './AppSidebar.module.css';
 
 interface NavItem {
@@ -36,7 +36,6 @@ const itemsPorRol: Record<string, NavItem[]> = {
 
 export function AppSidebar({ onResetMalla, onCloseSidebar }: AppSidebarProps) {
     const { user, logout } = useAuth();
-    const { theme, toggleTheme } = useTheme();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -78,14 +77,7 @@ export function AppSidebar({ onResetMalla, onCloseSidebar }: AppSidebarProps) {
             </div>
 
             <div className={styles.bottom}>
-                <button
-                    className={styles.themeToggle}
-                    onClick={toggleTheme}
-                    aria-label={theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'}
-                >
-                    {theme === 'dark' ? <SunIcon className={styles.themeIcon} /> : <MoonIcon className={styles.themeIcon} />}
-                    <span>{theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}</span>
-                </button>
+                <ThemeToggle className={styles.themeToggle} />
                 <button className={styles.logoutButton} onClick={logout}>
                     → Cerrar Sesion
                 </button>

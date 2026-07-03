@@ -33,13 +33,13 @@
     padding: 6px 0;
     border: 2px solid var(--color-green);
     border-radius: 6px;
-    background-color: var(--color-bg-primary);
+    background-color: var(--color-card-bg);
 }
 
 .semesterNumber {
     font-size: var(--font-size-sm);
     font-weight: 700;
-    color: var(--color-green);
+    color: var(--color-text-primary);
 }
 
 .subjects {
@@ -81,6 +81,10 @@
     border: 2px solid var(--color-green);
     color: var(--color-green);
     background: var(--color-green-soft);
+}
+
+.specialHeaderGreen:hover {
+    background: var(--color-hover-bg);
 }
 
 .specialItems {

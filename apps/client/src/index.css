@@ -53,9 +53,9 @@
 /* Light mode */
 [data-theme="light"] {
   --color-green: #1B8A4C;
-  --color-green-soft: rgba(27, 138, 76, 0.12);
+  --color-green-soft: #E8F5E9;
   --color-cyan: #0077B6;
-  --color-cyan-soft: rgba(0, 119, 182, 0.12);
+  --color-cyan-soft: #E3F2FD;
   --color-bg-primary: #F4F6F9;
   --color-input-bg: #ffffff;
   --color-input-bg-cyan: #ffffff;
@@ -68,16 +68,16 @@
   --color-text-muted: #94A3B8;
   --color-error: #DC2626;
   --color-success: #1B8A4C;
-  --color-aprobado-bg: rgba(27, 138, 76, 0.12);
+  --color-aprobado-bg: #E6F7EC;
   --color-aprobado-bd: #1B8A4C;
-  --color-reprobado-bg: rgba(220, 38, 38, 0.12);
+  --color-reprobado-bg: #FDECEC;
   --color-reprobado-bd: #DC2626;
-  --color-cursando-bg: rgba(0, 119, 182, 0.12);
+  --color-cursando-bg: #E5F3FA;
   --color-cursando-bd: #0077B6;
-  --color-disponible-bg: rgba(100, 100, 100, 0.08);
+  --color-disponible-bg: #F1F3F5;
   --color-disponible-bd: #94A3B8;
-  --color-bloqueado-bg: rgba(168, 85, 247, 0.08);
-  --color-bloqueado-bd: #A855F7;
+  --color-bloqueado-bg: #F1EAFB;
+  --color-bloqueado-bd: #7C3AED;
   /* Header, cards y hover en light mode */
   --color-header-bg: #005092;
   --color-header-text: #FFFFFF;

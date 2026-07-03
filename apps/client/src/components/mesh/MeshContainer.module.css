@@ -5,6 +5,8 @@
     padding: 16px;
     border: 2px solid var(--color-card-border-green);
     border-radius: 8px;
+    background-color: var(--color-card-bg);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     margin: 8px;
     overflow-x: auto;
 }

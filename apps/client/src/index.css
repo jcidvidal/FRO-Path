@@ -52,10 +52,10 @@
 
 /* Light mode */
 [data-theme="light"] {
-  --color-green: #1B8A4C;
-  --color-green-soft: #E8F5E9;
-  --color-cyan: #0077B6;
-  --color-cyan-soft: #E3F2FD;
+  --color-green: #16A34A;
+  --color-green-soft: #D1F5DD;
+  --color-cyan: #0284C7;
+  --color-cyan-soft: #CFE9F7;
   --color-bg-primary: #F4F6F9;
   --color-input-bg: #ffffff;
   --color-input-bg-cyan: #ffffff;
@@ -67,17 +67,17 @@
   --color-text-secondary: #4A5568;
   --color-text-muted: #718096;
   --color-error: #DC2626;
-  --color-success: #1B8A4C;
-  --color-aprobado-bg: #E6F7EC;
-  --color-aprobado-bd: #1B8A4C;
-  --color-reprobado-bg: #FDECEC;
+  --color-success: #16A34A;
+  --color-aprobado-bg: #D1F5DD;
+  --color-aprobado-bd: #16A34A;
+  --color-reprobado-bg: #FBD5D5;
   --color-reprobado-bd: #DC2626;
-  --color-cursando-bg: #E5F3FA;
-  --color-cursando-bd: #0077B6;
-  --color-disponible-bg: #F1F3F5;
-  --color-disponible-bd: #94A3B8;
-  --color-bloqueado-bg: #F1EAFB;
-  --color-bloqueado-bd: #7C3AED;
+  --color-cursando-bg: #CFE9F7;
+  --color-cursando-bd: #0284C7;
+  --color-disponible-bg: #E9EBEF;
+  --color-disponible-bd: #64748B;
+  --color-bloqueado-bg: #E3D5FA;
+  --color-bloqueado-bd: #6D28D9;
   /* Header, cards y hover en light mode */
   --color-header-bg: #005092;
   --color-header-text: #FFFFFF;

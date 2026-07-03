@@ -59,7 +59,7 @@
 
 .userName {
     font-size: var(--font-size-xl);
-    color: var(--color-text-secondary);
+    color: var(--color-header-text);
     font-weight: 600;
 }
 

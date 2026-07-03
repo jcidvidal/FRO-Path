@@ -104,7 +104,7 @@
     padding: 10px 14px;
     border-radius: 10px;
     border: 2px solid var(--color-card-border-green);
-    background-color: #0f1a14;
+    background-color: var(--color-card-bg);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
@@ -129,7 +129,7 @@
 
 .menuCircleActive {
     border-color: var(--color-text-primary);
-    transform: scale(1.15);
+    transform: scale(1.1.15);
 }
 
 .menuCircle_aprobado {
@@ -177,7 +177,7 @@
 }
 
 .hovered {
-    border-color: #00e5ff !important;
+    border-color: var(--color-cyan) !important;
     box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
 }
 

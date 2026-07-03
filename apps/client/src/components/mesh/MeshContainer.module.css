@@ -55,7 +55,7 @@
     display: flex;
     width: 100%;
     height: 8px;
-    background-color: #2a2d2a;
+    background-color: var(--color-card-border);
     border: 2px solid var(--color-green);
     border-radius: 6px;
     overflow: hidden;

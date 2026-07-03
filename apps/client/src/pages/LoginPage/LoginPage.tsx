@@ -6,6 +6,8 @@ import { PasswordInput } from '../../components/auth/Passwordinput/passwordInput
 import { Button } from '../../components/ui/Button/Button';
 import { FormMessage } from '../../components/ui/FormMessage/FormMessage';
 import { useAuth } from '../../services/AuthContext';
+import { useTheme } from '../../services/ThemeContext';
+import { SunIcon, MoonIcon } from '../../components/icons/Icons';
 import { useForm } from '../../hooks/useForm';
 import { required, minLength } from '../../services/validators';
 import styles from './LoginPage.module.css';
@@ -13,6 +15,7 @@ import styles from './LoginPage.module.css';
 export function LoginPage() {
     const navigate = useNavigate();
     const { login } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const [formError, setFormError] = useState<string | null>(null);
 
     const {
@@ -100,6 +103,14 @@ export function LoginPage() {
                     ¿No tienes cuenta?<Link to="/register">Registrate</Link>
                 </p>
             </div>
+
+            <button
+                className={styles.themeToggle}
+                onClick={toggleTheme}
+                aria-label={theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'}
+            >
+                {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+            </button>
         </AuthLayout>
     );
 }

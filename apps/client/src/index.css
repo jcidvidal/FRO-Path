@@ -54,15 +54,15 @@
 [data-theme="light"] {
   --color-green: #16A34A;
   --color-green-soft: #D1F5DD;
-  --color-cyan: #0284C7;
-  --color-cyan-soft: #CFE9F7;
+  --color-cyan: #0091FF;
+  --color-cyan-soft: rgba(0, 145, 255, 0.12);
   --color-bg-primary: #F4F6F9;
   --color-input-bg: #ffffff;
   --color-input-bg-cyan: #ffffff;
   --color-card-border-green: #E2E8F0;
   --color-card-border-cyan: #E2E8F0;
   --color-input-border-green: #CBD5E1;
-  --color-input-border-cyan: #CBD5E1;
+  --color-input-border-cyan: #66B8FF;
   --color-text-primary: #1A202C;
   --color-text-secondary: #4A5568;
   --color-text-muted: #718096;
@@ -72,14 +72,14 @@
   --color-aprobado-bd: #16A34A;
   --color-reprobado-bg: #FBD5D5;
   --color-reprobado-bd: #DC2626;
-  --color-cursando-bg: #CFE9F7;
-  --color-cursando-bd: #0284C7;
+  --color-cursando-bg: #DCEFFF;
+  --color-cursando-bd: #0091FF;
   --color-disponible-bg: #E9EBEF;
   --color-disponible-bd: #64748B;
   --color-bloqueado-bg: #E3D5FA;
   --color-bloqueado-bd: #6D28D9;
   /* Header, cards y hover en light mode */
-  --color-header-bg: #005092;
+  --color-header-bg: #1B3A6B;
   --color-header-text: #FFFFFF;
   --color-card-bg: #FFFFFF;
   --color-card-border: #E2E8F0;

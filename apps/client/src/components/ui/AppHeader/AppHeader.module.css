@@ -4,8 +4,8 @@
     align-items: center;
     justify-content: space-between;
     padding: 0px 24px;
-    border-bottom: 2px solid var(--color-card-border-green);
-    background-color: var(--color-bg-primary);
+    border-bottom: 2px solid var(--color-card-border);
+    background-color: var(--color-header-bg);
     position: sticky;
     top: 0;
     z-index: 5;
@@ -32,14 +32,14 @@
     display: block;
     height: 2px;
     width: 100%;
-    background-color: var(--color-green);
+    background-color: var(--color-header-text);
     border-radius: 2px;
 }
 
 .title {
     font-size: var(--font-size-lg);
     font-weight: 700;
-    color: var(--color-green);
+    color: var(--color-header-text);
     letter-spacing: 0.08em;
 }
 
@@ -54,6 +54,7 @@
     height: 56px;
     border-radius: 50%;
     object-fit: cover;
+    border: 2px solid var(--color-header-text);
 }
 
 .userName {

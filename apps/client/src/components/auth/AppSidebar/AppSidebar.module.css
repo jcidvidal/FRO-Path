@@ -117,9 +117,7 @@
 .logoutButton:hover {
     background: var(--color-error);
     color: var(--color-black);
-    box-shadow:
-        0 0 18px rgba(255, 68, 68, 0.8),
-        0 0 40px rgba(255, 68, 68, 0.4);
+    box-shadow: var(--color-error-glow);
 }
 
 .navItemActive {

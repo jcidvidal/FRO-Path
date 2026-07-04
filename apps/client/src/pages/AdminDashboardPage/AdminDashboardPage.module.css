@@ -155,6 +155,12 @@
   border: 1px solid var(--color-green);
 }
 
+:global([data-theme="light"]) .roleDocente {
+  background: rgba(246, 179, 74, 0.15);
+  color: #F6B34A;
+  border-color: #F6B34A;
+}
+
 .roleEstudiante {
   background: rgba(160, 174, 192, 0.2);
   color: var(--color-text-secondary);

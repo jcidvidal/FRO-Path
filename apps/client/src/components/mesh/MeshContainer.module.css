@@ -61,6 +61,10 @@
     overflow: hidden;
 }
 
+:global([data-theme="light"]) .progressBar {
+    border-color: var(--color-cyan);
+}
+
 .progressFill {
     height: 100%;
     background-color: var(--color-aprobado-bd);
@@ -149,6 +153,10 @@
     min-height: 80px;
     display: flex;
     align-items: center;
+}
+
+:global([data-theme="light"]) .bandurrBox {
+    border-color: var(--color-cyan);
 }
 
 .bandurrText {

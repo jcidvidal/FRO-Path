@@ -98,7 +98,6 @@
   --color-card-bg: #FFFFFF;
   --color-card-border: #E2E8F0;
   --color-hover-bg: #E6F0FA;
-  /* Variables de sombras y glows */
   --color-shadow-green-subtle: rgba(0, 145, 255, 0.15);
   --color-shadow-cyan-subtle: rgba(0, 145, 255, 0.15);
   --color-shadow-green-strong: 0 0 12px rgba(0, 145, 255, 0.5), 0 0 30px rgba(0, 145, 255, 0.2);

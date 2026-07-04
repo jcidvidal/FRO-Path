@@ -1,10 +1,10 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm"
 import { Carrera } from "./carrera.entity.js"
 
 @Entity()
 export class Asignatura {
-    @PrimaryColumn({type: "varchar", length: 36}) // UUID xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-    id!: string
+    @PrimaryGeneratedColumn()
+    id!: number
 
     @Column({ type: "varchar", length: 10, unique: true }) //ICC706
     codigo_ramo!: string

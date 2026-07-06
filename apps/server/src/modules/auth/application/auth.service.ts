@@ -44,7 +44,7 @@ export class AuthService {
   constructor(
     private readonly usuariosRepository: UsuariosRepository,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async login(dto: LoginDto): Promise<AuthResponse> {
     this.validarCredencialesBasicas(dto.email, dto.password);

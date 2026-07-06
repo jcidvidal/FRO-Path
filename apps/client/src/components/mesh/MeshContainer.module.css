@@ -104,11 +104,25 @@
     border-radius: 50%;
 }
 
-.dotAprobado { background-color: var(--color-aprobado-bd); }
-.dotReprobado { background-color: var(--color-reprobado-bd); }
-.dotCursando { background-color: var(--color-cursando-bd); }
-.dotDisponible { background-color: var(--color-disponible-bd); }
-.dotBloqueado { background-color: var(--color-bloqueado-bd); }
+.dotAprobado {
+    background-color: var(--color-aprobado-bd);
+}
+
+.dotReprobado {
+    background-color: var(--color-reprobado-bd);
+}
+
+.dotCursando {
+    background-color: var(--color-cursando-bd);
+}
+
+.dotDisponible {
+    background-color: var(--color-disponible-bd);
+}
+
+.dotBloqueado {
+    background-color: var(--color-bloqueado-bd);
+}
 
 .progresoHeader span:last-child {
     color: var(--color-green);

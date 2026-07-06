@@ -20,7 +20,7 @@ import type { RequestConUsuario } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('login')
   login(@Body() cuerpo: LoginDto) {

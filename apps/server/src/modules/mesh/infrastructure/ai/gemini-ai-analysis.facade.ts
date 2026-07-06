@@ -41,7 +41,7 @@ export class FachadaAnalisisIaGemini implements PuertoAnalisisIa {
   constructor(
     private readonly apiKey: string,
     private readonly modelo: string,
-  ) {}
+  ) { }
 
   async analizar(entrada: EntradaAnalisisIa): Promise<ResultadoAnalisisIa> {
     try {
@@ -73,8 +73,7 @@ export class FachadaAnalisisIaGemini implements PuertoAnalisisIa {
       return this.parsearRespuesta(datos);
     } catch (error) {
       this.logger.error(
-        `Error al consultar Gemini: ${
-          error instanceof Error ? error.message : String(error)
+        `Error al consultar Gemini: ${error instanceof Error ? error.message : String(error)
         }`,
       );
 

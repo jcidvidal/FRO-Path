@@ -16,7 +16,7 @@ export class MeshController {
     private readonly cambiarEstadoAsignaturaUseCase: CambiarEstadoAsignaturaUseCase,
     private readonly limpiarProgresoUseCase: LimpiarProgresoUseCase,
     private readonly analizarCargaMallaUseCase: AnalizarCargaMallaUseCase,
-  ) {}
+  ) { }
 
   @Get(':idCarrera')
   obtenerMalla(

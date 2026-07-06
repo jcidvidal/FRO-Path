@@ -13,7 +13,7 @@ export class AnalizarCargaMallaUseCase {
     private readonly analisisIa: PuertoAnalisisIa,
     @Inject(REPOSITORIO_MALLA)
     private readonly repositorioMalla: PuertoRepositorioMalla,
-  ) {}
+  ) { }
 
   async ejecutar(idCarrera: string, idUsuario: number) {
     const asignaturas = await this.repositorioMalla.buscarPorCarrera(

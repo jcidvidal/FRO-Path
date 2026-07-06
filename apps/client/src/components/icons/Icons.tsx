@@ -52,3 +52,47 @@ export function LockIcon({ className }: IconProps) {
         </svg>
     );
 }
+
+export function SearchIcon({ className }: IconProps) {
+    return (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+            <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M11 11L14.5 14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+    );
+}
+
+export function UserIcon({ className }: IconProps) {
+    return (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+            <circle cx="10" cy="7" r="3.5" stroke="var(--color-green)" strokeWidth="1.5" />
+            <path d="M3 18C3 14.5 6.5 12 10 12C13.5 12 17 14.5 17 18" stroke="var(--color-green)" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+    );
+}
+export function ErrorIcon({ className }: IconProps) {
+    return (
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+            <circle cx="9" cy="9" r="8" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M6 6L12 12M12 6L6 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+    );
+}
+
+export function SuccessIcon({ className }: IconProps) {
+    return (
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+            <circle cx="9" cy="9" r="8" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M5 9L8 12L13 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
+}
+
+export function InfoIcon({ className }: IconProps) {
+    return (
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+            <circle cx="9" cy="9" r="8" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M9 8V13M9 6V6.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+    );
+}

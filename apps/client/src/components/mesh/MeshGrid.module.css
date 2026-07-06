@@ -80,12 +80,11 @@
     flex: 1;
 }
 
-.specialItems > * {
+.specialItems>* {
     flex: 1;
     min-width: 0;
 }
 
-/* Mobile: 2 semesters per row */
 @media (max-width: 768px) {
     .gridWrapper {
         padding: 8px;
@@ -126,7 +125,7 @@
         width: 100%;
     }
 
-    .specialItems > * {
+    .specialItems>* {
         flex: 1 1 calc(50% - 3px);
         min-width: 0;
     }

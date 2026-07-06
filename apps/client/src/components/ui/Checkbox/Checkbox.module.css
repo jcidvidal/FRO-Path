@@ -53,8 +53,7 @@
   opacity: 1;
 }
 
-/* Focus state for keyboard navigation */
-.hiddenCheckbox:focus-visible + .visualCheckbox {
+.hiddenCheckbox:focus-visible+.visualCheckbox {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }

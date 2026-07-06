@@ -1,0 +1,61 @@
+services:
+  # ── Base de datos (PostgreSQL) ──────────────────────────────
+  db:
+    image: postgres:16.13-alpine
+    container_name: fropath_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-admin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-mallaufro}
+      POSTGRES_DB: ${DB_NAME:-mallaufro}
+    ports:
+      - "5435:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-admin} -d ${DB_NAME:-mallaufro}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Backend (NestJS) ────────────────────────────────────────
+  server:
+    build:
+      context: ./apps/server
+    container_name: fropath_server
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      CLIENT_URL: ${CLIENT_URL:-http://localhost:5173}
+      JWT_SECRET: ${JWT_SECRET:-cambia-esto-por-un-secreto-largo-y-aleatorio}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1h}
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-admin}
+      DB_PASSWORD: ${DB_PASSWORD:-mallaufro}
+      DB_NAME: ${DB_NAME:-mallaufro}
+      DB_SYNCHRONIZE: ${DB_SYNCHRONIZE:-true}
+      DB_LOGGING: ${DB_LOGGING:-false}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
+    ports:
+      - "3000:3000"
+
+  # ── Frontend (React + Vite, servido por Nginx) ──────────────
+  client:
+    build:
+      context: ./apps/client
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:3000}
+    container_name: fropath_client
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "5173:80"
+
+volumes:
+  pgdata:

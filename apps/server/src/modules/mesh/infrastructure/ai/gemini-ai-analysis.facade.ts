@@ -7,15 +7,28 @@ import {
 
 const URL_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 
+// Carga semestral de referencia (tiempo completo) en créditos SCT.
+const SCT_CARGA_COMPLETA = 30;
+
+// Descripción de cada carrera (nombre y sigla oficial) según el código de malla.
+// La malla con código 'icc' corresponde a Ingeniería Civil Informática, cuya
+// sigla oficial es ICI (no ICC); 'ii' corresponde a Ingeniería Informática (II).
+const CARRERAS: Record<string, string> = {
+  icc: 'Ingeniería Civil Informática (sigla ICI)',
+  ii: 'Ingeniería Informática (sigla II)',
+};
+
+export function describirCarrera(idCarrera: string): string {
+  return CARRERAS[idCarrera.toLowerCase()] ?? idCarrera;
+}
+
 // Esquema de salida estructurada (formato REST de la API de Gemini).
 const ESQUEMA_RESPUESTA = {
   type: 'OBJECT',
   properties: {
-    resumen: { type: 'STRING' },
-    advertencias: { type: 'ARRAY', items: { type: 'STRING' } },
-    recomendaciones: { type: 'ARRAY', items: { type: 'STRING' } },
+    comentario: { type: 'STRING' },
   },
-  required: ['resumen', 'advertencias', 'recomendaciones'],
+  required: ['comentario'],
 };
 
 interface RespuestaGemini {
@@ -28,7 +41,7 @@ export class FachadaAnalisisIaGemini implements PuertoAnalisisIa {
   constructor(
     private readonly apiKey: string,
     private readonly modelo: string,
-  ) {}
+  ) { }
 
   async analizar(entrada: EntradaAnalisisIa): Promise<ResultadoAnalisisIa> {
     try {
@@ -60,36 +73,30 @@ export class FachadaAnalisisIaGemini implements PuertoAnalisisIa {
       return this.parsearRespuesta(datos);
     } catch (error) {
       this.logger.error(
-        `Error al consultar Gemini: ${
-          error instanceof Error ? error.message : String(error)
+        `Error al consultar Gemini: ${error instanceof Error ? error.message : String(error)
         }`,
       );
 
       return {
-        resumen:
-          'No se pudo generar el análisis con la IA en este momento. Intenta nuevamente más tarde.',
-        advertencias: [],
-        recomendaciones: [],
+        comentario:
+          'No se pudo generar el análisis de tu carga académica en este momento. Intenta nuevamente más tarde.',
       };
     }
   }
 
   private construirPrompt(entrada: EntradaAnalisisIa): string {
     return [
-      'Eres un asistente académico que orienta a estudiantes universitarios sobre su carga curricular.',
-      `Carrera: ${entrada.idCarrera}.`,
-      `Asignaturas ya aprobadas (códigos): ${this.listar(entrada.idsAsignaturasAprobadas)}.`,
-      `Asignaturas que el estudiante quiere cursar el próximo semestre (códigos): ${this.listar(
-        entrada.idsAsignaturasSeleccionadas,
-      )}.`,
-      'Analiza si la selección es adecuada considerando la cantidad de ramos y la progresión esperada.',
-      'Responde en español, con tono cercano y profesional, dirigido directamente al estudiante.',
-      'Entrega un resumen breve, una lista de advertencias (vacía si no hay) y una lista de recomendaciones concretas.',
+      'Eres Bandurr-IA, un asistente académico que orienta a estudiantes universitarios sobre su carga académica semestral.',
+      `El estudiante está viendo la malla de ${describirCarrera(entrada.idCarrera)}. Refiérete a la carrera siempre con esa sigla oficial.`,
+      `El estudiante tiene ${entrada.cantidadEnCurso} asignatura(s) marcadas en curso para este semestre, que suman ${entrada.sctEnCurso} créditos SCT.`,
+      `Ha aprobado ${entrada.sctAprobado} de ${entrada.sctTotal} créditos SCT de la carrera.`,
+      `Una carga semestral de tiempo completo ronda los ${SCT_CARGA_COMPLETA} créditos SCT.`,
+      `Su carga ya fue clasificada como ${entrada.nivelCarga.toUpperCase()}. No la recalcules ni la contradigas: explícala con tus palabras.`,
+      entrada.nivelCarga === 'excesivo'
+        ? 'Indícale con tacto que conviene reducir la carga este semestre.'
+        : `Puede tomar hasta ${entrada.ramosAdicionalesSugeridos} asignatura(s) más sin sobrecargarse; menciónalo de forma orientativa.`,
+      'Responde en español, con tono cercano y dirigido directamente al estudiante. No uses listas ni títulos: solo un comentario en prosa.',
     ].join('\n');
-  }
-
-  private listar(ids: string[]): string {
-    return ids.length > 0 ? ids.join(', ') : 'ninguna';
   }
 
   private parsearRespuesta(datos: RespuestaGemini): ResultadoAnalisisIa {
@@ -102,9 +109,7 @@ export class FachadaAnalisisIaGemini implements PuertoAnalisisIa {
     const contenido = JSON.parse(texto) as Partial<ResultadoAnalisisIa>;
 
     return {
-      resumen: contenido.resumen ?? '',
-      advertencias: contenido.advertencias ?? [],
-      recomendaciones: contenido.recomendaciones ?? [],
+      comentario: contenido.comentario ?? '',
     };
   }
 }

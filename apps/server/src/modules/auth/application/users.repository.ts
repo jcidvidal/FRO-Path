@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { hash } from 'bcrypt';
 import { DataSource } from 'typeorm';
-import { UsuarioRegistro } from '../../mesh/infrastructure/persistence/postgres/postgres.entities';
+import {
+  CarreraRegistro,
+  UsuarioRegistro,
+} from '../../mesh/infrastructure/persistence/postgres/postgres.entities';
 import { obtenerDataSourceFroPath } from '../../mesh/infrastructure/persistence/postgres/postgres-data-source';
 import { UsuarioAutenticado, UsuarioConPassword } from '../domain/auth-user';
 import { RolUsuario } from '../domain/roles';
@@ -13,6 +16,7 @@ interface CrearUsuarioEntrada {
   email: string;
   passwordHash: string;
   rol: RolUsuario;
+  idCarrera?: string;
 }
 
 const USUARIOS_SEED: CrearUsuarioEntrada[] = [
@@ -58,7 +62,10 @@ export class UsuariosRepository {
     const dataSource = await this.obtenerDataSourceConSeed();
     const usuario = await dataSource
       .getRepository<UsuarioRegistro>('Usuario')
-      .findOne({ where: { email: this.normalizarEmail(email) } });
+      .findOne({
+        where: { email: this.normalizarEmail(email) },
+        relations: { carrera: true },
+      });
 
     return usuario ? this.mapearConPassword(usuario) : null;
   }
@@ -67,13 +74,18 @@ export class UsuariosRepository {
     const dataSource = await this.obtenerDataSourceConSeed();
     const usuario = await dataSource
       .getRepository<UsuarioRegistro>('Usuario')
-      .findOne({ where: { id } });
+      .findOne({ where: { id }, relations: { carrera: true } });
 
     return usuario ? this.mapear(usuario) : null;
   }
 
   async crear(entrada: CrearUsuarioEntrada): Promise<UsuarioAutenticado> {
     const dataSource = await this.obtenerDataSourceConSeed();
+    const carrera = await this.buscarCarreraPorCodigo(
+      dataSource,
+      entrada.idCarrera,
+    );
+
     const usuario = await dataSource
       .getRepository<UsuarioRegistro>('Usuario')
       .save({
@@ -83,9 +95,85 @@ export class UsuariosRepository {
         email: this.normalizarEmail(entrada.email),
         password: entrada.passwordHash,
         rol: entrada.rol,
+        carrera_id: carrera?.id ?? null,
       });
 
-    return this.mapear(usuario);
+    return this.mapear({ ...usuario, carrera: carrera ?? null });
+  }
+
+  private async buscarCarreraPorCodigo(
+    dataSource: DataSource,
+    codigo?: string,
+  ): Promise<CarreraRegistro | null> {
+    const codigoNormalizado = codigo?.trim();
+    if (!codigoNormalizado) {
+      return null;
+    }
+
+    return dataSource
+      .getRepository<CarreraRegistro>('Carrera')
+      .findOne({ where: { codigo: codigoNormalizado } });
+  }
+
+  async buscarEstudiantes(busqueda?: string): Promise<UsuarioAutenticado[]> {
+    const dataSource = await this.obtenerDataSourceConSeed();
+    const consulta = dataSource
+      .getRepository<UsuarioRegistro>('Usuario')
+      .createQueryBuilder('usuario')
+      .leftJoinAndSelect('usuario.carrera', 'carrera')
+      .where('usuario.rol = :rol', { rol: RolUsuario.Estudiante });
+
+    const termino = busqueda?.trim();
+    if (termino) {
+      consulta.andWhere(
+        `(usuario.nombre ILIKE :patron
+          OR usuario.apellido_paterno ILIKE :patron
+          OR usuario.apellido_materno ILIKE :patron
+          OR usuario.email ILIKE :patron)`,
+        { patron: `%${termino}%` },
+      );
+    }
+
+    const usuarios = await consulta
+      .orderBy('usuario.apellido_paterno', 'ASC')
+      .addOrderBy('usuario.apellido_materno', 'ASC')
+      .addOrderBy('usuario.nombre', 'ASC')
+      .take(50)
+      .getMany();
+
+    return usuarios.map((usuario) => this.mapear(usuario));
+  }
+
+  async buscarUsuarios(filtro: {
+    busqueda?: string;
+    roles: RolUsuario[];
+  }): Promise<UsuarioAutenticado[]> {
+    const dataSource = await this.obtenerDataSourceConSeed();
+    const consulta = dataSource
+      .getRepository<UsuarioRegistro>('Usuario')
+      .createQueryBuilder('usuario')
+      .leftJoinAndSelect('usuario.carrera', 'carrera')
+      .where('usuario.rol IN (:...roles)', { roles: filtro.roles });
+
+    const termino = filtro.busqueda?.trim();
+    if (termino) {
+      consulta.andWhere(
+        `(usuario.nombre ILIKE :patron
+          OR usuario.apellido_paterno ILIKE :patron
+          OR usuario.apellido_materno ILIKE :patron
+          OR usuario.email ILIKE :patron)`,
+        { patron: `%${termino}%` },
+      );
+    }
+
+    const usuarios = await consulta
+      .orderBy('usuario.apellido_paterno', 'ASC')
+      .addOrderBy('usuario.apellido_materno', 'ASC')
+      .addOrderBy('usuario.nombre', 'ASC')
+      .take(50)
+      .getMany();
+
+    return usuarios.map((usuario) => this.mapear(usuario));
   }
 
   async actualizarRol(
@@ -98,6 +186,11 @@ export class UsuariosRepository {
     usuario.rol = rol;
 
     return this.mapear(await repositorio.save(usuario));
+  }
+
+  async eliminar(id: number): Promise<void> {
+    const dataSource = await this.obtenerDataSourceConSeed();
+    await dataSource.getRepository<UsuarioRegistro>('Usuario').delete({ id });
   }
 
   private async obtenerDataSourceConSeed(): Promise<DataSource> {
@@ -139,6 +232,8 @@ export class UsuariosRepository {
       apellidoMaterno: usuario.apellido_materno,
       email: usuario.email,
       rol: usuario.rol as RolUsuario,
+      idCarrera: usuario.carrera?.codigo ?? null,
+      nombreCarrera: usuario.carrera?.nombre ?? null,
     };
   }
 

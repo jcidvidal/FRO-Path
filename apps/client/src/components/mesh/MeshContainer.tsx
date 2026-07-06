@@ -1,20 +1,36 @@
 import { MeshGrid } from './MeshGrid';
 import type { SubjectStatus } from '../../types/malla';
 import { useMesh } from '../../store/useMeshStore';
+import { useAuth } from '../../services/AuthContext';
 import styles from './MeshContainer.module.css';
 import bandurrIA from '../../assets/imagenes/Bandurrias/badurrIA.png';
 
-const ID_CARRERA = 'icc';
+const ID_CARRERA_POR_DEFECTO = 'ii';
 
 export function MeshContainer() {
-    const { semestres, isLoading, error, cambiarEstado } = useMesh(ID_CARRERA);
+    const { user } = useAuth();
+    const idCarrera = user?.idCarrera ?? ID_CARRERA_POR_DEFECTO;
+    const nombreCarrera = user?.nombreCarrera ?? 'Malla curricular';
 
-    const totalSct = semestres.flatMap((s) => s.asignaturas).reduce((acc, a) => acc + a.sct, 0);
-    const aprobadoSct = semestres
-        .flatMap((s) => s.asignaturas)
+    const {
+        semestres,
+        isLoading,
+        error,
+        cambiarEstado,
+        comentarioIa,
+        analizando,
+    } = useMesh(idCarrera);
+
+    const asignaturas = semestres.flatMap((s) => s.asignaturas);
+    const totalSct = asignaturas.reduce((acc, a) => acc + a.sct, 0);
+    const aprobadoSct = asignaturas
         .filter((a) => a.status === 'aprobado')
         .reduce((acc, a) => acc + a.sct, 0);
-    const porcentaje = totalSct === 0 ? 0 : Math.round((aprobadoSct / totalSct) * 100);
+    const cursandoSct = asignaturas
+        .filter((a) => a.status === 'cursando')
+        .reduce((acc, a) => acc + a.sct, 0);
+    const porcentajeAprobado = totalSct === 0 ? 0 : Math.round((aprobadoSct / totalSct) * 100);
+    const porcentajeCursando = totalSct === 0 ? 0 : Math.round((cursandoSct / totalSct) * 100);
 
     function handleStatusChange(subjectId: string, newStatus: SubjectStatus) {
         cambiarEstado(subjectId, newStatus);
@@ -24,19 +40,23 @@ export function MeshContainer() {
         <div className={styles.container}>
             <div className={styles.infoBar}>
                 <div className={styles.infoLeft}>
-                    <p className={styles.carrera}>ingenieria informatica</p>
+                    <p className={styles.carrera}>{nombreCarrera}</p>
                     <div className={styles.progreso}>
                         <div className={styles.progresoHeader}>
                             <span>Avance Curricular</span>
-                            <span>{aprobadoSct} / {totalSct} sct</span>
+                            <span>{aprobadoSct + cursandoSct} / {totalSct} sct</span>
                         </div>
                         <div className={styles.progressBar}>
                             <div
                                 className={styles.progressFill}
-                                style={{ width: `${porcentaje}%` }}
+                                style={{ width: `${porcentajeAprobado}%` }}
+                            />
+                            <div
+                                className={styles.progressFillCursando}
+                                style={{ width: `${porcentajeCursando}%` }}
                             />
                         </div>
-                        <span className={styles.porcentaje}>{porcentaje}%</span>
+                        <span className={styles.porcentaje}>{porcentajeAprobado + porcentajeCursando}%</span>
                     </div>
                 </div>
 
@@ -50,9 +70,15 @@ export function MeshContainer() {
                         <span className={styles.bandurrTitle}>Bandurr-IA</span>
                     </div>
                     <div className={styles.bandurrBox}>
-                        <p className={styles.bandurrText}>
-                            Aqui apareceran sugerencias y mensajes del asistente inteligente sobre tu progreso academico.
-                        </p>
+                        {analizando && (
+                            <p className={styles.bandurrText}>
+                                Analizando tu carga académica...
+                            </p>
+                        )}
+
+                        {!analizando && comentarioIa && (
+                            <p className={styles.bandurrComentario}>{comentarioIa}</p>
+                        )}
                     </div>
                 </div>
             </div>

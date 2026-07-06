@@ -1,7 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './modules/auth/auth.module';
+import { MeshModule } from './modules/mesh/mesh.module';
+import { ProgressModule } from './modules/progress/progress.module';
+import { CarreraModule } from './modules/carrera/carrera.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MeshModule } from './modules/mesh/mesh.module';
 import { ProgressModule } from './modules/progress/progress.module';
@@ -13,9 +18,11 @@ import { CarreraModule } from './modules/carrera/carrera.module';
     AuthModule,
     MeshModule,
     ProgressModule,
+    CarreraModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
+
 

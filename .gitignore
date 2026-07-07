@@ -50,6 +50,11 @@ web_modules/
 # Optional npm cache directory
 .npm
 
+# SonarQube
+sonar-project.properties
+.scannerwork/
+.sonarlint/
+
 # Optional eslint cache
 .eslintcache
 

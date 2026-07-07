@@ -1,0 +1,90 @@
+.header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 24px;
+    border-bottom: 2px solid var(--color-card-border-green);
+    background-color: var(--color-bg-primary);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 36px;
+}
+
+.hamburger span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background-color: var(--color-green);
+    border-radius: 2px;
+}
+
+.title {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-green);
+    letter-spacing: 0.08em;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.userName {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-secondary);
+    font-weight: 600;
+}
+
+.userData {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+@media (max-width: 480px) {
+    .header {
+        padding: 8px 12px;
+    }
+    .title {
+        font-size: 14px;
+    }
+    .userName {
+        font-size: var(--font-size-base);
+    }
+    .avatar {
+        width: 32px;
+        height: 32px;
+    }
+    .hamburger {
+        width: 28px;
+        padding: 6px;
+    }
+}

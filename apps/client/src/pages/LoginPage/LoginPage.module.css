@@ -1,0 +1,48 @@
+.card {
+  width: 400px;
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-card-border-green);
+  border-radius: 8px;
+  padding: 48px 40px 44px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-green);
+  text-align: center;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.field {
+  margin-bottom: 22px;
+}
+
+.footer {
+  margin-top: 26px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.footer a {
+  color: var(--color-cyan);
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 4px;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}

@@ -97,4 +97,34 @@ describe('FachadaAnalisisIaGemini', () => {
 
     expect(resultado.resumen).toContain('No se pudo generar el análisis');
   });
+
+  it('incluye "ninguna" en el prompt cuando los arrays de ids estan vacios', async () => {
+    fetchMock.mockResolvedValue(
+      respuestaGeminiConTexto(
+        JSON.stringify({ resumen: 'Sin asignaturas.', advertencias: [], recomendaciones: [] }),
+      ),
+    );
+
+    const entradaVacia = {
+      idCarrera: 'icc',
+      idsAsignaturasSeleccionadas: [],
+      idsAsignaturasAprobadas: [],
+    };
+
+    await fachada.analizar(entradaVacia);
+
+    const body = JSON.parse((fetchMock.mock.calls[0][1] as RequestInit).body as string);
+    const prompt: string = body.contents[0].parts[0].text;
+    expect(prompt).toContain('ninguna');
+  });
+
+  it('devuelve un resultado degradado si fetch lanza un valor que no es una instancia de Error', async () => {
+    fetchMock.mockRejectedValue('fallo como string');
+
+    const resultado = await fachada.analizar(entrada);
+
+    expect(resultado.resumen).toContain('No se pudo generar el análisis');
+    expect(resultado.advertencias).toEqual([]);
+    expect(resultado.recomendaciones).toEqual([]);
+  });
 });

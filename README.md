@@ -1,5 +1,130 @@
 # FRO-Path
+README ejecutable con:
 
+Descripción breve del producto.
+
+Prerrequisitos.
+
+Comandos únicos para levantar local (Docker/compose o scripts) y ejecutar pruebas.
+
+.env.example en caso de ser necesario.
+
+URL de despliegue (web/API) o enlace a APK (móvil).
+
+## Descripción breve del producto
+
+## Prerequisitos para ejecutarlo
+Para esto considerar los principales sistemas los cuales son windowns, linux y macos
+
+## Los compnados para levantar el Docker
+
+Esto hay qu everlo bien
+## .env.example en caso de ser necesario.
+
+## URL de despliegue (web/API) o enlace a APK (móvil).
+
+
+---
+
+## Prerrequisitos
+
+Para ejecutar el proyecto localmente de cualquiera de las dos formas, asegúrate de tener instalado:
+
+1. **Node.js** (Versión recomendada: `24.14.1` o compatible)
+2. **npm** (Versión recomendada: `11.11.0` o compatible)
+3. **Docker** y **Docker Compose** (Necesario para base de datos y despliegue rápido)
+
+---
+
+## Comandos Únicos para Levantar Local
+
+### Opción A: Levantar Todo con Docker Compose (Recomendado)
+Este comando único levanta la base de datos PostgreSQL, el servidor NestJS y el cliente React en sus respectivos contenedores de forma automatizada:
+
+```bash
+docker compose up --build
+```
+* Una vez levantado:
+  * **Frontend (Cliente):** `http://localhost:5173`
+  * **Backend (Servidor API):** `http://localhost:3000`
+
+---
+
+### Opción B: Levantar con Scripts Locales (Desarrollo Local)
+Si deseas levantar los servicios directamente con Node:
+
+1. **Instalar dependencias:**
+   ```bash
+   npm run install:all
+   ```
+2. **Levantar base de datos en segundo plano:**
+   ```bash
+   docker compose up -d db
+   ```
+3. **Iniciar el servidor API (Backend - NestJS):**
+   ```bash
+   npm run dev:server
+   ```
+4. **Iniciar el cliente web (Frontend - React + Vite):**
+   ```bash
+   npm run dev:client
+   ```
+
+---
+
+## Comandos para Ejecutar Pruebas y Cobertura
+
+Puedes ejecutar las pruebas de cada workspace desde la raíz del proyecto usando los siguientes comandos:
+
+### 1. Servidor Backend (NestJS / Jest)
+* **Ejecutar pruebas unitarias:**
+  ```bash
+  npm run test --workspace=@fro-path/server
+  ```
+* **Ejecutar cobertura de código (Coverage):**
+  ```bash
+  npm run test:cov --workspace=@fro-path/server
+  ```
+
+### 2. Cliente Frontend (React / Vitest)
+* **Ejecutar pruebas unitarias:**
+  ```bash
+  npm run test --workspace=@fro-path/client
+  ```
+* **Ejecutar cobertura de código (Coverage):**
+  ```bash
+  npm run test:coverage --workspace=@fro-path/client
+  ```
+
+---
+
+## Configuración de Variables de Entorno (`.env`)
+
+El backend requiere ciertas configuraciones que se definen en el archivo `.env`. Se incluye una plantilla en [apps/server/.env.example](./apps/server/.env.example). 
+
+Para comenzar:
+1. Copia el archivo de ejemplo:
+   ```bash
+   cp apps/server/.env.example apps/server/.env
+   ```
+2. Si deseas habilitar el análisis de carga académica por IA, obtén una clave de API en [Google AI Studio](https://aistudio.google.com/apikey) y configúrala en el parámetro:
+   ```env
+   GEMINI_API_KEY=tu-clave-de-api-de-gemini
+   ```
+
+Las credenciales por defecto de la base de datos están preconfiguradas para funcionar directamente con el servicio de Docker.
+
+---
+
+## URLs de Despliegue
+
+Actualmente, el proyecto está preparado para su despliegue continuo en la nube:
+
+* **Frontend Web (Vercel):** [https://fro-path-client.vercel.app](https://fro-path-client.vercel.app) *(TBD / Próximamente)*
+* **Backend API (Despliegue Externo):** [https://fro-path-server.onrender.com](https://fro-path-server.onrender.com) *(TBD / Próximamente)*
+* **Base de datos (PostgreSQL Cloud):** Hospedada en servicio compatible con TypeORM.
+
+---
 Visualizador interactivo de progreso academico para estudiantes de carreras informaticas de la Universidad de La Frontera.
 
 FRO-Path busca ayudar a estudiantes a entender su avance curricular, visualizar prerrequisitos, simular estados de asignaturas y revisar una orientacion de carga academica basada en creditos SCT.

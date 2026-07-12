@@ -1,30 +1,9 @@
 # FRO-Path
-README ejecutable con:
-
-Descripción breve del producto.
-
-Prerrequisitos.
-
-Comandos únicos para levantar local (Docker/compose o scripts) y ejecutar pruebas.
-
-.env.example en caso de ser necesario.
-
-URL de despliegue (web/API) o enlace a APK (móvil).
 
 ## Descripción breve del producto
+Visualizador interactivo de progreso academico para estudiantes de carreras informaticas de la Universidad de La Frontera.
 
-## Prerequisitos para ejecutarlo
-Para esto considerar los principales sistemas los cuales son windowns, linux y macos
-
-## Los compnados para levantar el Docker
-
-Esto hay qu everlo bien
-## .env.example en caso de ser necesario.
-
-## URL de despliegue (web/API) o enlace a APK (móvil).
-
-
----
+FRO-Path busca ayudar a estudiantes a entender su avance curricular, visualizar prerrequisitos, simular estados de asignaturas y revisar una orientacion de carga academica basada en creditos SCT.
 
 ## Prerrequisitos
 
@@ -125,9 +104,6 @@ Actualmente, el proyecto está preparado para su despliegue continuo en la nube:
 * **Base de datos (PostgreSQL Cloud):** Hospedada en servicio compatible con TypeORM.
 
 ---
-Visualizador interactivo de progreso academico para estudiantes de carreras informaticas de la Universidad de La Frontera.
-
-FRO-Path busca ayudar a estudiantes a entender su avance curricular, visualizar prerrequisitos, simular estados de asignaturas y revisar una orientacion de carga academica basada en creditos SCT.
 
 ## Apartados principales
 

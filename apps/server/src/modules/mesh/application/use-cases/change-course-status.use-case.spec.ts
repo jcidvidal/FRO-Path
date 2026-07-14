@@ -48,7 +48,25 @@ class RepositorioMallaFake implements PuertoRepositorioMalla {
   }
 }
 
-function crearCasoDeUso(repositorio: RepositorioMallaFake) {
+class RepositorioMallaVacioFake implements PuertoRepositorioMalla {
+  buscarPorCarrera(_idCarrera: string, _idUsuario: number): Promise<Asignatura[]> {
+    return Promise.resolve([]);
+  }
+
+  guardarEstadoAsignatura(
+    _idCarrera: string,
+    asignatura: Asignatura,
+    _idUsuario: number,
+  ): Promise<Asignatura> {
+    return Promise.resolve(asignatura);
+  }
+
+  limpiarProgreso(_idCarrera: string, _idUsuario: number): Promise<void> {
+    return Promise.resolve();
+  }
+}
+
+function crearCasoDeUso(repositorio: PuertoRepositorioMalla) {
   const specification = new PuedeAprobarAsignaturaSpecification();
 
   return new CambiarEstadoAsignaturaUseCase(
@@ -93,5 +111,84 @@ describe('CambiarEstadoAsignaturaUseCase', () => {
       repositorio.asignaturas.find((asignatura) => asignatura.id === 'ICC-002')
         ?.estado,
     ).toBe(EstadoAsignatura.Bloqueada);
+  });
+  it('lanza BadRequestException si el estado proporcionado no es valido', async () => {
+    const repositorio = new RepositorioMallaFake();
+    const casoDeUso = crearCasoDeUso(repositorio);
+
+    await expect(
+      casoDeUso.ejecutar('icc', 'ICC-001', 'estado_invalido' as EstadoAsignatura, 1),
+    ).rejects.toThrow('El estado estado_invalido no es valido.');
+  });
+
+  it('lanza BadRequestException si la carrera no tiene asignaturas', async () => {
+    const casoDeUso = crearCasoDeUso(new RepositorioMallaVacioFake());
+
+    await expect(
+      casoDeUso.ejecutar('no-existe', 'ICC-001', EstadoAsignatura.Aprobada, 1),
+    ).rejects.toThrow('La carrera no-existe no existe.');
+  });
+
+  it('lanza BadRequestException si la asignatura no pertenece a la carrera', async () => {
+    const repositorio = new RepositorioMallaFake();
+    const casoDeUso = crearCasoDeUso(repositorio);
+
+    await expect(
+      casoDeUso.ejecutar('icc', 'ICC-INEXISTENTE', EstadoAsignatura.Aprobada, 1),
+    ).rejects.toThrow('La asignatura ICC-INEXISTENTE no existe.');
+  });
+
+  it('lanza BadRequestException si los prerequisitos no estan aprobados', async () => {
+    const repositorio = new RepositorioMallaFake();
+    const casoDeUso = crearCasoDeUso(repositorio);
+
+    // ICC-002 requires ICC-001 which is Disponible (not Aprobada)
+    await expect(
+      casoDeUso.ejecutar('icc', 'ICC-002', EstadoAsignatura.Aprobada, 1),
+    ).rejects.toThrow('Los prerequisitos de la asignatura no estan aprobados.');
+  });
+
+  it('devuelve eventos de asignatura aprobada cuando el estado es Aprobada', async () => {
+    const repositorio = new RepositorioMallaFake();
+    const casoDeUso = crearCasoDeUso(repositorio);
+
+    const resultado = await casoDeUso.ejecutar(
+      'icc',
+      'ICC-001',
+      EstadoAsignatura.Aprobada,
+      1,
+    );
+
+    expect(resultado.eventos).toHaveLength(1);
+    expect(resultado.eventos[0]).toMatchObject({ idCarrera: 'icc', idAsignatura: 'ICC-001' });
+  });
+
+  it('devuelve lista de eventos vacia cuando el estado no es Aprobada', async () => {
+    const repositorio = new RepositorioMallaFake();
+    const casoDeUso = crearCasoDeUso(repositorio);
+
+    const resultado = await casoDeUso.ejecutar(
+      'icc',
+      'ICC-001',
+      EstadoAsignatura.Reprobada,
+      1,
+    );
+
+    expect(resultado.eventos).toHaveLength(0);
+  });
+
+  it('persiste el nuevo estado de la asignatura cambiada', async () => {
+    const repositorio = new RepositorioMallaFake();
+    const casoDeUso = crearCasoDeUso(repositorio);
+
+    const resultado = await casoDeUso.ejecutar(
+      'icc',
+      'ICC-001',
+      EstadoAsignatura.EnCurso,
+      1,
+    );
+
+    expect(resultado.asignatura.estado).toBe(EstadoAsignatura.EnCurso);
+    expect(resultado.asignatura.id).toBe('ICC-001');
   });
 });

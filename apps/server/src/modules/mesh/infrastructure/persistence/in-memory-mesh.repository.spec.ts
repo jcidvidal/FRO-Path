@@ -61,4 +61,26 @@ describe('RepositorioMallaEnMemoria', () => {
     expect(prog1?.estado).toBe(EstadoAsignatura.Disponible);
     expect(prog2?.estado).toBe(EstadoAsignatura.Bloqueada);
   });
+  it('guardarEstadoAsignatura no lanza si la carrera no existe en el mapa', async () => {
+    const asignatura = new Asignatura({
+      id: 'x',
+      codigo: 'X',
+      nombre: 'X',
+      sct: 3,
+      nivel: 1,
+      estado: EstadoAsignatura.Disponible,
+      idsPrerequisitos: [],
+    });
+
+    // Should not throw — it uses `?? []` as the base array
+    await expect(
+      repositorio.guardarEstadoAsignatura('carrera-inexistente', asignatura, 1),
+    ).resolves.toBe(asignatura);
+  });
+
+  it('limpiarProgreso no lanza si la carrera no existe en el mapa', async () => {
+    await expect(
+      repositorio.limpiarProgreso('carrera-inexistente', 1),
+    ).resolves.toBeUndefined();
+  });
 });

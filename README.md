@@ -66,26 +66,38 @@ Si deseas levantar los servicios directamente con Node:
 
 ## Comandos para Ejecutar Pruebas y Cobertura
 
-Puedes ejecutar las pruebas de cada workspace desde la raíz del proyecto usando los siguientes comandos:
+Puedes ejecutar las pruebas y coberturas de cada workspace por separado o de todo el monorepo a la vez directamente desde la raíz del proyecto:
 
-### 1. Servidor Backend (NestJS / Jest)
+### 1. Comandos Globales (Ejecutan todo a la vez)
+* **Ejecutar todos los tests (servidor y cliente en una sola corrida):**
+  ```bash
+  npm run test:all
+  ```
+* **Ejecutar cobertura de código completa (servidor y cliente):**
+  ```bash
+  npm run test:cov:all
+  ```
+
+### 2. Servidor Backend (NestJS / Jest)
 * **Ejecutar pruebas unitarias:**
   ```bash
   npm run test --workspace=@fro-path/server
   ```
 * **Ejecutar cobertura de código (Coverage):**
   ```bash
-  npm run test:cov --workspace=@fro-path/server
+  npm run test:cov:server
+  # (o bien: npm run test:cov --workspace=@fro-path/server)
   ```
 
-### 2. Cliente Frontend (React / Vitest)
+### 3. Cliente Frontend (React / Vitest)
 * **Ejecutar pruebas unitarias:**
   ```bash
   npm run test --workspace=@fro-path/client
   ```
 * **Ejecutar cobertura de código (Coverage):**
   ```bash
-  npm run test:coverage --workspace=@fro-path/client
+  npm run test:cov:client
+  # (o bien: npm run test:coverage --workspace=@fro-path/client)
   ```
 
 ---

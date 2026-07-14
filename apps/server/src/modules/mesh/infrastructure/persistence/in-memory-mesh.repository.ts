@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Asignatura } from '../../domain/entities/course.entity';
-import { PuertoRepositorioMalla } from '../../domain/ports/mesh-repository.port';
+import { PuertoRepositorioMalla, MallaCategorizada } from '../../domain/ports/mesh-repository.port';
 import { EstadoAsignatura } from '../../domain/value-objects/course-status.vo';
 
 function estadoInicial(asignatura: Asignatura): EstadoAsignatura {
@@ -11,34 +11,38 @@ function estadoInicial(asignatura: Asignatura): EstadoAsignatura {
 
 @Injectable()
 export class RepositorioMallaEnMemoria implements PuertoRepositorioMalla {
-  private readonly asignaturasPorCarrera = new Map<string, Asignatura[]>([
+  private readonly asignaturasPorCarrera = new Map<string, MallaCategorizada>([
     [
       'informatica',
-      [
-        new Asignatura({
-          id: 'programming-1',
-          codigo: 'INF-101',
-          nombre: 'Programacion I',
-          sct: 6,
-          nivel: 1,
-          estado: EstadoAsignatura.Disponible,
-          idsPrerequisitos: [],
-        }),
-        new Asignatura({
-          id: 'programming-2',
-          codigo: 'INF-102',
-          nombre: 'Programacion II',
-          sct: 6,
-          nivel: 2,
-          estado: EstadoAsignatura.Bloqueada,
-          idsPrerequisitos: ['programming-1'],
-        }),
-      ],
+      {
+        asignaturas: [
+          new Asignatura({
+            id: 'programming-1',
+            codigo: 'INF-101',
+            nombre: 'Programacion I',
+            sct: 6,
+            nivel: 1,
+            estado: EstadoAsignatura.Disponible,
+            idsPrerequisitos: [],
+          }),
+          new Asignatura({
+            id: 'programming-2',
+            codigo: 'INF-102',
+            nombre: 'Programacion II',
+            sct: 6,
+            nivel: 2,
+            estado: EstadoAsignatura.Bloqueada,
+            idsPrerequisitos: ['programming-1'],
+          }),
+        ],
+        modulosIngles: [],
+        practicas: [],
+      },
     ],
   ]);
 
-  buscarPorCarrera(idCarrera: string, _idUsuario: number): Promise<Asignatura[]> {
-    return Promise.resolve(this.asignaturasPorCarrera.get(idCarrera) ?? []);
+  buscarPorCarrera(idCarrera: string, _idUsuario: number): Promise<MallaCategorizada> {
+    return Promise.resolve(this.asignaturasPorCarrera.get(idCarrera) ?? { asignaturas: [], modulosIngles: [], practicas: [] });
   }
 
   guardarEstadoAsignatura(
@@ -46,23 +50,30 @@ export class RepositorioMallaEnMemoria implements PuertoRepositorioMalla {
     asignatura: Asignatura,
     _idUsuario: number,
   ): Promise<Asignatura> {
-    const asignaturas = this.asignaturasPorCarrera.get(idCarrera) ?? [];
-    this.asignaturasPorCarrera.set(
-      idCarrera,
-      asignaturas.map((elemento) =>
-        elemento.id === asignatura.id ? asignatura : elemento,
-      ),
-    );
+    const malla = this.asignaturasPorCarrera.get(idCarrera);
+    if (!malla) return Promise.resolve(asignatura);
+    
+    // Buscar en las tres categorías
+    const actualizar = (items: Asignatura[]) => items.map(a => a.id === asignatura.id ? asignatura : a);
+    
+    this.asignaturasPorCarrera.set(idCarrera, {
+      asignaturas: actualizar(malla.asignaturas),
+      modulosIngles: actualizar(malla.modulosIngles),
+      practicas: actualizar(malla.practicas),
+    });
 
     return Promise.resolve(asignatura);
   }
 
   limpiarProgreso(idCarrera: string, _idUsuario: number): Promise<void> {
-    const asignaturas = this.asignaturasPorCarrera.get(idCarrera) ?? [];
-    this.asignaturasPorCarrera.set(
-      idCarrera,
-      asignaturas.map((a) => a.conEstado(estadoInicial(a))),
-    );
+    const malla = this.asignaturasPorCarrera.get(idCarrera);
+    if (!malla) return Promise.resolve();
+
+    this.asignaturasPorCarrera.set(idCarrera, {
+      asignaturas: malla.asignaturas.map(a => a.conEstado(estadoInicial(a))),
+      modulosIngles: malla.modulosIngles.map(a => a.conEstado(estadoInicial(a))),
+      practicas: malla.practicas.map(a => a.conEstado(estadoInicial(a))),
+    });
 
     return Promise.resolve();
   }

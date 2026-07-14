@@ -12,7 +12,7 @@ const bandurrImages: Record<string, string> = {
 };
 
 interface AppHeaderProps {
-    onToggleSidebar: () => void;
+    readonly onToggleSidebar: () => void;
 }
 
 export function AppHeader({ onToggleSidebar }: AppHeaderProps) {

@@ -1,5 +1,5 @@
 interface IconProps {
-    className?: string;
+    readonly className?: string;
 }
 
 export function GridIcon({ className }: IconProps) {
@@ -93,6 +93,24 @@ export function InfoIcon({ className }: IconProps) {
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
             <circle cx="9" cy="9" r="8" stroke="currentColor" strokeWidth="1.5" />
             <path d="M9 8V13M9 6V6.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+    );
+}
+
+export function SunIcon({ className }: IconProps) {
+    return (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+            <circle cx="10" cy="10" r="4" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M10 2V5M10 15V18M2 10H5M15 10H18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <path d="M4.5 4.5L6 6M14 14L15.5 15.5M6 14L4.5 15.5M14 6L15.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+    );
+}
+
+export function MoonIcon({ className }: IconProps) {
+    return (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+            <path d="M16 10C16 13.31 13.31 16 10 16C6.69 16 4 13.31 4 10C4 6.69 6.69 4 10 4C11.66 4 13.11 4.76 14.17 5.94C13.38 7.09 13 8.56 13 10C13 11.66 12.24 13.11 11.06 13.94C9.9 13.11 9.14 11.66 9.14 10C9.14 7.24 11.38 5 14.14 5C15.3 5.9 16 7.24 16 10Z" stroke="currentColor" strokeWidth="1.5" />
         </svg>
     );
 }

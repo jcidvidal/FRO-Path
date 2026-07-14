@@ -1,17 +1,18 @@
 import { useAuth } from '../../../services/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { GridIcon, TrashIcon, ChartIcon, UsersIcon } from '../../icons/Icons';
+import { ThemeToggle } from '../../ui/ThemeToggle/ThemeToggle';
 import styles from './AppSidebar.module.css';
 
 interface NavItem {
-    label: string;
-    icon: React.ReactNode;
-    path: string;
+    readonly label: string;
+    readonly icon: React.ReactNode;
+    readonly path: string;
 }
 
 interface AppSidebarProps {
-    onResetMalla?: () => void;
-    onCloseSidebar?: () => void;
+    readonly onResetMalla?: () => void;
+    readonly onCloseSidebar?: () => void;
 }
 
 const itemsPorRol: Record<string, NavItem[]> = {
@@ -29,7 +30,7 @@ const itemsPorRol: Record<string, NavItem[]> = {
     admin: [
         { label: 'Usuarios', icon: <UsersIcon className={styles.navIcon} />, path: '/dashboard/admin?view=users' },
         { label: 'Ver Mallas', icon: <GridIcon className={styles.navIcon} />, path: '/dashboard/admin?view=mallas' },
-        { label: 'Estudiantes', icon: <ChartIcon className={styles.navIcon} />, path: '/dashboard/admin?view=students' },
+        { label: 'Estudiantes', icon: <ChartIcon className={styles.navIcon} />, path: '/dashboard/admin?view=avances' },
     ],
 };
 
@@ -76,6 +77,7 @@ export function AppSidebar({ onResetMalla, onCloseSidebar }: AppSidebarProps) {
             </div>
 
             <div className={styles.bottom}>
+                <ThemeToggle className={styles.themeToggle} />
                 <button className={styles.logoutButton} onClick={logout}>
                     → Cerrar Sesion
                 </button>

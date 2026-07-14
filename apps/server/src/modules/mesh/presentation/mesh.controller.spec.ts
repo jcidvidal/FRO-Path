@@ -1,9 +1,10 @@
+import { RolUsuario } from '../../auth/domain/roles';
 import { EstadoAsignatura } from '../domain/value-objects/course-status.vo';
 import { MeshController } from './mesh.controller';
 import type { RequestConUsuario } from '../../auth/presentation/jwt-auth.guard';
 
-function solicitudConUsuario(id: number): RequestConUsuario {
-  return { user: { id } } as RequestConUsuario;
+function solicitudConUsuario(id: number, rol: RolUsuario = RolUsuario.Estudiante): RequestConUsuario {
+  return { user: { id, rol } } as RequestConUsuario;
 }
 
 describe('MeshController', () => {
@@ -24,13 +25,27 @@ describe('MeshController', () => {
     );
   });
 
-  it('obtenerMalla delega con el idCarrera y el id del usuario autenticado', () => {
-    obtenerMallaUseCase.ejecutar.mockReturnValue('malla');
+  it('obtenerMalla delega con el idCarrera y el id del usuario autenticado', async () => {
+    obtenerMallaUseCase.ejecutar.mockResolvedValue('malla');
 
-    const resultado = controlador.obtenerMalla('icc', solicitudConUsuario(7));
+    const resultado = await controlador.obtenerMalla('icc', solicitudConUsuario(7));
 
     expect(resultado).toBe('malla');
     expect(obtenerMallaUseCase.ejecutar).toHaveBeenCalledWith('icc', 7);
+  });
+
+  it('obtenerMalla oculta el avance curricular para usuarios que no son estudiantes', async () => {
+    obtenerMallaUseCase.ejecutar.mockResolvedValue({
+      asignaturas: [{ id: '1', estado: EstadoAsignatura.Aprobada }],
+      modulosIngles: [{ id: '2', estado: EstadoAsignatura.Aprobada }],
+      practicas: [{ id: '3', estado: EstadoAsignatura.Aprobada }],
+    });
+
+    const resultado = await controlador.obtenerMalla('icc', solicitudConUsuario(7, RolUsuario.Director));
+
+    expect(resultado.asignaturas[0].estado).toBe(EstadoAsignatura.Disponible);
+    expect(resultado.modulosIngles[0].estado).toBe(EstadoAsignatura.Disponible);
+    expect(resultado.practicas[0].estado).toBe(EstadoAsignatura.Disponible);
   });
 
   it('cambiarEstadoAsignatura delega con los datos del cuerpo y el usuario', () => {

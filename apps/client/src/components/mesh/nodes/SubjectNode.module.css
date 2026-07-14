@@ -15,6 +15,9 @@
     cursor: pointer;
     transition: opacity 0.18s, transform 0.18s;
     overflow: hidden;
+    background-color: var(--color-card-bg);
+    border-color: var(--color-card-border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
 .node:hover {
@@ -48,7 +51,7 @@
     margin-top: 4px;
 }
 
-/* Estados */
+
 .aprobado {
     background-color: var(--color-aprobado-bg);
     border-color: var(--color-aprobado-bd);
@@ -93,7 +96,6 @@
     color: var(--color-bloqueado-bd);
 }
 
-/* Menu */
 .menu {
     position: absolute;
     top: calc(100% + 4px);
@@ -105,7 +107,7 @@
     padding: 10px 14px;
     border-radius: 10px;
     border: 2px solid var(--color-card-border-green);
-    background-color: #0f1a14;
+    background-color: var(--color-card-bg);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
@@ -130,7 +132,7 @@
 
 .menuCircleActive {
     border-color: var(--color-text-primary);
-    transform: scale(1.15);
+    transform: scale(1.1.15);
 }
 
 .menuCircle_aprobado {
@@ -169,5 +171,19 @@
 
 .selected {
     border-color: var(--color-green) !important;
-    box-shadow: 0 0 8px rgba(57, 255, 20, 0.4);
+    box-shadow: 0 0 8px var(--color-shadow-green-soft);
+}
+
+.prerequisite {
+    border-color: #ff1493 !important;
+    box-shadow: 0 0 10px rgba(255, 20, 147, 0.6);
+}
+
+.hovered {
+    border-color: var(--color-cyan) !important;
+    box-shadow: 0 0 10px var(--color-shadow-cyan-soft);
+}
+
+.dimmed {
+    opacity: 0.3;
 }

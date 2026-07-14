@@ -1,5 +1,6 @@
 import { Controller, Delete, ForbiddenException, Get, HttpCode, Param, Patch, Post, Req, UseGuards, Body } from '@nestjs/common';
 import { RolUsuario } from '../../auth/domain/roles';
+import { EstadoAsignatura } from '../domain/value-objects/course-status.vo';
 import { JwtAuthGuard } from '../../auth/presentation/jwt-auth.guard';
 import type { RequestConUsuario } from '../../auth/presentation/jwt-auth.guard';
 import { AnalizarCargaMallaUseCase } from '../application/use-cases/analyze-mesh-load.use-case';
@@ -19,11 +20,28 @@ export class MeshController {
   ) {}
 
   @Get(':idCarrera')
-  obtenerMalla(
+  async obtenerMalla(
     @Param('idCarrera') idCarrera: string,
     @Req() solicitud: RequestConUsuario,
   ) {
-    return this.obtenerMallaUseCase.ejecutar(idCarrera, solicitud.user!.id);
+    const malla = await this.obtenerMallaUseCase.ejecutar(idCarrera, solicitud.user!.id);
+
+    if (solicitud.user?.rol !== RolUsuario.Estudiante) {
+      malla.asignaturas = malla.asignaturas.map((a) => ({
+        ...a,
+        estado: EstadoAsignatura.Disponible,
+      }));
+      malla.modulosIngles = malla.modulosIngles.map((a) => ({
+        ...a,
+        estado: EstadoAsignatura.Disponible,
+      }));
+      malla.practicas = malla.practicas.map((a) => ({
+        ...a,
+        estado: EstadoAsignatura.Disponible,
+      }));
+    }
+
+    return malla;
   }
 
   @Get(':idCarrera/estudiante/:idEstudiante')
@@ -41,6 +59,7 @@ export class MeshController {
 
     return this.obtenerMallaUseCase.ejecutar(idCarrera, Number(idEstudiante));
   }
+
 
   @Patch(':idCarrera/estado')
   cambiarEstadoAsignatura(

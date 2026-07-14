@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthLayout } from '../../layouts/AuthLayout/AuthLayout';
 import { Input } from '../../components/ui/Input/Input';
@@ -8,18 +8,16 @@ import { FormMessage } from '../../components/ui/FormMessage/FormMessage';
 import { useAuth } from '../../services/AuthContext';
 import { useForm } from '../../hooks/useForm';
 import { required, minLength, matchesField, rut } from '../../services/validators';
+import { listarCarreras, type CarreraDto } from '../../services/carreraService';
 import styles from './RegisterPage.module.css';
-
-const CARRERA_OPTIONS = [
-    { value: 'ii', label: 'Ingeniería en Informática' },
-    { value: 'icc', label: 'Ingeniería Civil en Informática' },
-];
 
 export function RegisterPage() {
     const navigate = useNavigate();
     const { register } = useAuth();
     const [formError, setFormError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [carreras, setCarreras] = useState<CarreraDto[]>([]);
+    const [cargandoCarreras, setCargandoCarreras] = useState(true);
 
     const {
         values,
@@ -32,14 +30,18 @@ export function RegisterPage() {
     } = useForm({
         initialValues: {
             nombre: '',
+            apellidoPaterno: '',
+            apellidoMaterno: '',
             rut: '',
             email: '',
-            carrera: 'ii',
+            carrera: '',
             password: '',
             confirmPassword: '',
         },
         validators: {
             nombre: [required],
+            apellidoPaterno: [required],
+            apellidoMaterno: [required],
             rut: [required, rut],
             email: [required],
             password: [required, minLength(6)],
@@ -49,7 +51,15 @@ export function RegisterPage() {
             setFormError(null);
             setSuccessMessage(null);
 
-            const result = await register(vals.nombre, vals.rut, vals.email, vals.password, vals.carrera);
+            const result = await register(
+                vals.nombre,
+                vals.apellidoPaterno,
+                vals.apellidoMaterno,
+                vals.rut,
+                vals.email,
+                vals.password,
+                vals.carrera,
+            );
 
             if (result.success) {
                 setSuccessMessage(
@@ -61,6 +71,13 @@ export function RegisterPage() {
             }
         },
     });
+
+    useEffect(() => {
+        listarCarreras()
+            .then(setCarreras)
+            .catch(() => setCarreras([]))
+            .finally(() => setCargandoCarreras(false));
+    }, []);
 
     return (
         <AuthLayout glow="cyan">
@@ -76,14 +93,40 @@ export function RegisterPage() {
                 <form onSubmit={handleSubmit} noValidate>
                     <div className={styles.fieldsGrid}>
                         <Input
-                            label="Nombre Completo"
+                            label="Nombres"
                             name="nombre"
                             type="text"
                             value={values.nombre}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             error={touched.nombre ? errors.nombre : undefined}
-                            autoComplete="name"
+                            autoComplete="given-name"
+                            required
+                            variant="cyan"
+                        />
+
+                        <Input
+                            label="Apellido Paterno"
+                            name="apellidoPaterno"
+                            type="text"
+                            value={values.apellidoPaterno}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.apellidoPaterno ? errors.apellidoPaterno : undefined}
+                            autoComplete="family-name"
+                            required
+                            variant="cyan"
+                        />
+
+                        <Input
+                            label="Apellido Materno"
+                            name="apellidoMaterno"
+                            type="text"
+                            value={values.apellidoMaterno}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.apellidoMaterno ? errors.apellidoMaterno : undefined}
+                            autoComplete="family-name"
                             required
                             variant="cyan"
                         />
@@ -125,7 +168,18 @@ export function RegisterPage() {
                             error={touched.carrera ? errors.carrera : undefined}
                             required
                             variant="cyan"
-                            options={CARRERA_OPTIONS}
+                            options={[
+                                {
+                                    value: '',
+                                    label: cargandoCarreras
+                                        ? 'Cargando carreras...'
+                                        : 'Seleccione una carrera',
+                                },
+                                ...carreras.map((c) => ({
+                                    value: c.codigo_carrera,
+                                    label: c.nombre,
+                                })),
+                            ]}
                         />
 
                         <PasswordInput

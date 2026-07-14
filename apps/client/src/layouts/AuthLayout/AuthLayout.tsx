@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 import styles from './AuthLayout.module.css';
 
 interface AuthLayoutProps {
-    children: ReactNode;
-    glow?: 'green' | 'cyan';
+    readonly children: ReactNode;
+    readonly glow?: 'green' | 'cyan';
 }
 
 export function AuthLayout({ children, glow = 'green' }: AuthLayoutProps) {

@@ -1,8 +1,134 @@
 # FRO-Path
 
-Visualizador interactivo de progreso academico para estudiantes de carreras informaticas de la Universidad de La Frontera.
+## Descripción del Producto
 
-FRO-Path busca ayudar a estudiantes a entender su avance curricular, visualizar prerrequisitos, simular estados de asignaturas y revisar una orientacion de carga academica basada en creditos SCT.
+**FRO-Path** es una plataforma web interactiva diseñada para la visualización, simulación y planificación del progreso académico de los estudiantes de las carreras de **Ingeniería Civil Informática (ICI)** e **Ingeniería Informática (II)** de la **Universidad de La Frontera (UFRO)**.
+
+### Características Principales:
+- **Visualizador de Malla Curricular:** Interfaz gráfica moderna e interactiva para navegar por los niveles, asignaturas y áreas de conocimiento de la carrera.
+- **Simulador de Avance y Prerrequisitos:** Permite a los estudiantes marcar asignaturas como cursando, aprobadas o reprobadas, visualizando dinámicamente qué ramos se desbloquean o bloquean en tiempo real.
+- **Cálculo de Créditos SCT:** Seguimiento automático del avance de créditos aprobados en relación con el plan de estudios.
+- **Planificador / Orientador por IA (Gemini):** Integración opcional con inteligencia artificial para sugerir una carga académica óptima y personalizada basada en el avance actual y la carga de créditos recomendada.
+
+## Prerrequisitos y Configuración Inicial
+
+Para ejecutar y desarrollar el proyecto de forma local, asegúrate de contar con lo siguiente:
+
+### 1. Requisitos de Software
+- **Node.js:** Versión `24.14.1` o superior compatible.
+- **npm:** Versión `11.11.0` o superior compatible.
+- **Docker & Docker Compose:** Necesario para instanciar la base de datos PostgreSQL de forma local o levantar el entorno completo. *(Asegúrate de que **Docker Desktop** esté abierto y ejecutándose en tu sistema).*
+
+### 2. Configuración de Variables de Entorno (`.env`)
+El servidor y la base de datos requieren configuraciones locales para funcionar. Debes crear un archivo `.env` antes de levantar los servicios:
+- **Si usas Docker Compose (Opción A):** Crea un archivo `.env` en la raíz del proyecto.
+- **Si usas desarrollo local (Opción B):** Copia la plantilla ejecutando `cp apps/server/.env.example apps/server/.env` y configúrala.
+- **Clave API de Gemini:** Si deseas el análisis por IA, obtén una clave gratuita en [Google AI Studio](https://aistudio.google.com/apikey) (debe comenzar con `AIzaSy...`) y colócala en `GEMINI_API_KEY`.
+- **JWT Secret:** Genera un secreto para la autenticación de usuarios (ej. usando `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`).
+
+---
+
+## Comandos Únicos para Levantar Local
+
+### Opción A: Levantar Todo con Docker Compose
+Este comando único levanta la base de datos PostgreSQL, el servidor NestJS y el cliente React en sus respectivos contenedores de forma automatizada:
+
+```bash
+docker compose up --build
+```
+* Una vez levantado:
+  * **Frontend (Cliente):** `http://localhost:5173`
+  * **Backend (Servidor API):** `http://localhost:3000`
+
+---
+
+### Opción B: Levantar con Scripts Locales
+Si deseas levantar los servicios directamente con Node:
+
+1. **Instalar dependencias:**
+   ```bash
+   npm run install:all
+   ```
+2. **Levantar base de datos en segundo plano:**
+   ```bash
+   docker compose up -d db
+   ```
+3. **Iniciar el servidor API (Backend - NestJS):**
+   ```bash
+   npm run dev:server
+   ```
+4. **Iniciar el cliente web (Frontend - React + Vite):**
+   ```bash
+   npm run dev:client
+   ```
+
+---
+
+## Comandos para Ejecutar Pruebas y Cobertura
+
+Puedes ejecutar las pruebas y coberturas de cada workspace por separado o de todo el monorepo a la vez directamente desde la raíz del proyecto:
+
+### 1. Comandos Globales (Ejecutan todo a la vez)
+* **Ejecutar todos los tests (servidor y cliente en una sola corrida):**
+  ```bash
+  npm run test:all
+  ```
+* **Ejecutar cobertura de código completa (servidor y cliente):**
+  ```bash
+  npm run test:cov:all
+  ```
+
+### 2. Servidor Backend (NestJS / Jest)
+* **Ejecutar pruebas unitarias:**
+  ```bash
+  npm run test --workspace=@fro-path/server
+  ```
+* **Ejecutar cobertura de código (Coverage):**
+  ```bash
+  npm run test:cov:server
+  # (o bien: npm run test:cov --workspace=@fro-path/server)
+  ```
+
+### 3. Cliente Frontend (React / Vitest)
+* **Ejecutar pruebas unitarias:**
+  ```bash
+  npm run test --workspace=@fro-path/client
+  ```
+* **Ejecutar cobertura de código (Coverage):**
+  ```bash
+  npm run test:cov:client
+  # (o bien: npm run test:coverage --workspace=@fro-path/client)
+  ```
+
+---
+
+## Configuración de Variables de Entorno (`.env`)
+
+El backend requiere ciertas configuraciones que se definen en el archivo `.env`. Se incluye una plantilla en [apps/server/.env.example](./apps/server/.env.example). 
+
+Para comenzar:
+1. Copia el archivo de ejemplo:
+   ```bash
+   cp apps/server/.env.example apps/server/.env
+   ```
+2. Si deseas habilitar el análisis de carga académica por IA, obtén una clave de API en [Google AI Studio](https://aistudio.google.com/apikey) y configúrala en el parámetro:
+   ```env
+   GEMINI_API_KEY=tu-clave-de-api-de-gemini
+   ```
+
+Las credenciales por defecto de la base de datos están preconfiguradas para funcionar directamente con el servicio de Docker.
+
+---
+
+## URLs de Despliegue
+
+Actualmente, el proyecto está preparado para su despliegue continuo en la nube:
+
+* **Frontend Web (Vercel):** [https://fro-path-client.vercel.app](https://fro-path-client.vercel.app)
+* **Backend API (Despliegue Externo):** [https://fro-path-server.onrender.com](https://fro-path-server.onrender.com)
+* **Base de datos (PostgreSQL Cloud):** Hospedada en servicio compatible con TypeORM.
+
+---
 
 ## Apartados principales
 

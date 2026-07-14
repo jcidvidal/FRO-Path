@@ -29,7 +29,7 @@ describe('ObtenerMallaUseCase', () => {
   });
 
   it('retorna la malla con asignaturas si la carrera existe', async () => {
-    repositorioFake.buscarPorCarrera.mockResolvedValue([asignaturaFake]);
+    repositorioFake.buscarPorCarrera.mockResolvedValue({ asignaturas: [asignaturaFake], modulosIngles: [], practicas: [] });
 
     const resultado = await casoDeUso.ejecutar('icc', 1);
 
@@ -40,7 +40,7 @@ describe('ObtenerMallaUseCase', () => {
   });
 
   it('lanza NotFoundException si la carrera no tiene asignaturas', async () => {
-    repositorioFake.buscarPorCarrera.mockResolvedValue([]);
+    repositorioFake.buscarPorCarrera.mockResolvedValue({ asignaturas: [], modulosIngles: [], practicas: [] });
 
     await expect(casoDeUso.ejecutar('no-existe', 1)).rejects.toThrow(
       new NotFoundException('La carrera no-existe no existe.'),

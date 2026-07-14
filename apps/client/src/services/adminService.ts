@@ -41,3 +41,24 @@ export function asignarRol(idUsuario: number, rol: RolAsignable): Promise<Usuari
 export function eliminarUsuario(idUsuario: number): Promise<{ id: number }> {
     return apiClient.delete<{ id: number }>(`/auth/usuarios/${idUsuario}`);
 }
+
+export function crearUsuario(datos: {
+    nombre: string;
+    apellidoPaterno: string;
+    apellidoMaterno: string;
+    email: string;
+    password: string;
+    rol: string;
+}): Promise<UsuarioResumen> {
+    return apiClient.post<UsuarioResumen>('/auth/usuarios', datos);
+}
+
+export function actualizarUsuario(id: number, datos: {
+    nombre?: string;
+    apellidoPaterno?: string;
+    apellidoMaterno?: string;
+    email?: string;
+    rol?: RolUsuario;
+}): Promise<UsuarioResumen> {
+    return apiClient.patch<UsuarioResumen>(`/auth/usuarios/${id}`, datos);
+}

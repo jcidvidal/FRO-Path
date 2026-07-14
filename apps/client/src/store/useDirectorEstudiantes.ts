@@ -4,7 +4,7 @@ import {
     obtenerMallaEstudiante,
     type EstudianteResumen,
 } from '../services/directorService';
-import type { Semester } from '../types/malla';
+import type { Semester, Subject } from '../types/malla';
 
 const RETARDO_BUSQUEDA_MS = 300;
 
@@ -62,6 +62,8 @@ export function useBusquedaEstudiantes(busqueda: string): UseBusquedaEstudiantes
 
 interface UseMallaEstudianteResult {
     semestres: Semester[];
+    modulosIngles: Subject[];
+    practicas: Subject[];
     cargando: boolean;
     error: string | null;
 }
@@ -71,6 +73,8 @@ export function useMallaEstudiante(
     idEstudiante: number | null,
 ): UseMallaEstudianteResult {
     const [semestres, setSemestres] = useState<Semester[]>([]);
+    const [modulosIngles, setModulosIngles] = useState<Subject[]>([]);
+    const [practicas, setPracticas] = useState<Subject[]>([]);
     const [cargando, setCargando] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -80,6 +84,8 @@ export function useMallaEstudiante(
         const cargar = async () => {
             if (idEstudiante === null) {
                 setSemestres([]);
+                setModulosIngles([]);
+                setPracticas([]);
                 setError(null);
                 return;
             }
@@ -89,7 +95,9 @@ export function useMallaEstudiante(
             try {
                 const datos = await obtenerMallaEstudiante(idCarrera, idEstudiante);
                 if (activo) {
-                    setSemestres(datos);
+                    setSemestres(datos.semestres);
+                    setModulosIngles(datos.modulosIngles);
+                    setPracticas(datos.practicas);
                 }
             } catch (err: unknown) {
                 if (activo) {
@@ -109,5 +117,5 @@ export function useMallaEstudiante(
         };
     }, [idCarrera, idEstudiante]);
 
-    return { semestres, cargando, error };
+    return { semestres, modulosIngles, practicas, cargando, error };
 }

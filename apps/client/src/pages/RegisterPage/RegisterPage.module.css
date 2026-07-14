@@ -58,3 +58,65 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* --- LIGHT MODE: card azul UFRO fijo --- */
+:global([data-theme="light"]) .card {
+  background-color: #1B3A6B;
+  border-color: #1B3A6B;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+:global([data-theme="light"]) .title {
+  color: #FFFFFF;
+}
+
+:global([data-theme="light"]) .subtitle {
+  color: #B8D4EA;
+}
+
+:global([data-theme="light"]) .fieldsGrid label {
+  color: #FFFFFF !important;
+}
+
+:global([data-theme="light"]) .fieldsGrid input,
+:global([data-theme="light"]) .fieldsGrid select {
+  background-color: #FFFFFF !important;
+  border-color: #0091FF !important;
+  color: #1A202C !important;
+}
+
+:global([data-theme="light"]) .fieldsGrid input:focus,
+:global([data-theme="light"]) .fieldsGrid select:focus {
+  border-color: #0091FF !important;
+  box-shadow: 0 0 0 2px rgba(0, 145, 255, 0.3) !important;
+}
+
+:global([data-theme="light"]) .fieldsGrid input::placeholder {
+  color: #94A3B8 !important;
+}
+
+:global([data-theme="light"]) .card button[type="submit"] {
+  background: #0091FF !important;
+  border-color: #0091FF !important;
+  color: #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+:global([data-theme="light"]) .card button[type="submit"]:hover:not(:disabled) {
+  background: #0077CC !important;
+  border-color: #0077CC !important;
+  color: #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+:global([data-theme="light"]) .card button[type="submit"]:focus-visible {
+  outline-color: #0091FF !important;
+}
+
+:global([data-theme="light"]) .footer {
+  color: #B8D4EA;
+}
+
+:global([data-theme="light"]) .footer a {
+  color: #7FD1FF;
+}

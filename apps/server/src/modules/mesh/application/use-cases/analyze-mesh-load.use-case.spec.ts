@@ -27,7 +27,7 @@ describe('AnalizarCargaMallaUseCase', () => {
       analizar: jest.fn().mockResolvedValue({ comentario: 'ok' }),
     };
     const repositorio: jest.Mocked<PuertoRepositorioMalla> = {
-      buscarPorCarrera: jest.fn().mockResolvedValue(asignaturas),
+      buscarPorCarrera: jest.fn().mockResolvedValue({ asignaturas, modulosIngles: [], practicas: [] }),
       guardarEstadoAsignatura: jest.fn(),
       limpiarProgreso: jest.fn(),
     };

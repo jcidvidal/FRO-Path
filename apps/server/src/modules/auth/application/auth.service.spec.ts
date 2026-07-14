@@ -37,6 +37,7 @@ describe('AuthService', () => {
     );
   });
 
+  // ─── login ────────────────────────────────────────────────────────────────
   it('inicia sesion con email y password validos', async () => {
     usuariosRepository.buscarPorEmail.mockResolvedValue({
       id: 1,
@@ -76,6 +77,38 @@ describe('AuthService', () => {
     ).rejects.toThrow('Credenciales invalidas.');
   });
 
+  it('rechaza credenciales cuando la password no coincide con el hash', async () => {
+    usuariosRepository.buscarPorEmail.mockResolvedValue({
+      id: 1,
+      nombre: 'Estudiante',
+      apellidoPaterno: 'Demo',
+      apellidoMaterno: 'FROPath',
+      email: 'estudiante@fro-path.local',
+      rol: RolUsuario.Estudiante,
+      passwordHash: await hash('OtraPass', 10),
+    });
+
+    await expect(
+      authService.login({
+        email: 'estudiante@fro-path.local',
+        password: 'Pass1234',
+      }),
+    ).rejects.toThrow('Credenciales invalidas.');
+  });
+
+  it('rechaza login si el email esta vacio', async () => {
+    await expect(
+      authService.login({ email: '   ', password: 'Pass1234' }),
+    ).rejects.toThrow('El email es obligatorio.');
+  });
+
+  it('rechaza login si la password tiene menos de 6 caracteres', async () => {
+    await expect(
+      authService.login({ email: 'test@test.cl', password: '123' }),
+    ).rejects.toThrow('La contrasena debe tener al menos 6 caracteres.');
+  });
+
+  // ─── register ─────────────────────────────────────────────────────────────
   it('registra estudiantes con password hasheada', async () => {
     usuariosRepository.buscarPorEmail.mockResolvedValue(null);
     usuariosRepository.crear.mockResolvedValue({
@@ -127,6 +160,56 @@ describe('AuthService', () => {
     ).rejects.toThrow('El correo ya esta registrado.');
   });
 
+  it('rechaza registro si el nombre esta vacio o solo tiene espacios', async () => {
+    usuariosRepository.buscarPorEmail.mockResolvedValue(null);
+
+    await expect(
+      authService.register({
+        nombre: '   ',
+        email: 'test@fro-path.local',
+        password: 'Pass1234',
+      }),
+    ).rejects.toThrow('El nombre es obligatorio.');
+  });
+
+  it('rechaza registro si el email esta vacio', async () => {
+    await expect(
+      authService.register({ nombre: 'Test', email: '', password: 'Pass1234' }),
+    ).rejects.toThrow('El email es obligatorio.');
+  });
+
+  it('rechaza registro si la password tiene menos de 6 caracteres', async () => {
+    await expect(
+      authService.register({ nombre: 'Test', email: 'test@test.cl', password: '123' }),
+    ).rejects.toThrow('La contrasena debe tener al menos 6 caracteres.');
+  });
+
+  it('usa apellido por defecto si los apellidos son omitidos', async () => {
+    usuariosRepository.buscarPorEmail.mockResolvedValue(null);
+    usuariosRepository.crear.mockResolvedValue({
+      id: 3,
+      nombre: 'Solo',
+      apellidoPaterno: 'Sin apellido',
+      apellidoMaterno: 'Sin apellido',
+      email: 'solo@fro-path.local',
+      rol: RolUsuario.Estudiante,
+    });
+
+    await authService.register({
+      nombre: 'Solo',
+      email: 'solo@fro-path.local',
+      password: 'Pass1234',
+    });
+
+    expect(usuariosRepository.crear).toHaveBeenCalledWith(
+      expect.objectContaining({
+        apellidoPaterno: 'Sin apellido',
+        apellidoMaterno: 'Sin apellido',
+      }),
+    );
+  });
+
+  // ─── asignarRolUsuario ────────────────────────────────────────────────────
   it('permite que un admin asigne rol profesor a un estudiante', async () => {
     usuariosRepository.buscarPorId.mockResolvedValue({
       id: 2,
@@ -176,6 +259,15 @@ describe('AuthService', () => {
     ).rejects.toThrow('Solo un administrador puede asignar roles.');
   });
 
+  it('rechaza asignacion cuando no hay usuario solicitante', async () => {
+    await expect(
+      authService.asignarRolUsuario({
+        idUsuario: 2,
+        rol: RolUsuario.Profesor,
+        usuarioSolicitante: undefined,
+      }),
+    ).rejects.toThrow('Solo un administrador puede asignar roles.');
+  });
   it('rechaza asignacion de roles distintos a profesor o director', async () => {
     await expect(
       authService.asignarRolUsuario({
@@ -190,6 +282,31 @@ describe('AuthService', () => {
     ).rejects.toThrow('Solo se puede asignar rol profesor o director.');
   });
 
+  it('rechaza asignacion de rol si el id de usuario es cero o negativo', async () => {
+    await expect(
+      authService.asignarRolUsuario({
+        idUsuario: 0,
+        rol: RolUsuario.Profesor,
+        usuarioSolicitante: {
+          id: 1,
+          email: 'admin@fro-path.local',
+          rol: RolUsuario.Admin,
+        },
+      }),
+    ).rejects.toThrow('El id de usuario no es valido.');
+
+    await expect(
+      authService.asignarRolUsuario({
+        idUsuario: -5,
+        rol: RolUsuario.Profesor,
+        usuarioSolicitante: {
+          id: 1,
+          email: 'admin@fro-path.local',
+          rol: RolUsuario.Admin,
+        },
+      }),
+    ).rejects.toThrow('El id de usuario no es valido.');
+  });
   it('rechaza asignacion de rol a usuarios inexistentes', async () => {
     usuariosRepository.buscarPorId.mockResolvedValue(null);
 

@@ -18,6 +18,8 @@ const respuestaMalla: BackendMeshResponse = {
         { id: 'ICC-001', codigo: 'ICC-001', nombre: 'Prog I', sct: 6, nivel: 1, estado: 'disponible', idsPrerequisitos: [] },
         { id: 'ICC-002', codigo: 'ICC-002', nombre: 'Prog II', sct: 6, nivel: 2, estado: 'bloqueada', idsPrerequisitos: ['ICC-001'] },
     ],
+    modulosIngles: [],
+    practicas: [],
 };
 
 describe('useMesh', () => {

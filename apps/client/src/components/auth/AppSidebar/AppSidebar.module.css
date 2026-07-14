@@ -16,26 +16,26 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 8px;
     height: 60px;
     min-height: 60px;
     border-bottom: 2px solid var(--color-card-border-green);
     margin: 0 -12px;
     padding: 0 20px;
+    background-color: var(--color-header-bg);
 }
 
 .roleLabel {
     font-size: var(--font-size-sm);
     font-weight: 700;
-    color: var(--color-green);
+    color: var(--color-header-text);
     text-transform: uppercase;
     letter-spacing: 0.1em;
 }
 
 .closeButton {
     background: transparent;
-    border: 2px solid var(--color-green);
-    color: var(--color-green);
+    border: 2px solid var(--color-header-text);
+    color: var(--color-header-text);
     font-size: 16px;
     cursor: pointer;
     width: 28px;
@@ -50,11 +50,8 @@
 }
 
 .closeButton:hover {
-    background: var(--color-green);
-    color: #000000;
-    box-shadow:
-        0 0 18px rgba(57, 255, 20, 0.8),
-        0 0 40px rgba(57, 255, 20, 0.4);
+    background: var(--color-header-text);
+    color: var(--color-header-bg);
 }
 
 .nav {
@@ -119,14 +116,44 @@
 
 .logoutButton:hover {
     background: var(--color-error);
-    color: #000000;
-    box-shadow:
-        0 0 18px rgba(255, 68, 68, 0.8),
-        0 0 40px rgba(255, 68, 68, 0.4);
+    color: var(--color-black);
+    box-shadow: var(--color-error-glow);
 }
 
 .navItemActive {
     background: var(--color-green-soft);
     color: var(--color-green);
     border-left: 3px solid var(--color-green);
+}
+
+.themeToggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--color-card-border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-md);
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+    margin-bottom: 8px;
+}
+
+.themeToggle:hover {
+    background: var(--color-hover-bg);
+    color: var(--color-text-primary);
+    border-color: var(--color-green);
+}
+
+.themeIcon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }

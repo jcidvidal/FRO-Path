@@ -30,7 +30,7 @@ El servidor y la base de datos requieren configuraciones locales para funcionar.
 
 ## Comandos Únicos para Levantar Local
 
-### Opción A: Levantar Todo con Docker Compose (Recomendado)
+### Opción A: Levantar Todo con Docker Compose
 Este comando único levanta la base de datos PostgreSQL, el servidor NestJS y el cliente React en sus respectivos contenedores de forma automatizada:
 
 ```bash
@@ -42,7 +42,7 @@ docker compose up --build
 
 ---
 
-### Opción B: Levantar con Scripts Locales (Desarrollo Local)
+### Opción B: Levantar con Scripts Locales
 Si deseas levantar los servicios directamente con Node:
 
 1. **Instalar dependencias:**

@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { MeshModule } from './modules/mesh/mesh.module';
 import { ProgressModule } from './modules/progress/progress.module';
+import { CarreraModule } from './modules/carrera/carrera.module';
 
 @Module({
   imports: [
@@ -12,8 +13,10 @@ import { ProgressModule } from './modules/progress/progress.module';
     AuthModule,
     MeshModule,
     ProgressModule,
+    CarreraModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
+

@@ -31,6 +31,8 @@ export interface UsuarioRegistro {
   email: string;
   password: string;
   rol: string;
+  carrera_id?: number | null;
+  carrera?: CarreraRegistro | null;
 }
 
 export interface ProgresoAcademicoRegistro {
@@ -103,6 +105,15 @@ export const UsuarioSchema = new EntitySchema<UsuarioRegistro>({
     email: { type: String, length: 140, unique: true },
     password: { type: String, length: 255 },
     rol: { type: String, length: 20, default: 'estudiante' },
+    carrera_id: { type: Number, nullable: true },
+  },
+  relations: {
+    carrera: {
+      type: 'many-to-one',
+      target: 'Carrera',
+      joinColumn: { name: 'carrera_id' },
+      nullable: true,
+    },
   },
 });
 

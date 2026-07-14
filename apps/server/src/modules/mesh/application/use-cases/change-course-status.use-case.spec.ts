@@ -112,7 +112,6 @@ describe('CambiarEstadoAsignaturaUseCase', () => {
         ?.estado,
     ).toBe(EstadoAsignatura.Bloqueada);
   });
-
   it('lanza BadRequestException si el estado proporcionado no es valido', async () => {
     const repositorio = new RepositorioMallaFake();
     const casoDeUso = crearCasoDeUso(repositorio);

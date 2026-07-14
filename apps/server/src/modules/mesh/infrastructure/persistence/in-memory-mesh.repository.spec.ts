@@ -61,7 +61,6 @@ describe('RepositorioMallaEnMemoria', () => {
     expect(prog1?.estado).toBe(EstadoAsignatura.Disponible);
     expect(prog2?.estado).toBe(EstadoAsignatura.Bloqueada);
   });
-
   it('guardarEstadoAsignatura no lanza si la carrera no existe en el mapa', async () => {
     const asignatura = new Asignatura({
       id: 'x',

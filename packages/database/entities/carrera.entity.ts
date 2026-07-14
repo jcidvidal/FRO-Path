@@ -1,10 +1,13 @@
-import { Entity, Column, PrimaryColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity()
 export class Carrera {
-    @PrimaryColumn({type: "varchar", length: 36}) //Estes es un UUID xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-    id!: string
+    @PrimaryGeneratedColumn()
+    id!: number
 
     @Column({ type: "varchar", length: 28 }) // 22 Ingeniería Informática, 28 Ingeniería Civil Informática
-    nombre!: string 
+    nombre!: string
+
+    @Column({ type: "varchar", length: 10, unique: true }) //ICC706
+    codigo_carrera!: string
 }

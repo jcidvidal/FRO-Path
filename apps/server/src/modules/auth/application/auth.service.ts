@@ -78,6 +78,7 @@ export class AuthService {
       email: dto.email,
       passwordHash: await hash(dto.password, 10),
       rol: RolUsuario.Estudiante,
+      idCarrera: dto.carrera,
     });
 
     return this.crearRespuestaAuth(usuario);
@@ -89,7 +90,9 @@ export class AuthService {
     usuarioSolicitante,
   }: AsignarRolUsuarioEntrada): Promise<UsuarioAutenticado> {
     if (usuarioSolicitante?.rol !== RolUsuario.Admin) {
-      throw new ForbiddenException('Solo un administrador puede asignar roles.');
+      throw new ForbiddenException(
+        'Solo un administrador puede asignar roles.',
+      );
     }
 
     if (!Number.isInteger(idUsuario) || idUsuario <= 0) {
@@ -111,6 +114,91 @@ export class AuthService {
     return this.usuariosRepository.actualizarRol(idUsuario, rol);
   }
 
+  async buscarEstudiantes({
+    busqueda,
+    usuarioSolicitante,
+  }: {
+    busqueda?: string;
+    usuarioSolicitante?: UsuarioSolicitante;
+  }): Promise<UsuarioAutenticado[]> {
+    if (
+      usuarioSolicitante?.rol !== RolUsuario.Director &&
+      usuarioSolicitante?.rol !== RolUsuario.Admin
+    ) {
+      throw new ForbiddenException(
+        'Solo un director o administrador puede consultar estudiantes.',
+      );
+    }
+
+    return this.usuariosRepository.buscarEstudiantes(busqueda);
+  }
+
+  async listarUsuarios({
+    busqueda,
+    rol,
+    usuarioSolicitante,
+  }: {
+    busqueda?: string;
+    rol?: RolUsuario;
+    usuarioSolicitante?: UsuarioSolicitante;
+  }): Promise<UsuarioAutenticado[]> {
+    if (usuarioSolicitante?.rol !== RolUsuario.Admin) {
+      throw new ForbiddenException(
+        'Solo un administrador puede listar usuarios.',
+      );
+    }
+
+    const rolesGestionables = [
+      RolUsuario.Estudiante,
+      RolUsuario.Profesor,
+      RolUsuario.Director,
+    ];
+
+    if (rol && !rolesGestionables.includes(rol)) {
+      throw new BadRequestException('El rol indicado no es valido.');
+    }
+
+    return this.usuariosRepository.buscarUsuarios({
+      busqueda,
+      roles: rol ? [rol] : rolesGestionables,
+    });
+  }
+
+  async eliminarEstudiante({
+    idUsuario,
+    usuarioSolicitante,
+  }: {
+    idUsuario: number;
+    usuarioSolicitante?: UsuarioSolicitante;
+  }): Promise<{ id: number }> {
+    if (
+      usuarioSolicitante?.rol !== RolUsuario.Director &&
+      usuarioSolicitante?.rol !== RolUsuario.Admin
+    ) {
+      throw new ForbiddenException(
+        'Solo un director o administrador puede eliminar estudiantes.',
+      );
+    }
+
+    if (!Number.isInteger(idUsuario) || idUsuario <= 0) {
+      throw new BadRequestException('El id de usuario no es valido.');
+    }
+
+    const usuario = await this.usuariosRepository.buscarPorId(idUsuario);
+
+    if (!usuario) {
+      throw new NotFoundException(`El usuario ${idUsuario} no existe.`);
+    }
+
+    if (usuario.rol !== RolUsuario.Estudiante) {
+      throw new BadRequestException('Solo se puede eliminar a un estudiante.');
+    }
+
+    await this.usuariosRepository.eliminar(idUsuario);
+
+    return { id: idUsuario };
+  }
+
   private esRolAsignable(
     rol: RolUsuario,
   ): rol is RolUsuario.Profesor | RolUsuario.Director {
@@ -125,6 +213,8 @@ export class AuthService {
       apellidoMaterno: usuario.apellidoMaterno,
       email: usuario.email,
       rol: usuario.rol,
+      idCarrera: usuario.idCarrera ?? null,
+      nombreCarrera: usuario.nombreCarrera ?? null,
     };
     const payload: JwtPayload = {
       sub: usuarioSeguro.id,

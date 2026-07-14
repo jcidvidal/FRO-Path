@@ -3,7 +3,9 @@ import { EstadoAsignatura } from '../../../domain/value-objects/course-status.vo
 export interface CarreraSeed {
   codigo: string;
   nombre: string;
-  asignaturas: AsignaturaSeed[];
+  asignaturas: AsignaturaSeed[];        // Solo malla
+  modulosIngles?: AsignaturaSeed[];     // Inglés de coordinación de idiomas
+  practicas?: AsignaturaSeed[];         // Prácticas
 }
 
 export interface AsignaturaSeed {
@@ -432,6 +434,39 @@ export const CARRERAS_SEED: CarreraSeed[] = [
         requisitos: ['ICC-051', 'ICC-052', 'ICC-053', 'ICC-054', 'ICC-055'],
       },
     ],
+    modulosIngles: [
+      { codigo: 'ICC-ING-1', nombre: 'Nivel Principiante', sct: 0, nivel: 1 },
+      { codigo: 'ICC-ING-2', nombre: 'Nivel Basico', sct: 0, nivel: 2, requisitos: ['ICC-ING-1'] },
+      { codigo: 'ICC-ING-3', nombre: 'Nivel Pre Intermedio', sct: 0, nivel: 3, requisitos: ['ICC-ING-2'] },
+      { codigo: 'ICC-ING-4', nombre: 'Nivel Intermedio', sct: 0, nivel: 4, requisitos: ['ICC-ING-3'] },
+    ],
+    practicas: [
+      {
+        codigo: 'ICC-PRAC-1',
+        nombre: 'Practica I',
+        sct: 5,
+        nivel: 1,
+        requisitos: ['ICC-001', 'ICC-002', 'ICC-003', 'ICC-004', 'ICC-005',
+                     'ICC-006', 'ICC-007', 'ICC-008', 'ICC-009', 'ICC-010',
+                     'ICC-011', 'ICC-012', 'ICC-013', 'ICC-014', 'ICC-015', 'ICC-016',
+                     'ICC-017', 'ICC-018', 'ICC-019', 'ICC-020', 'ICC-021', 'ICC-022',
+                     'ICC-023', 'ICC-024', 'ICC-025', 'ICC-026', 'ICC-027', 'ICC-028']
+      },
+      {
+        codigo: 'ICC-PRAC-2',
+        nombre: 'Practica II',
+        sct: 5,
+        nivel: 2,
+        requisitos: ['ICC-001', 'ICC-002', 'ICC-003', 'ICC-004', 'ICC-005',
+                     'ICC-006', 'ICC-007', 'ICC-008', 'ICC-009', 'ICC-010',
+                     'ICC-011', 'ICC-012', 'ICC-013', 'ICC-014', 'ICC-015', 'ICC-016',
+                     'ICC-017', 'ICC-018', 'ICC-019', 'ICC-020', 'ICC-021', 'ICC-022',
+                     'ICC-023', 'ICC-024', 'ICC-025', 'ICC-026', 'ICC-027', 'ICC-028',
+                     'ICC-029', 'ICC-030', 'ICC-031', 'ICC-032', 'ICC-033', 'ICC-034',
+                     'ICC-035', 'ICC-036', 'ICC-037', 'ICC-038', 'ICC-039', 'ICC-040',
+                     'ICC-041', 'ICC-042', 'ICC-043', 'ICC-044', 'ICC-045', 'ICC-046', 'ICC-047']
+      },
+    ],
   },
   {
     codigo: 'ii',
@@ -574,13 +609,6 @@ export const CARRERAS_SEED: CarreraSeed[] = [
       },
       { codigo: 'II-024', nombre: 'Ingles Tecnico I', sct: 3, nivel: 5 },
       {
-        codigo: 'II-025',
-        nombre: 'Practica I',
-        sct: 9,
-        nivel: 5,
-        requisitos: REQUISITOS_II_HASTA_NIVEL_4,
-      },
-      {
         codigo: 'II-026',
         nombre: 'Diseno Interface Humano Computador',
         sct: 7,
@@ -675,13 +703,6 @@ export const CARRERAS_SEED: CarreraSeed[] = [
       },
       { codigo: 'II-040', nombre: 'Ingles Tecnico II', sct: 5, nivel: 8 },
       {
-        codigo: 'II-041',
-        nombre: 'Practica II',
-        sct: 9,
-        nivel: 8,
-        requisitos: REQUISITOS_II_HASTA_NIVEL_7,
-      },
-      {
         codigo: 'II-042',
         nombre: 'Gestion de Proyectos de Software',
         sct: 7,
@@ -708,6 +729,28 @@ export const CARRERAS_SEED: CarreraSeed[] = [
         sct: 30,
         nivel: 10,
         requisitos: REQUISITOS_II_HASTA_NIVEL_9,
+      },
+    ],
+    modulosIngles: [
+      { codigo: 'II-ING-1', nombre: 'Nivel Principiante', sct: 0, nivel: 1 },
+      { codigo: 'II-ING-2', nombre: 'Nivel Basico', sct: 0, nivel: 2, requisitos: ['II-ING-1'] },
+      { codigo: 'II-ING-3', nombre: 'Nivel Pre Intermedio', sct: 0, nivel: 3, requisitos: ['II-ING-2'] },
+      { codigo: 'II-ING-4', nombre: 'Nivel Intermedio', sct: 0, nivel: 4, requisitos: ['II-ING-3'] },
+    ],
+    practicas: [
+      {
+        codigo: 'II-025',
+        nombre: 'Practica I',
+        sct: 9,
+        nivel: 5,
+        requisitos: REQUISITOS_II_HASTA_NIVEL_4,
+      },
+      {
+        codigo: 'II-041',
+        nombre: 'Practica II',
+        sct: 9,
+        nivel: 8,
+        requisitos: REQUISITOS_II_HASTA_NIVEL_7,
       },
     ],
   },

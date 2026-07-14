@@ -27,8 +27,8 @@ class RepositorioMallaFake implements PuertoRepositorioMalla {
     }),
   ];
 
-  buscarPorCarrera(_idCarrera: string, _idUsuario: number): Promise<Asignatura[]> {
-    return Promise.resolve(this.asignaturas);
+  buscarPorCarrera(_idCarrera: string, _idUsuario: number): Promise<{ asignaturas: Asignatura[]; modulosIngles: Asignatura[]; practicas: Asignatura[] }> {
+    return Promise.resolve({ asignaturas: this.asignaturas, modulosIngles: [], practicas: [] });
   }
 
   guardarEstadoAsignatura(
@@ -49,8 +49,8 @@ class RepositorioMallaFake implements PuertoRepositorioMalla {
 }
 
 class RepositorioMallaVacioFake implements PuertoRepositorioMalla {
-  buscarPorCarrera(_idCarrera: string, _idUsuario: number): Promise<Asignatura[]> {
-    return Promise.resolve([]);
+  buscarPorCarrera(_idCarrera: string, _idUsuario: number): Promise<{ asignaturas: Asignatura[]; modulosIngles: Asignatura[]; practicas: Asignatura[] }> {
+    return Promise.resolve({ asignaturas: [], modulosIngles: [], practicas: [] });
   }
 
   guardarEstadoAsignatura(

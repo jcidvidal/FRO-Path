@@ -1,13 +1,13 @@
 import styles from './Button.module.css';
 
 export interface ButtonProps {
-    children: React.ReactNode;
-    type?: 'button' | 'submit' | 'reset';
-    variant?: 'green' | 'cyan';
-    loading?: boolean;
-    disabled?: boolean;
-    fullWidth?: boolean;
-    onClick?: () => void;
+    readonly children: React.ReactNode;
+    readonly type?: 'button' | 'submit' | 'reset';
+    readonly variant?: 'green' | 'cyan';
+    readonly loading?: boolean;
+    readonly disabled?: boolean;
+    readonly fullWidth?: boolean;
+    readonly onClick?: () => void;
 }
 
 export function Button({

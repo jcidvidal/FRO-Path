@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background-color: #000000;
+  background-color: var(--color-bg-primary);
 }
 
 .glow {
@@ -42,4 +42,16 @@
   display: flex;
   justify-content: center;
   padding: 24px 16px;
+}
+
+[data-theme="light"] .glowGreen,
+[data-theme="light"] .glowCyan {
+    opacity: 0;
+}
+
+[data-theme="light"] .layout {
+    background-image: url('../../assets/imagenes/Ufro.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }

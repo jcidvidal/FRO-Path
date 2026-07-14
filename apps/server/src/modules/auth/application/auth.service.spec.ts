@@ -322,6 +322,7 @@ describe('AuthService', () => {
       }),
     ).rejects.toThrow('El usuario 999 no existe.');
   });
+
   it('permite que un admin liste usuarios de los roles gestionables', async () => {
     usuariosRepository.buscarUsuarios.mockResolvedValue([]);
 

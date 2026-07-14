@@ -10,16 +10,16 @@ describe('RepositorioMallaEnMemoria', () => {
   });
 
   it('buscarPorCarrera retorna las asignaturas de una carrera existente', async () => {
-    const asignaturas = await repositorio.buscarPorCarrera('informatica', 1);
+    const resultado = await repositorio.buscarPorCarrera('informatica', 1);
 
-    expect(asignaturas.length).toBeGreaterThan(0);
-    expect(asignaturas.map((a) => a.id)).toContain('programming-1');
+    expect(resultado.asignaturas.length).toBeGreaterThan(0);
+    expect(resultado.asignaturas.map((a) => a.id)).toContain('programming-1');
   });
 
   it('buscarPorCarrera retorna lista vacia para una carrera inexistente', async () => {
-    const asignaturas = await repositorio.buscarPorCarrera('no-existe', 1);
+    const resultado = await repositorio.buscarPorCarrera('no-existe', 1);
 
-    expect(asignaturas).toEqual([]);
+    expect(resultado).toEqual({ asignaturas: [], modulosIngles: [], practicas: [] });
   });
 
   it('guardarEstadoAsignatura reemplaza el estado de la asignatura persistida', async () => {
@@ -34,10 +34,10 @@ describe('RepositorioMallaEnMemoria', () => {
     });
 
     await repositorio.guardarEstadoAsignatura('informatica', aprobada, 1);
-    const asignaturas = await repositorio.buscarPorCarrera('informatica', 1);
+    const resultado = await repositorio.buscarPorCarrera('informatica', 1);
 
     expect(
-      asignaturas.find((a) => a.id === 'programming-1')?.estado,
+      resultado.asignaturas.find((a) => a.id === 'programming-1')?.estado,
     ).toBe(EstadoAsignatura.Aprobada);
   });
 
@@ -54,10 +54,10 @@ describe('RepositorioMallaEnMemoria', () => {
     await repositorio.guardarEstadoAsignatura('informatica', aprobada, 1);
 
     await repositorio.limpiarProgreso('informatica', 1);
-    const asignaturas = await repositorio.buscarPorCarrera('informatica', 1);
+    const resultado = await repositorio.buscarPorCarrera('informatica', 1);
 
-    const prog1 = asignaturas.find((a) => a.id === 'programming-1');
-    const prog2 = asignaturas.find((a) => a.id === 'programming-2');
+    const prog1 = resultado.asignaturas.find((a) => a.id === 'programming-1');
+    const prog2 = resultado.asignaturas.find((a) => a.id === 'programming-2');
     expect(prog1?.estado).toBe(EstadoAsignatura.Disponible);
     expect(prog2?.estado).toBe(EstadoAsignatura.Bloqueada);
   });

@@ -25,13 +25,15 @@ export class CambiarEstadoAsignaturaUseCase {
       throw new BadRequestException(`El estado ${estado} no es valido.`);
     }
 
-    const asignaturas = await this.repositorioMalla.buscarPorCarrera(idCarrera, idUsuario);
+    const { asignaturas, modulosIngles, practicas } = await this.repositorioMalla.buscarPorCarrera(idCarrera, idUsuario);
 
-    if (asignaturas.length === 0) {
+    const todasLasAsignaturas = [...asignaturas, ...modulosIngles, ...practicas];
+
+    if (todasLasAsignaturas.length === 0) {
       throw new BadRequestException(`La carrera ${idCarrera} no existe.`);
     }
 
-    const asignatura = asignaturas.find(
+    const asignatura = todasLasAsignaturas.find(
       (elemento) => elemento.id === idAsignatura,
     );
 
@@ -41,7 +43,7 @@ export class CambiarEstadoAsignaturaUseCase {
 
     if (
       estado === EstadoAsignatura.Aprobada &&
-      !this.puedeAprobarAsignatura.seCumplePor(asignatura, asignaturas)
+      !this.puedeAprobarAsignatura.seCumplePor(asignatura, todasLasAsignaturas)
     ) {
       throw new BadRequestException(
         'Los prerequisitos de la asignatura no estan aprobados.',
@@ -64,11 +66,11 @@ export class CambiarEstadoAsignaturaUseCase {
       estado === EstadoAsignatura.Aprobada
         ? this.servicioDesbloqueoCascada.obtenerIdsAsignaturasDesbloqueadas(
             asignaturaGuardada,
-            asignaturas,
+            todasLasAsignaturas,
           )
         : [];
     const asignaturasPorId = new Map(
-      asignaturas.map((elemento) => [elemento.id, elemento]),
+      todasLasAsignaturas.map((elemento) => [elemento.id, elemento]),
     );
 
     await Promise.all(

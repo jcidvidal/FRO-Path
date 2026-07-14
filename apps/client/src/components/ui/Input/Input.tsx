@@ -2,28 +2,28 @@ import { useId } from 'react';
 import styles from './Input.module.css';
 
 export interface Option {
-    value: string;
-    label: string;
+    readonly value: string;
+    readonly label: string;
 }
 
 export interface InputProps {
-    label?: string;
-    name: string;
-    type?: 'text' | 'email' | 'password' | 'tel';
+    readonly label?: string;
+    readonly name: string;
+    readonly type?: 'text' | 'email' | 'password' | 'tel';
 
-    as?: 'input' | 'select';
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-    onBlur?: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => void;
-    error?: string;
-    placeholder?: string;
-    disabled?: boolean;
-    required?: boolean;
-    autoComplete?: string;
+    readonly as?: 'input' | 'select';
+    readonly value: string;
+    readonly onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+    readonly onBlur?: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => void;
+    readonly error?: string;
+    readonly placeholder?: string;
+    readonly disabled?: boolean;
+    readonly required?: boolean;
+    readonly autoComplete?: string;
 
-    variant?: 'green' | 'cyan';
+    readonly variant?: 'green' | 'cyan';
 
-    options?: Option[];
+    readonly options?: Option[];
 }
 
 export function Input({

@@ -4,8 +4,8 @@ import { AppHeader } from '../../components/ui/AppHeader/AppHeader';
 import styles from './DashboardLayout.module.css';
 
 interface DashboardLayoutProps {
-    sidebar: (onClose: () => void) => ReactNode;
-    children: ReactNode;
+    readonly sidebar: (onClose: () => void) => ReactNode;
+    readonly children: ReactNode;
 }
 
 export function DashboardLayout({ sidebar, children }: DashboardLayoutProps) {

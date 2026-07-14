@@ -1,0 +1,290 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-green);
+}
+
+.filters {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.searchWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    max-width: 400px;
+    background: transparent;
+    border: 2px solid var(--color-card-border-green);
+    border-radius: 8px;
+    padding: 8px 14px;
+}
+
+.searchInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+}
+
+.searchInput::placeholder {
+    color: var(--color-text-muted);
+}
+
+.careerSelect {
+    background: transparent;
+    border: 2px solid var(--color-card-border-green);
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+    cursor: pointer;
+}
+
+.careerSelect option {
+    background: var(--color-bg-primary);
+}
+
+.mainPanel {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    border: 2px solid var(--color-card-border-green);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.studentList {
+    width: 240px;
+    min-width: 240px;
+    border-right: 2px solid var(--color-card-border-green);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.listTitle {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--color-green);
+    border-bottom: 2px solid var(--color-green);
+    padding-bottom: 8px;
+}
+
+.studentItems {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.studentItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-family);
+    transition: background 0.18s, border-color 0.18s;
+}
+
+.studentItem:hover {
+    background: var(--color-green-soft);
+}
+
+.studentItemActive {
+    border-color: var(--color-green);
+    background: var(--color-green-soft);
+}
+
+.studentInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.studentName {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.studentMeta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.studentEmail {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.studentCareer {
+    font-size: var(--font-size-xs);
+    color: var(--color-cyan);
+}
+
+.meshPanel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.meshArea {
+    padding: 16px;
+}
+
+.studentDetail {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    border-top: 2px solid var(--color-card-border-green);
+}
+
+.detailCard {
+    flex: 1;
+    border: 2px solid var(--color-card-border-green);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.detailCard:first-child {
+    flex: 0 0 auto;
+    min-width: 220px;
+}
+
+.detailTitle {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+}
+
+.progressHeader {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.sctGreen {
+    color: var(--color-green);
+    font-weight: 700;
+}
+
+.progressBar {
+    width: 100%;
+    height: 8px;
+    background-color: var(--color-card-border);
+    border: 2px solid var(--color-green);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+:global([data-theme="light"]) .progressBar {
+    border-color: var(--color-cyan);
+}
+
+.progressFill {
+    height: 100%;
+    background-color: var(--color-aprobado-bd);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.percentage {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-green);
+    text-align: center;
+}
+
+.detailStats {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    justify-content: center;
+    min-width: 140px;
+}
+
+.detailStats p {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+}
+
+.dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dotAprobado { background-color: var(--color-aprobado-bd); }
+.dotReprobado { background-color: var(--color-reprobado-bd); }
+.dotCursando { background-color: var(--color-cursando-bd); }
+.dotDisponible { background-color: var(--color-disponible-bd); }
+.dotBloqueado { background-color: var(--color-bloqueado-bd); }
+
+@media (max-width: 768px) {
+    .filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .searchWrapper {
+        max-width: 100%;
+    }
+
+    .mainPanel {
+        flex-direction: column;
+    }
+
+    .studentList {
+        width: 100%;
+        min-width: unset;
+        border-right: none;
+        border-bottom: 2px solid var(--color-card-border-green);
+        max-height: 200px;
+    }
+
+    .studentDetail {
+        flex-direction: column;
+    }
+
+    .detailStats {
+        flex-direction: row;
+        flex-wrap: wrap;
+        min-width: unset;
+    }
+}

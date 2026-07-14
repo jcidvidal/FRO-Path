@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -12,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from '../application/auth.service';
 import { RolUsuario } from '../domain/roles';
+import { ActualizarUsuarioDto } from './dto/update-user.dto';
 import { AsignarRolDto } from './dto/assign-role.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -32,6 +35,31 @@ export class AuthController {
     return this.authService.register(cuerpo);
   }
 
+  @Post('usuarios')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(201)
+  async crearUsuario(
+    @Body() cuerpo: RegisterDto,
+    @Req() solicitud: RequestConUsuario,
+  ) {
+    if (solicitud.user?.rol !== RolUsuario.Admin) {
+      throw new ForbiddenException('Solo un administrador puede crear usuarios.');
+    }
+    return this.authService.crearUsuario(cuerpo, solicitud.user);
+  }
+
+  @Patch('usuarios/:id')
+  @UseGuards(JwtAuthGuard)
+  async actualizarUsuario(
+    @Param('id') id: string,
+    @Body() cuerpo: ActualizarUsuarioDto,
+    @Req() solicitud: RequestConUsuario,
+  ) {
+    if (solicitud.user?.rol !== RolUsuario.Admin) {
+      throw new ForbiddenException('Solo un administrador puede editar usuarios.');
+    }
+    return this.authService.actualizarUsuario(Number(id), cuerpo);
+  }
   @Get('estudiantes')
   @UseGuards(JwtAuthGuard)
   buscarEstudiantes(

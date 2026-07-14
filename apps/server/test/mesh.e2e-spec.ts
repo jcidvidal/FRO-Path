@@ -60,6 +60,8 @@ describe('Mesh (e2e)', () => {
       expect(respuesta.body.idCarrera).toBe('informatica');
       expect(Array.isArray(respuesta.body.asignaturas)).toBe(true);
       expect(respuesta.body.asignaturas.length).toBeGreaterThan(0);
+      expect(Array.isArray(respuesta.body.modulosIngles)).toBe(true);
+      expect(Array.isArray(respuesta.body.practicas)).toBe(true);
     });
 
     it('retorna 404 si la carrera no existe', async () => {

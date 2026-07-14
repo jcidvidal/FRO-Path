@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
+import { ActualizarUsuarioDto } from '../presentation/dto/update-user.dto';
 import { UsuarioAutenticado } from '../domain/auth-user';
 import { RolUsuario } from '../domain/roles';
 import { LoginDto } from '../presentation/dto/login.dto';
@@ -82,6 +83,48 @@ export class AuthService {
     });
 
     return this.crearRespuestaAuth(usuario);
+  }
+
+  async crearUsuario(
+    dto: RegisterDto,
+    usuarioSolicitante: { id: number; email: string; rol: RolUsuario },
+  ): Promise<UsuarioAutenticado> {
+    this.validarCredencialesBasicas(dto.email, dto.password);
+
+    if (!dto.nombre?.trim()) {
+      throw new BadRequestException('El nombre es obligatorio.');
+    }
+
+    const existente = await this.usuariosRepository.buscarPorEmail(dto.email);
+    if (existente) {
+      throw new ConflictException('El correo ya esta registrado.');
+    }
+
+    return this.usuariosRepository.crear({
+      nombre: dto.nombre.trim(),
+      apellidoPaterno: dto.apellidoPaterno?.trim() || 'Sin apellido',
+      apellidoMaterno: dto.apellidoMaterno?.trim() || 'Sin apellido',
+      email: dto.email,
+      passwordHash: await hash(dto.password, 10),
+      rol: RolUsuario.Estudiante,
+      idCarrera: dto.carrera,
+    });
+  }
+
+  async actualizarUsuario(
+    id: number,
+    dto: ActualizarUsuarioDto,
+  ): Promise<UsuarioAutenticado> {
+    if (!Number.isInteger(id) || id <= 0) {
+      throw new BadRequestException('El id de usuario no es valido.');
+    }
+
+    const usuario = await this.usuariosRepository.buscarPorId(id);
+    if (!usuario) {
+      throw new NotFoundException(`El usuario ${id} no existe.`);
+    }
+
+    return this.usuariosRepository.actualizar(id, dto);
   }
 
   async asignarRolUsuario({

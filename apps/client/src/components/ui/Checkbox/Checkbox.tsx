@@ -2,10 +2,10 @@ import { useId } from 'react';
 import styles from './Checkbox.module.css';
 
 export interface CheckboxProps {
-    label: string;
-    name: string;
-    checked: boolean;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    readonly label: string;
+    readonly name: string;
+    readonly checked: boolean;
+    readonly onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function Checkbox({ label, name, checked, onChange }: CheckboxProps) {

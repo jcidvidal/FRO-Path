@@ -1,17 +1,30 @@
 # FRO-Path
 
-## Descripción breve del producto
-Visualizador interactivo de progreso academico para estudiantes de carreras informaticas de la Universidad de La Frontera.
+## Descripción del Producto
 
-FRO-Path busca ayudar a estudiantes a entender su avance curricular, visualizar prerrequisitos, simular estados de asignaturas y revisar una orientacion de carga academica basada en creditos SCT.
+**FRO-Path** es una plataforma web interactiva diseñada para la visualización, simulación y planificación del progreso académico de los estudiantes de las carreras de **Ingeniería Civil Informática (ICI)** e **Ingeniería Informática (II)** de la **Universidad de La Frontera (UFRO)**.
 
-## Prerrequisitos
+### Características Principales:
+- **Visualizador de Malla Curricular:** Interfaz gráfica moderna e interactiva para navegar por los niveles, asignaturas y áreas de conocimiento de la carrera.
+- **Simulador de Avance y Prerrequisitos:** Permite a los estudiantes marcar asignaturas como cursando, aprobadas o reprobadas, visualizando dinámicamente qué ramos se desbloquean o bloquean en tiempo real.
+- **Cálculo de Créditos SCT:** Seguimiento automático del avance de créditos aprobados en relación con el plan de estudios.
+- **Planificador / Orientador por IA (Gemini):** Integración opcional con inteligencia artificial para sugerir una carga académica óptima y personalizada basada en el avance actual y la carga de créditos recomendada.
 
-Para ejecutar el proyecto localmente de cualquiera de las dos formas, asegúrate de tener instalado:
+## Prerrequisitos y Configuración Inicial
 
-1. **Node.js** (Versión recomendada: `24.14.1` o compatible)
-2. **npm** (Versión recomendada: `11.11.0` o compatible)
-3. **Docker** y **Docker Compose** (Necesario para base de datos y despliegue rápido)
+Para ejecutar y desarrollar el proyecto de forma local, asegúrate de contar con lo siguiente:
+
+### 1. Requisitos de Software
+- **Node.js:** Versión `24.14.1` o superior compatible.
+- **npm:** Versión `11.11.0` o superior compatible.
+- **Docker & Docker Compose:** Necesario para instanciar la base de datos PostgreSQL de forma local o levantar el entorno completo. *(Asegúrate de que **Docker Desktop** esté abierto y ejecutándose en tu sistema).*
+
+### 2. Configuración de Variables de Entorno (`.env`)
+El servidor y la base de datos requieren configuraciones locales para funcionar. Debes crear un archivo `.env` antes de levantar los servicios:
+- **Si usas Docker Compose (Opción A):** Crea un archivo `.env` en la raíz del proyecto.
+- **Si usas desarrollo local (Opción B):** Copia la plantilla ejecutando `cp apps/server/.env.example apps/server/.env` y configúrala.
+- **Clave API de Gemini:** Si deseas el análisis por IA, obtén una clave gratuita en [Google AI Studio](https://aistudio.google.com/apikey) (debe comenzar con `AIzaSy...`) y colócala en `GEMINI_API_KEY`.
+- **JWT Secret:** Genera un secreto para la autenticación de usuarios (ej. usando `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`).
 
 ---
 

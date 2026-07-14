@@ -99,8 +99,8 @@ Las credenciales por defecto de la base de datos están preconfiguradas para fun
 
 Actualmente, el proyecto está preparado para su despliegue continuo en la nube:
 
-* **Frontend Web (Vercel):** [https://fro-path-client.vercel.app](https://fro-path-client.vercel.app) *(TBD / Próximamente)*
-* **Backend API (Despliegue Externo):** [https://fro-path-server.onrender.com](https://fro-path-server.onrender.com) *(TBD / Próximamente)*
+* **Frontend Web (Vercel):** [https://fro-path-client.vercel.app](https://fro-path-client.vercel.app)
+* **Backend API (Despliegue Externo):** [https://fro-path-server.onrender.com](https://fro-path-server.onrender.com)
 * **Base de datos (PostgreSQL Cloud):** Hospedada en servicio compatible con TypeORM.
 
 ---

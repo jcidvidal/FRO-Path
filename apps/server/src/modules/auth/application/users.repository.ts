@@ -221,7 +221,6 @@ export class UsuariosRepository {
     }
     return this.mapear(usuario);
   }
-
   async eliminar(id: number): Promise<void> {
     const dataSource = await this.obtenerDataSourceConSeed();
     await dataSource.getRepository<UsuarioRegistro>('Usuario').delete({ id });

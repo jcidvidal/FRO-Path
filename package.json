@@ -23,6 +23,11 @@
     "build:server": "npm run build --workspace=@fro-path/server",
     "build:common": "npm run build --workspace=@fro-path/common",
     "test": "npm run test --workspace=@fro-path/server",
+    "test:client": "npm run test --workspace=@fro-path/client -- --run",
+    "test:all": "npm run test --workspace=@fro-path/server && npm run test:client",
+    "test:cov:server": "npm run test:cov --workspace=@fro-path/server",
+    "test:cov:client": "npm run test:coverage --workspace=@fro-path/client",
+    "test:cov:all": "npm run test:cov:server && npm run test:cov:client",
     "lint": "npm run lint --workspaces"
   },
   "repository": {
@@ -36,5 +41,8 @@
     "react",
     "nestjs",
     "typescript"
-  ]
+  ],
+  "devDependencies": {
+    "jsdom": "^29.1.1"
+  }
 }

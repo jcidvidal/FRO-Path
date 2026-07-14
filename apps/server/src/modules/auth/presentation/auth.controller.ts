@@ -60,7 +60,6 @@ export class AuthController {
     }
     return this.authService.actualizarUsuario(Number(id), cuerpo);
   }
-
   @Get('estudiantes')
   @UseGuards(JwtAuthGuard)
   buscarEstudiantes(

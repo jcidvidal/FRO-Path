@@ -145,4 +145,12 @@ describe('FachadaAnalisisIaGemini', () => {
 
     expect(resultado.comentario).toContain('No se pudo generar el análisis');
   });
+
+  it('devuelve un resultado degradado si fetch lanza un valor que no es una instancia de Error', async () => {
+    fetchMock.mockRejectedValue('fallo como string');
+
+    const resultado = await fachada.analizar(entrada);
+
+    expect(resultado.comentario).toContain('No se pudo generar el análisis');
+  });
 });

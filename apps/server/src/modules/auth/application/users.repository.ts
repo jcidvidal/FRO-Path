@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { hash } from 'bcrypt';
 import { DataSource } from 'typeorm';
 import {
@@ -19,6 +19,14 @@ interface CrearUsuarioEntrada {
   idCarrera?: string;
 }
 
+type ActualizarUsuarioDatos = {
+  nombre?: string;
+  apellidoPaterno?: string;
+  apellidoMaterno?: string;
+  email?: string;
+  rol?: RolUsuario;
+};
+
 const USUARIOS_SEED: CrearUsuarioEntrada[] = [
   {
     nombre: 'Estudiante',
@@ -27,6 +35,7 @@ const USUARIOS_SEED: CrearUsuarioEntrada[] = [
     email: 'estudiante@fro-path.local',
     passwordHash: '',
     rol: RolUsuario.Estudiante,
+    idCarrera: 'icc',
   },
   {
     nombre: 'Profesor',
@@ -188,6 +197,30 @@ export class UsuariosRepository {
     return this.mapear(await repositorio.save(usuario));
   }
 
+  async actualizar(
+    id: number,
+    datos: Partial<ActualizarUsuarioDatos>,
+  ): Promise<UsuarioAutenticado> {
+    const dataSource = await this.obtenerDataSourceConSeed();
+    const repositorio = dataSource.getRepository<UsuarioRegistro>('Usuario');
+
+    const entityData: Partial<UsuarioRegistro> = {};
+    if (datos.nombre !== undefined) entityData.nombre = datos.nombre;
+    if (datos.apellidoPaterno !== undefined) entityData.apellido_paterno = datos.apellidoPaterno;
+    if (datos.apellidoMaterno !== undefined) entityData.apellido_materno = datos.apellidoMaterno;
+    if (datos.email !== undefined) entityData.email = datos.email;
+    if (datos.rol !== undefined) entityData.rol = datos.rol;
+
+    await repositorio.update(id, entityData);
+    const usuario = await repositorio.findOne({
+      where: { id },
+      relations: { carrera: true },
+    });
+    if (!usuario) {
+      throw new NotFoundException(`Usuario ${id} no encontrado`);
+    }
+    return this.mapear(usuario);
+  }
   async eliminar(id: number): Promise<void> {
     const dataSource = await this.obtenerDataSourceConSeed();
     await dataSource.getRepository<UsuarioRegistro>('Usuario').delete({ id });
@@ -204,6 +237,7 @@ export class UsuariosRepository {
 
   private async sembrarUsuarios(dataSource: DataSource): Promise<void> {
     const repositorio = dataSource.getRepository<UsuarioRegistro>('Usuario');
+    const repositorioCarreras = dataSource.getRepository<CarreraRegistro>('Carrera');
     const passwordHash = await hash('Pass1234', 10);
 
     for (const usuarioSeed of USUARIOS_SEED) {
@@ -212,6 +246,10 @@ export class UsuariosRepository {
       });
 
       if (!existente) {
+        const carrera = usuarioSeed.idCarrera
+          ? await repositorioCarreras.findOne({ where: { codigo: usuarioSeed.idCarrera } })
+          : null;
+
         await repositorio.save({
           nombre: usuarioSeed.nombre,
           apellido_paterno: usuarioSeed.apellidoPaterno,
@@ -219,6 +257,7 @@ export class UsuariosRepository {
           email: usuarioSeed.email,
           password: passwordHash,
           rol: usuarioSeed.rol,
+          carrera_id: carrera?.id ?? null,
         });
       }
     }

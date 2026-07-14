@@ -1,164 +1,195 @@
-.container {
-    display: flex;
+.content {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+}
+
+.subtitle {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-green);
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  max-width: 400px;
+  background: transparent;
+  border: 2px solid var(--color-card-border-green);
+  border-radius: 8px;
+  padding: 8px 14px;
+}
+
+.searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+}
+
+.searchInput::placeholder {
+  color: var(--color-text-muted);
+}
+
+.mainPanel {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  border: 2px solid var(--color-card-border-green);
+  border-radius: 8px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.userList {
+  width: 240px;
+  min-width: 240px;
+  border-right: 2px solid var(--color-card-border-green);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.listTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-green);
+  border-bottom: 2px solid var(--color-green);
+  padding-bottom: 8px;
+}
+
+.userItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-family);
+  transition:
+    background 0.18s,
+    border-color 0.18s;
+}
+
+.userItem:hover {
+  background: var(--color-green-soft);
+}
+
+.userItemActive {
+  border-color: var(--color-green);
+  background: var(--color-green-soft);
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.userName {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.userDetail {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.placeholder {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+  margin: auto;
+  padding: 40px;
+  text-align: center;
+}
+
+.roleBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.roleAdmin {
+  background: rgba(168, 85, 247, 0.2);
+  color: var(--color-purple);
+  border: 1px solid var(--color-purple);
+}
+
+.roleDirector {
+  background: rgba(0, 229, 255, 0.2);
+  color: var(--color-cyan);
+  border: 1px solid var(--color-cyan);
+}
+
+.roleDocente {
+  background: rgba(57, 255, 20, 0.2);
+  color: var(--color-green);
+  border: 1px solid var(--color-green);
+}
+
+:global([data-theme="light"]) .roleDocente {
+  background: rgba(246, 179, 74, 0.15);
+  color: #F6B34A;
+  border-color: #F6B34A;
+}
+
+.roleEstudiante {
+  background: rgba(160, 174, 192, 0.2);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-text-secondary);
+}
+
+@media (max-width: 768px) {
+  .filters {
     flex-direction: column;
-    height: 100%;
-    gap: 16px;
-    padding: 24px;
-    overflow-y: auto;
-}
-
-.titulo {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--color-green);
-}
-
-.descripcion {
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-base);
-    max-width: 720px;
-}
-
-.filtros {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.buscador {
-    flex: 1;
-    min-width: 240px;
-    max-width: 420px;
-    padding: 10px 14px;
-    border: 1px solid var(--color-border, #d0d7de);
-    border-radius: 8px;
-    font-size: var(--font-size-base);
-    outline: none;
-}
-
-.buscador:focus,
-.selectorRol:focus {
-    border-color: var(--color-green);
-}
-
-.selectorRol {
-    padding: 10px 14px;
-    border: 1px solid var(--color-border, #d0d7de);
-    border-radius: 8px;
-    font-size: var(--font-size-base);
-    background: var(--color-surface, #fff);
-    outline: none;
-    cursor: pointer;
-}
-
-.tablaWrapper {
-    border: 1px solid var(--color-border, #d0d7de);
-    border-radius: 10px;
-    overflow: auto;
-}
-
-.tabla {
+    align-items: stretch;
+  }
+  .searchWrapper {
+    max-width: 100%;
+  }
+  .mainPanel {
+    flex-direction: column;
+  }
+  .userList {
     width: 100%;
-    border-collapse: collapse;
-    font-size: var(--font-size-base);
+    min-width: unset;
+    border-right: none;
+    border-bottom: 2px solid var(--color-card-border-green);
+    max-height: 200px;
+  }
 }
 
-.tabla th,
-.tabla td {
-    text-align: left;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--color-border, #eef0f2);
-}
-
-.tabla th {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    color: var(--color-text-secondary);
-    background: var(--color-surface-hover, #f6f8fa);
-}
-
-.tabla tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.celdaEmail {
-    color: var(--color-text-secondary);
-}
-
-.badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    background: var(--color-surface-hover, #eef0f2);
-    color: var(--color-text-primary, #1f2328);
-}
-
-.badge_estudiante {
-    background: #e6f4ea;
-    color: #1a7f37;
-}
-
-.badge_profesor {
-    background: #e0f2fe;
-    color: #0369a1;
-}
-
-.badge_director {
-    background: #ede9fe;
-    color: #6d28d9;
-}
-
-.badge_admin {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.acciones {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.botonRol {
-    padding: 6px 12px;
-    border: 1px solid var(--color-green);
-    border-radius: 6px;
-    background: transparent;
-    color: var(--color-green);
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
-}
-
-.botonRol:hover:not(:disabled) {
-    background: var(--color-green);
-    color: #fff;
-}
-
-.botonRol:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-}
-
-.sinAcciones {
-    color: var(--color-text-secondary);
-}
-
-.estado {
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-base);
-}
-
-.estadoExito {
-    color: var(--color-green);
-    font-size: var(--font-size-base);
-}
-
-.estadoError {
-    color: var(--color-danger, #d1242f);
-    font-size: var(--font-size-base);
+.usersView {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  height: 100%;
 }

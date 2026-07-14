@@ -13,6 +13,7 @@ export interface AsignaturaRegistro {
   sct: number;
   nivel: number;
   carrera_id: number;
+  categoria: string;  // 'malla' | 'ingles' | 'practica'
   carrera?: CarreraRegistro;
 }
 
@@ -63,6 +64,7 @@ export const AsignaturaSchema = new EntitySchema<AsignaturaRegistro>({
     sct: { type: Number },
     nivel: { type: Number },
     carrera_id: { type: Number },
+    categoria: { type: String, length: 20, default: 'malla' },
   },
   relations: {
     carrera: {

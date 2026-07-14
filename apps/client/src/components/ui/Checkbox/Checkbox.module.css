@@ -42,7 +42,7 @@
 }
 
 .checkIcon {
-  color: #000000;
+  color: var(--color-black);
   width: 12px;
   height: 12px;
   opacity: 0;

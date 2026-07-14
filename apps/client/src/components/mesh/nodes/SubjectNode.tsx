@@ -5,19 +5,28 @@ import { SubjectTooltip } from '../SubjectTooltip/SubjectTooltip';
 import { LockIcon } from '../../icons/Icons';
 
 interface SubjectNodeProps {
-    subject: Subject;
-    onStatusChange?: (subjectId: string, newStatus: SubjectStatus) => void;
-    readOnly?: boolean;
-    onSubjectClick?: (subjectId: string) => void;
-    isSelected?: boolean;
-    semestres?: Semester[];
-    modulosIngles?: Subject[];
-    practicas?: Subject[];
+    readonly subject: Subject;
+    readonly onStatusChange?: (subjectId: string, newStatus: SubjectStatus) => void;
+    readonly readOnly?: boolean;
+    readonly onSubjectClick?: (subjectId: string) => void;
+    readonly isSelected?: boolean;
+    readonly semestres?: Semester[];
+    readonly modulosIngles?: Subject[];
+    readonly practicas?: Subject[];
+    readonly isPrerequisite?: boolean;
+    readonly isHovered?: boolean;
+    readonly isDimmed?: boolean;
+    readonly onHover?: (subjectId: string) => void;
+    readonly onHoverEnd?: () => void;
 }
 
 const STATUS_OPTIONS: SubjectStatus[] = ['aprobado', 'reprobado', 'cursando', 'disponible'];
 
-function Indicator({ status }: { status: SubjectStatus }) {
+interface IndicatorProps {
+    readonly status: SubjectStatus;
+}
+
+function Indicator({ status }: IndicatorProps) {
     if (status === 'bloqueado') {
         return <LockIcon className={styles.lockIcon} />;
     }
@@ -25,12 +34,24 @@ function Indicator({ status }: { status: SubjectStatus }) {
     return <div className={styles.indicator} />;
 }
 
-export function SubjectNode({ subject, onStatusChange, readOnly, onSubjectClick, isSelected, semestres, modulosIngles, practicas }: SubjectNodeProps) {
+export function SubjectNode({ subject, onStatusChange, readOnly, onSubjectClick, isSelected, semestres, modulosIngles, practicas, isPrerequisite, isHovered, isDimmed, onHover, onHoverEnd }: SubjectNodeProps) {
     const [menuOpen, setMenuOpen] = useState(false);
     const [showTooltip, setShowTooltip] = useState(false);
     const [tooltipPosition, setTooltipPosition] = useState<DOMRect | null>(null);
     const menuRef = useRef<HTMLDivElement>(null);
     const tooltipTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    const nodeRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!showTooltip) return;
+
+        function handleScroll() {
+            setShowTooltip(false);
+        }
+
+        window.addEventListener('scroll', handleScroll, { passive: true, capture: true });
+        return () => window.removeEventListener('scroll', handleScroll, true);
+    }, [showTooltip]);
 
     useEffect(() => {
         if (!menuOpen) return;
@@ -52,6 +73,12 @@ export function SubjectNode({ subject, onStatusChange, readOnly, onSubjectClick,
             }
             return;
         }
+
+        if (showTooltip) {
+            if (tooltipTimeoutRef.current) clearTimeout(tooltipTimeoutRef.current);
+            setShowTooltip(false);
+        }
+
         if (subject.status !== 'bloqueado') {
             setMenuOpen((prev) => !prev);
         }
@@ -66,24 +93,26 @@ export function SubjectNode({ subject, onStatusChange, readOnly, onSubjectClick,
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
         setTooltipPosition(rect);
         tooltipTimeoutRef.current = setTimeout(() => setShowTooltip(true), 500);
+        onHover?.(subject.id);
     }
 
     function handleMouseLeave() {
         if (tooltipTimeoutRef.current) clearTimeout(tooltipTimeoutRef.current);
         setShowTooltip(false);
+        onHoverEnd?.();
     }
 
     return (
-        <div className={styles.wrapper}>
+        <div className={styles.wrapper} ref={nodeRef}>
             <div
-                className={`${styles.node} ${styles[subject.status]} ${readOnly ? styles.readOnly : ''} ${isSelected ? styles.selected : ''} ${readOnly && onSubjectClick ? styles.clickable : ''}`}
+                className={`${styles.node} ${styles[subject.status]} ${readOnly ? styles.readOnly : ''} ${isSelected ? styles.selected : ''} ${readOnly && onSubjectClick ? styles.clickable : ''} ${isPrerequisite ? styles.prerequisite : ''} ${isHovered ? styles.hovered : ''} ${isDimmed ? styles.dimmed : ''}`}
                 onClick={handleCardClick}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                role={readOnly ? undefined : 'button'}
-                tabIndex={readOnly ? undefined : 0}
+                role="button"
+                tabIndex={0}
                 onKeyDown={(e) => {
-                    if (!readOnly && (e.key === 'Enter' || e.key === ' ')) handleCardClick();
+                    if (e.key === 'Enter' || e.key === ' ') handleCardClick();
                 }}
             >
                 <div className={styles.indicatorWrapper}>
@@ -101,7 +130,7 @@ export function SubjectNode({ subject, onStatusChange, readOnly, onSubjectClick,
                     {STATUS_OPTIONS.map((status) => (
                         <button
                             key={status}
-                            className={`${styles.menuCircle} ${styles[`menuCircle_${status}`]} ${subject.status === status ? styles.menuCircleActive : ''}`}
+                            className={`${styles.menuCircle} ${styles['menuCircle_' + status]} ${subject.status === status ? styles.menuCircleActive : ''}`}
                             onClick={() => handleStatusSelect(status)}
                             aria-label={status}
                             title={status}

@@ -2,8 +2,8 @@ import { ErrorIcon, SuccessIcon, InfoIcon } from '../../icons/Icons';
 import styles from './FormMessage.module.css';
 
 export interface FormMessageProps {
-    type: 'error' | 'success' | 'info';
-    message: string;
+    readonly type: 'error' | 'success' | 'info';
+    readonly message: string;
 }
 
 export function FormMessage({ type, message }: FormMessageProps) {

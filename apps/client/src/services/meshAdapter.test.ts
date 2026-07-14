@@ -9,11 +9,13 @@ const RESPUESTA_BASE: BackendMeshResponse = {
         { id: 'ICC-002', codigo: 'ICC-002', nombre: 'Prog II', sct: 6, nivel: 2, estado: 'bloqueada', idsPrerequisitos: ['ICC-001'] },
         { id: 'ICC-003', codigo: 'ICC-003', nombre: 'Prog III', sct: 4, nivel: 1, estado: 'aprobada', idsPrerequisitos: [] },
     ],
+    modulosIngles: [],
+    practicas: [],
 };
 
 describe('adaptarMeshAFrontend', () => {
     it('agrupa asignaturas del mismo nivel en un mismo semestre', () => {
-        const semestres = adaptarMeshAFrontend(RESPUESTA_BASE);
+        const { semestres } = adaptarMeshAFrontend(RESPUESTA_BASE);
 
         expect(semestres).toHaveLength(2);
         expect(semestres[0].asignaturas).toHaveLength(2);
@@ -27,9 +29,11 @@ describe('adaptarMeshAFrontend', () => {
                 { id: 'C', codigo: 'C', nombre: 'C', sct: 3, nivel: 3, estado: 'bloqueada', idsPrerequisitos: [] },
                 { id: 'A', codigo: 'A', nombre: 'A', sct: 3, nivel: 1, estado: 'disponible', idsPrerequisitos: [] },
             ],
+            modulosIngles: [],
+            practicas: [],
         };
 
-        const semestres = adaptarMeshAFrontend(respuesta);
+        const { semestres } = adaptarMeshAFrontend(respuesta);
 
         expect(semestres[0].numero).toBe(1);
         expect(semestres[1].numero).toBe(3);
@@ -45,9 +49,11 @@ describe('adaptarMeshAFrontend', () => {
                 { id: '4', codigo: 'D', nombre: 'D', sct: 1, nivel: 4, estado: 'en_curso', idsPrerequisitos: [] },
                 { id: '5', codigo: 'E', nombre: 'E', sct: 1, nivel: 5, estado: 'reprobada', idsPrerequisitos: [] },
             ],
+            modulosIngles: [],
+            practicas: [],
         };
 
-        const semestres = adaptarMeshAFrontend(respuesta);
+        const { semestres } = adaptarMeshAFrontend(respuesta);
 
         expect(semestres[0].asignaturas[0].status).toBe('disponible');
         expect(semestres[1].asignaturas[0].status).toBe('bloqueado');
@@ -63,24 +69,32 @@ describe('adaptarMeshAFrontend', () => {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 { id: '1', codigo: 'A', nombre: 'A', sct: 1, nivel: 1, estado: 'desconocido' as any, idsPrerequisitos: [] },
             ],
+            modulosIngles: [],
+            practicas: [],
         };
 
-        const semestres = adaptarMeshAFrontend(respuesta);
+        const { semestres } = adaptarMeshAFrontend(respuesta);
 
         expect(semestres[0].asignaturas[0].status).toBe('bloqueado');
     });
 
     it('incluye los ids de prerrequisitos en la asignatura adaptada', () => {
-        const semestres = adaptarMeshAFrontend(RESPUESTA_BASE);
+        const { semestres } = adaptarMeshAFrontend(RESPUESTA_BASE);
         const prog2 = semestres[1].asignaturas[0];
 
         expect(prog2.prerrequisitos).toEqual(['ICC-001']);
     });
 
     it('retorna un array vacio si no hay asignaturas', () => {
-        const semestres = adaptarMeshAFrontend({ idCarrera: 'icc', asignaturas: [] });
+        const { semestres } = adaptarMeshAFrontend({ idCarrera: 'icc', asignaturas: [], modulosIngles: [], practicas: [] });
 
         expect(semestres).toHaveLength(0);
+    });
+
+    it('incluye modulosIngles y practicas vacios cuando no hay', () => {
+        const result = adaptarMeshAFrontend(RESPUESTA_BASE);
+        expect(result.modulosIngles).toEqual([]);
+        expect(result.practicas).toEqual([]);
     });
 });
 

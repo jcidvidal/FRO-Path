@@ -3,8 +3,8 @@ import { useAuth } from '../services/AuthContext';
 import type React from 'react';
 
 interface ProtectedRouteProps {
-    children: React.ReactNode;
-    allowedRoles?: string[];
+    readonly children: React.ReactNode;
+    readonly allowedRoles?: string[];
 }
 const roleRoutes: Record<string, string> = {
   estudiante: '/dashboard',

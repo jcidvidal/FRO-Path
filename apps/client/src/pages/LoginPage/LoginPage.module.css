@@ -46,3 +46,102 @@
 .footer a:hover {
   text-decoration: underline;
 }
+
+/* --- LIGHT MODE: card azul UFRO fijo --- */
+:global([data-theme="light"]) .card {
+  background-color: #1B3A6B;
+  border-color: #1B3A6B;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+:global([data-theme="light"]) .title {
+  color: #FFFFFF;
+}
+
+:global([data-theme="light"]) .subtitle {
+  color: #B8D4EA;
+}
+
+:global([data-theme="light"]) .field label {
+  color: #FFFFFF !important;
+}
+
+:global([data-theme="light"]) .field input,
+:global([data-theme="light"]) .field select {
+  background-color: #FFFFFF !important;
+  border-color: #0091FF !important;
+  color: #1A202C !important;
+}
+
+:global([data-theme="light"]) .field input:focus,
+:global([data-theme="light"]) .field select:focus {
+  border-color: #0091FF !important;
+  box-shadow: 0 0 0 2px rgba(0, 145, 255, 0.3) !important;
+}
+
+:global([data-theme="light"]) .field input::placeholder {
+  color: #94A3B8 !important;
+}
+
+:global([data-theme="light"]) .card button[type="submit"] {
+  background: #0091FF !important;
+  border-color: #0091FF !important;
+  color: #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+:global([data-theme="light"]) .card button[type="submit"]:hover:not(:disabled) {
+  background: #0077CC !important;
+  border-color: #0077CC !important;
+  color: #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+:global([data-theme="light"]) .card button[type="submit"]:focus-visible {
+  outline-color: #0091FF !important;
+}
+
+:global([data-theme="light"]) .footer {
+  color: #B8D4EA;
+}
+
+:global([data-theme="light"]) .footer a {
+  color: #7FD1FF;
+}
+
+.themeToggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid var(--color-card-border);
+    background-color: var(--color-card-bg);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: background 0.18s, color 0.18s, border-color 0.18s, box-shadow 0.18s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.themeToggle:hover {
+    border-color: var(--color-green);
+    box-shadow: 0 2px 12px rgba(57, 255, 20, 0.3);
+}
+
+:global([data-theme="light"]) .themeToggle {
+    background-color: #1B3A6B;
+    border-color: #1B3A6B;
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+:global([data-theme="light"]) .themeToggle:hover {
+    background-color: #0091FF;
+    border-color: #0091FF;
+    box-shadow: 0 2px 12px rgba(0, 145, 255, 0.4);
+}

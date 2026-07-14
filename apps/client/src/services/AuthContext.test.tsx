@@ -140,7 +140,7 @@ describe('AuthContext', () => {
             const { result } = renderAuthHook();
 
             await act(async () => {
-                const res = await result.current.register('Nuevo', '22.222.222-2', 'nuevo@test.cl', 'password123', 'ii');
+                const res = await result.current.register('Nuevo', 'Test', 'Apellido', '22.222.222-2', 'nuevo@test.cl', 'password123', 'ii');
                 expect(res.success).toBe(true);
             });
         });
@@ -152,7 +152,7 @@ describe('AuthContext', () => {
             const { result } = renderAuthHook();
 
             await act(async () => {
-                const res = await result.current.register('Otro', '33.333.333-3', 'existente@test.cl', 'password123', 'ii');
+                const res = await result.current.register('Otro', 'Test', 'Apellido', '33.333.333-3', 'existente@test.cl', 'password123', 'ii');
                 expect(res.success).toBe(false);
                 expect(res.error).toBe('El correo ya esta registrado.');
             });
@@ -163,7 +163,7 @@ describe('AuthContext', () => {
             const { result } = renderAuthHook();
 
             await act(async () => {
-                await result.current.register('Nuevo', '44.444.444-4', 'nuevo@test.cl', 'password123', 'ii');
+                await result.current.register('Nuevo', 'Test', 'Apellido', '44.444.444-4', 'nuevo@test.cl', 'password123', 'ii');
             });
 
             expect(result.current.isAuthenticated).toBe(false);

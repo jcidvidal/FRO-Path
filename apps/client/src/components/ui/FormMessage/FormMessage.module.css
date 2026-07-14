@@ -27,8 +27,8 @@
 
 .success {
   color: var(--color-success);
-  background-color: rgba(57, 255, 20, 0.08);
-  border-color: rgba(57, 255, 20, 0.2);
+  background-color: var(--color-success-soft-bg);
+  border-color: var(--color-success-soft-border);
 }
 
 .info {
